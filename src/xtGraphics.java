@@ -898,7 +898,7 @@ public class xtGraphics extends Panel {
 
 	public void loadpak1(final MediaTracker mediaTracker, final Toolkit toolkit) {
 		try {
-			String path = "resources/graphics/images1.radq";
+			String path = "resources/graphics/images1.zipo";
 			final ZipInputStream zipInputStream = getInputStream(path);
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
 				int i = (int) zipEntry.getSize();
@@ -1069,67 +1069,67 @@ public class xtGraphics extends Panel {
 		this.app.setCursor(new Cursor(3));
 		this.app.repaint();
 		if (n == 1 && !this.loadedt[0]) {
-			this.stracks[0] = new RadicalMod("music/stage1.radq", 350, 8400, 135, this.app);
+			this.stracks[0] = new RadicalMod("resources/music/stage1.zipo", 350, 8400, 135, this.app);
 			if (this.stracks[0].stream != null) {
 				this.loadedt[0] = true;
 			}
 		}
 		if (n == 2 && !this.loadedt[1]) {
-			this.stracks[1] = new RadicalMod("music/stage2.radq", 370, 9000, 145, this.app);
+			this.stracks[1] = new RadicalMod("music/stage2.zipo", 370, 9000, 145, this.app);
 			if (this.stracks[1].stream != null) {
 				this.loadedt[1] = true;
 			}
 		}
 		if (n == 3 && !this.loadedt[2]) {
-			this.stracks[2] = new RadicalMod("music/stage3.radq", 350, 8500, 145, this.app);
+			this.stracks[2] = new RadicalMod("music/stage3.zipo", 350, 8500, 145, this.app);
 			if (this.stracks[2].stream != null) {
 				this.loadedt[2] = true;
 			}
 		}
 		if (n == 4 && !this.loadedt[3]) {
-			this.stracks[3] = new RadicalMod("music/stage4.radq", 300, 7500, 125, this.app);
+			this.stracks[3] = new RadicalMod("music/stage4.zipo", 300, 7500, 125, this.app);
 			if (this.stracks[3].stream != null) {
 				this.loadedt[3] = true;
 			}
 		}
 		if (n == 5 && !this.loadedt[4]) {
-			this.stracks[4] = new RadicalMod("music/stage5.radq", 250, 7900, 125, this.app);
+			this.stracks[4] = new RadicalMod("music/stage5.zipo", 250, 7900, 125, this.app);
 			if (this.stracks[4].stream != null) {
 				this.loadedt[4] = true;
 			}
 		}
 		if (n == 6 && !this.loadedt[5]) {
-			this.stracks[5] = new RadicalMod("music/stage6.radq", 760, 7900, 125, this.app);
+			this.stracks[5] = new RadicalMod("music/stage6.zipo", 760, 7900, 125, this.app);
 			if (this.stracks[5].stream != null) {
 				this.loadedt[5] = true;
 			}
 		}
 		if (n == 7 && !this.loadedt[6]) {
-			this.stracks[6] = new RadicalMod("music/stage7.radq", 300, 7500, 125, this.app);
+			this.stracks[6] = new RadicalMod("music/stage7.zipo", 300, 7500, 125, this.app);
 			if (this.stracks[6].stream != null) {
 				this.loadedt[6] = true;
 			}
 		}
 		if (n == 8 && !this.loadedt[7]) {
-			this.stracks[7] = new RadicalMod("music/stage8.radq", 400, 7900, 125, this.app);
+			this.stracks[7] = new RadicalMod("music/stage8.zipo", 400, 7900, 125, this.app);
 			if (this.stracks[7].stream != null) {
 				this.loadedt[7] = true;
 			}
 		}
 		if (n == 9 && !this.loadedt[8]) {
-			this.stracks[8] = new RadicalMod("music/stage9.radq", 300, 7900, 125, this.app);
+			this.stracks[8] = new RadicalMod("music/stage9.zipo", 300, 7900, 125, this.app);
 			if (this.stracks[8].stream != null) {
 				this.loadedt[8] = true;
 			}
 		}
 		if (n == 10 && !this.loadedt[9]) {
-			this.stracks[9] = new RadicalMod("music/stage10.radq", 550, 8100, 145, this.app);
+			this.stracks[9] = new RadicalMod("music/stage10.zipo", 550, 8100, 145, this.app);
 			if (this.stracks[9].stream != null) {
 				this.loadedt[9] = true;
 			}
 		}
 		if (n == 11 && !this.loadedt[10]) {
-			this.stracks[10] = new RadicalMod("music/stage11.radq", 550, 9000, 145, this.app);
+			this.stracks[10] = new RadicalMod("music/stage11.zipo", 550, 9000, 145, this.app);
 			if (this.stracks[10].stream != null) {
 				this.loadedt[10] = true;
 			}
@@ -2290,7 +2290,7 @@ public class xtGraphics extends Panel {
 	public void loadpak2(final MediaTracker mediaTracker, final Toolkit toolkit) {
 		try {
 
-			String path = "resources/graphics/images2.radq";
+			String path = "resources/graphics/images2.zipo";
 			final ZipInputStream zipInputStream = getInputStream(path);
 
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
@@ -2793,10 +2793,10 @@ public class xtGraphics extends Panel {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
 		}
-		this.cars = new RadicalMod("music/cars.radq", 500, 7900, 125, this.app);
+		this.cars = new RadicalMod("resources/music/cars.zipo", 500, 7900, 125, this.app);
 		this.dnload += 26;
 		this.loading(graphics, this.app);
-		this.stages = new RadicalMod("music/stages.radq", 200, 9000, 145, this.app);
+		this.stages = new RadicalMod("resources/music/stages.zipo", 200, 9000, 145, this.app);
 		this.dnload += 22;
 		this.loading(graphics, this.app);
 		int n8 = 0;
@@ -3067,7 +3067,7 @@ public class xtGraphics extends Panel {
 	public void loadpak3(final MediaTracker mediaTracker, final Toolkit toolkit) {
 		try {
 
-			String path = "resources/graphics/images3.radq";
+			String path = "resources/graphics/images3.zipo";
 			final ZipInputStream zipInputStream = getInputStream(path);
 
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
@@ -3548,7 +3548,7 @@ public class xtGraphics extends Panel {
 
 	public void loadpak4(final MediaTracker mediaTracker, final Toolkit toolkit) {
 		try {
-			String path = "resources/graphics/images4.radq";
+			String path = "resources/graphics/images4.zipo";
 			final ZipInputStream zipInputStream = getInputStream(path);
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
 				int i = (int) zipEntry.getSize();
