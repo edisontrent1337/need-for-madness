@@ -2,6 +2,7 @@ import java.awt.Cursor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -3536,8 +3537,13 @@ public class xtGraphics extends Panel {
 		}
 	}
 
-	private AudioClip getSound(final String name) {
-		final AudioClip audioClip = this.app.getAudioClip(this.app.getCodeBase(), name);
+	private AudioClip getSound(final String name) throws MalformedURLException {
+		//
+		 AudioClip audioClip = this.app.getAudioClip(this.app.getCodeBase(), name);
+		 // FIXME: find sound effect file like we did with the other files
+		// File f = new File(name);
+		// URL url = f.toURL();
+		/audioClip = Applet.newAudioClip(url);
 		if (name.startsWith("sounds/default")) {
 			audioClip.play();
 			Thread.yield();
