@@ -4,9 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.awt.Color;
 import java.awt.Graphics;
 
-// 
+//
 // Decompiled by Procyon v0.5.36
-// 
+//
 
 public class ContO
 {
@@ -60,7 +60,7 @@ public class ContO
     int[] elc;
     boolean fix;
     int fcnt;
-    
+
     public void pdust(final int n, final Graphics graphics, final int n2) {
         if (n2 * this.dov[n] > 0) {
             int n3;
@@ -182,14 +182,14 @@ public class ContO
             this.dov[n] = 1;
         }
     }
-    
+
     public int ys(final int n, int n2) {
         if (n2 < 50) {
             n2 = 50;
         }
         return (n2 - this.m.focus_point) * (this.m.cy - n) / n2 + n;
     }
-    
+
     public ContO(final byte[] array, final Medium m, final Trackers t) {
         this.npl = 0;
         this.x = 0;
@@ -396,7 +396,7 @@ public class ContO
         }
         this.grat = wheels.ground;
     }
-    
+
     public ContO(final ContO contO, final int x, final int y, final int z, final int a) {
         this.npl = 0;
         this.x = 0;
@@ -496,7 +496,7 @@ public class ContO
             this.keyz[n2] = contO.keyz[n2];
         } while (++n2 < 4);
     }
-    
+
     public void d(final Graphics graphics) {
         if (this.dist != 0) {
             this.dist = 0;
@@ -614,11 +614,11 @@ public class ContO
             } while (++n17 < 4);
         }
     }
-    
+
     public int getpy(final int n, final int n2, final int n3) {
         return (n - this.x) / 10 * ((n - this.x) / 10) + (n2 - this.y) / 10 * ((n2 - this.y) / 10) + (n3 - this.z) / 10 * ((n3 - this.z) / 10);
     }
-    
+
     public void rot(final int[] array, final int[] array2, final int n, final int n2, final int n3, final int n4) {
         if (n3 != 0) {
             for (int i = 0; i < n4; ++i) {
@@ -629,7 +629,7 @@ public class ContO
             }
         }
     }
-    
+
     public void dust(final int n, final float n2, final float n3, final float n4, final float a, final float a2, final float n5, final boolean b, final int n6) {
         boolean b2 = false;
         if (n6 > 5 && (n == 0 || n == 2)) {
@@ -650,7 +650,7 @@ public class ContO
             this.fulls[n] = b;
         }
     }
-    
+
     public int getvalue(final String s, final String s2, final int n) {
         int n2 = 0;
         String string = "";
@@ -666,14 +666,14 @@ public class ContO
         }
         return Integer.valueOf(string);
     }
-    
+
     public int xs(final int n, int n2) {
         if (n2 < 50) {
             n2 = 50;
         }
         return (n2 - this.m.focus_point) * (this.m.cx - n) / n2 + n;
     }
-    
+
     public void lowshadow(final Graphics graphics, final int n) {
         final int[] array = new int[4];
         final int[] array2 = new int[4];
@@ -769,7 +769,7 @@ public class ContO
             graphics.fillPolygon(array, array2, 4);
         }
     }
-    
+
     public void fixit(final Graphics graphics) {
         if (this.fcnt == 1) {
             for (int i = 0; i < this.npl; ++i) {
@@ -958,7 +958,7 @@ public class ContO
             ++this.fcnt;
         }
     }
-    
+
     public void electrify(final Graphics graphics) {
         int n = 0;
         do {
@@ -1085,7 +1085,7 @@ public class ContO
             this.zy += 11;
         }
     }
-    
+
     public int py(final int n, final int n2, final int n3, final int n4) {
         return (n - n2) * (n - n2) + (n3 - n4) * (n3 - n4);
     }
