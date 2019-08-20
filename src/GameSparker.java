@@ -6,6 +6,8 @@ import java.awt.event.MouseListener;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Date;
 import java.util.zip.ZipEntry;
@@ -499,7 +501,14 @@ public class GameSparker extends Applet implements Runnable, MouseListener {
 		}
 		final Trackers trackers = new Trackers();
 		final CheckPoints checkPoints = new CheckPoints();
-		final xtGraphics xtGraphics = new xtGraphics(medium, this.rd, this, sunytyp);
+		xtGraphics xtGraphics = null;
+		try {
+			xtGraphics = new xtGraphics(medium, this.rd, this, sunytyp);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 		final Record record = new Record(medium);
 		final ContO[] array = new ContO[43];
 		this.loadbase(array, medium, trackers);

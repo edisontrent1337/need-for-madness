@@ -2513,7 +2513,7 @@ public class xtGraphics extends Panel {
 		applet.repaint();
 	}
 
-	public xtGraphics(final Medium m, final Graphics graphics, final Applet app, final int n) {
+	public xtGraphics(final Medium m, final Graphics graphics, final Applet app, final int n) throws MalformedURLException, URISyntaxException {
 		this.fase = 111;
 		this.oldfase = 0;
 		this.starcnt = 0;
@@ -2661,23 +2661,23 @@ public class xtGraphics extends Panel {
 		}
 		int n3 = 0;
 		do {
-			this.engs[0][n3] = this.getSound("sounds/" + str + "a" + n3 + ".au");
+			this.engs[0][n3] = this.getSound("resources/sounds/" + str + "a" + n3 + ".au");
 			this.dnload += 2;
 			this.loading(graphics, this.app);
-			this.engs[1][n3] = this.getSound("sounds/" + str + "b" + n3 + ".au");
+			this.engs[1][n3] = this.getSound("resources/sounds/" + str + "b" + n3 + ".au");
 			this.dnload += 3;
 			this.loading(graphics, this.app);
 			this.pengs[n3] = false;
 		} while (++n3 < 5);
 		int i = 0;
 		do {
-			this.air[i] = this.getSound("sounds/" + str + "air" + i + ".au");
+			this.air[i] = this.getSound("resources/sounds/" + str + "air" + i + ".au");
 			this.dnload += 2;
 			this.loading(graphics, this.app);
 		} while (++i < 6);
 		int n4 = 0;
 		do {
-			this.crash[n4] = this.getSound("sounds/" + str + "crash" + (n4 + 1) + ".au");
+			this.crash[n4] = this.getSound("resources/sounds/" + str + "crash" + (n4 + 1) + ".au");
 			if (n == 2) {
 				this.dnload += 12;
 				this.loading(graphics, this.app);
@@ -2688,7 +2688,7 @@ public class xtGraphics extends Panel {
 		} while (++n4 < 3);
 		int n5 = 0;
 		do {
-			this.lowcrash[n5] = this.getSound("sounds/" + str + "lowcrash" + (n5 + 1) + ".au");
+			this.lowcrash[n5] = this.getSound("resources/sounds/" + str + "lowcrash" + (n5 + 1) + ".au");
 			if (n == 2) {
 				this.dnload += 8;
 				this.loading(graphics, this.app);
@@ -2697,7 +2697,7 @@ public class xtGraphics extends Panel {
 				this.loading(graphics, this.app);
 			}
 		} while (++n5 < 3);
-		this.tires = this.getSound("sounds/" + str + "tires.au");
+		this.tires = this.getSound("resources/sounds/" + str + "tires.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -2705,7 +2705,7 @@ public class xtGraphics extends Panel {
 			this.dnload += 4;
 			this.loading(graphics, this.app);
 		}
-		this.checkpoint = this.getSound("sounds/" + str + "checkpoint.au");
+		this.checkpoint = this.getSound("resources/sounds/" + str + "checkpoint.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -2713,7 +2713,7 @@ public class xtGraphics extends Panel {
 			this.dnload += 7;
 			this.loading(graphics, this.app);
 		}
-		this.carfixed = this.getSound("sounds/" + str + "carfixed.au");
+		this.carfixed = this.getSound("resources/sounds/" + str + "carfixed.au");
 		if (n == 2) {
 			this.dnload += 16;
 			this.loading(graphics, this.app);
@@ -2721,7 +2721,7 @@ public class xtGraphics extends Panel {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
 		}
-		this.powerup = this.getSound("sounds/" + str + "powerup.au");
+		this.powerup = this.getSound("resources/sounds/" + str + "powerup.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -2729,7 +2729,7 @@ public class xtGraphics extends Panel {
 			this.dnload += 9;
 			this.loading(graphics, this.app);
 		}
-		this.three = this.getSound("sounds/" + str + "three.au");
+		this.three = this.getSound("resources/sounds/" + str + "three.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -2737,7 +2737,7 @@ public class xtGraphics extends Panel {
 			this.dnload += 4;
 			this.loading(graphics, this.app);
 		}
-		this.two = this.getSound("sounds/" + str + "two.au");
+		this.two = this.getSound("resources/sounds/" + str + "two.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -2745,7 +2745,7 @@ public class xtGraphics extends Panel {
 			this.dnload += 3;
 			this.loading(graphics, this.app);
 		}
-		this.one = this.getSound("sounds/" + str + "one.au");
+		this.one = this.getSound("resources/sounds/" + str + "one.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -2753,7 +2753,7 @@ public class xtGraphics extends Panel {
 			this.dnload += 4;
 			this.loading(graphics, this.app);
 		}
-		this.go = this.getSound("sounds/" + str + "go.au");
+		this.go = this.getSound("resources/sounds/" + str + "go.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -2763,7 +2763,7 @@ public class xtGraphics extends Panel {
 		}
 		int n6 = 0;
 		do {
-			this.skid[n6] = this.getSound("sounds/" + str + "skid" + (n6 + 1) + ".au");
+			this.skid[n6] = this.getSound("resources/sounds/" + str + "skid" + (n6 + 1) + ".au");
 			if (n == 2) {
 				this.dnload += 9;
 				this.loading(graphics, this.app);
@@ -2774,7 +2774,7 @@ public class xtGraphics extends Panel {
 		} while (++n6 < 2);
 		int n7 = 0;
 		do {
-			this.dustskid[n7] = this.getSound("sounds/" + str + "dustskid" + (n7 + 1) + ".au");
+			this.dustskid[n7] = this.getSound("resources/sounds/" + str + "dustskid" + (n7 + 1) + ".au");
 			if (n == 2) {
 				this.dnload += 11;
 				this.loading(graphics, this.app);
@@ -2783,10 +2783,10 @@ public class xtGraphics extends Panel {
 				this.loading(graphics, this.app);
 			}
 		} while (++n7 < 2);
-		this.wastd = this.getSound("sounds/" + str + "wasted.au");
+		this.wastd = this.getSound("resources/sounds/" + str + "wasted.au");
 		this.dnload += 5;
 		this.loading(graphics, this.app);
-		this.firewasted = this.getSound("sounds/" + str + "firewasted.au");
+		this.firewasted = this.getSound("resources/sounds/" + str + "firewasted.au");
 		if (n == 2) {
 			this.dnload += 13;
 			this.loading(graphics, this.app);
@@ -3537,14 +3537,17 @@ public class xtGraphics extends Panel {
 		}
 	}
 
-	private AudioClip getSound(final String name) throws MalformedURLException {
+	private AudioClip getSound(final String name) throws MalformedURLException, URISyntaxException {
 		//
 		 AudioClip audioClip = this.app.getAudioClip(this.app.getCodeBase(), name);
+
+		URL resource = this.getClass().getResource(name);
+		File file = new File(resource.toURI());
 		 // FIXME: find sound effect file like we did with the other files
 		// File f = new File(name);
 		// URL url = f.toURL();
-		/audioClip = Applet.newAudioClip(url);
-		if (name.startsWith("sounds/default")) {
+		audioClip = Applet.newAudioClip(resource);
+		if (name.startsWith("resources/sounds/default")) {
 			audioClip.play();
 			Thread.yield();
 			audioClip.stop();
