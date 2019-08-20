@@ -775,11 +775,11 @@ public class xtGraphics extends Panel {
 			this.cntwis = 0;
 		}
 		if (this.fase == 0 || this.fase == 6 || this.fase == -1 || this.fase == -2 || this.fase == -3 || this.fase == -4 || this.fase == -5) {
-			if (this.mutes != control.mutes) {
-				this.mutes = control.mutes;
+			if (this.mutes != control.sound_muted) {
+				this.mutes = control.sound_muted;
 			}
-			if (control.mutem != this.mutem) {
-				this.mutem = control.mutem;
+			if (control.music_muted != this.mutem) {
+				this.mutem = control.music_muted;
 				if (this.mutem) {
 					if (this.loadedt[n - 1]) {
 						this.stracks[n - 1].stop();
@@ -1074,61 +1074,61 @@ public class xtGraphics extends Panel {
 			}
 		}
 		if (n == 2 && !this.loadedt[1]) {
-			this.stracks[1] = new RadicalMod("music/stage2.zipo", 370, 9000, 145, this.app);
+			this.stracks[1] = new RadicalMod("resources/music/stage2.zipo", 370, 9000, 145, this.app);
 			if (this.stracks[1].stream != null) {
 				this.loadedt[1] = true;
 			}
 		}
 		if (n == 3 && !this.loadedt[2]) {
-			this.stracks[2] = new RadicalMod("music/stage3.zipo", 350, 8500, 145, this.app);
+			this.stracks[2] = new RadicalMod("resources/music/stage3.zipo", 350, 8500, 145, this.app);
 			if (this.stracks[2].stream != null) {
 				this.loadedt[2] = true;
 			}
 		}
 		if (n == 4 && !this.loadedt[3]) {
-			this.stracks[3] = new RadicalMod("music/stage4.zipo", 300, 7500, 125, this.app);
+			this.stracks[3] = new RadicalMod("resources/music/stage4.zipo", 300, 7500, 125, this.app);
 			if (this.stracks[3].stream != null) {
 				this.loadedt[3] = true;
 			}
 		}
 		if (n == 5 && !this.loadedt[4]) {
-			this.stracks[4] = new RadicalMod("music/stage5.zipo", 250, 7900, 125, this.app);
+			this.stracks[4] = new RadicalMod("resources/music/stage5.zipo", 250, 7900, 125, this.app);
 			if (this.stracks[4].stream != null) {
 				this.loadedt[4] = true;
 			}
 		}
 		if (n == 6 && !this.loadedt[5]) {
-			this.stracks[5] = new RadicalMod("music/stage6.zipo", 760, 7900, 125, this.app);
+			this.stracks[5] = new RadicalMod("resources/music/stage6.zipo", 760, 7900, 125, this.app);
 			if (this.stracks[5].stream != null) {
 				this.loadedt[5] = true;
 			}
 		}
 		if (n == 7 && !this.loadedt[6]) {
-			this.stracks[6] = new RadicalMod("music/stage7.zipo", 300, 7500, 125, this.app);
+			this.stracks[6] = new RadicalMod("resources/music/stage7.zipo", 300, 7500, 125, this.app);
 			if (this.stracks[6].stream != null) {
 				this.loadedt[6] = true;
 			}
 		}
 		if (n == 8 && !this.loadedt[7]) {
-			this.stracks[7] = new RadicalMod("music/stage8.zipo", 400, 7900, 125, this.app);
+			this.stracks[7] = new RadicalMod("resources/music/stage8.zipo", 400, 7900, 125, this.app);
 			if (this.stracks[7].stream != null) {
 				this.loadedt[7] = true;
 			}
 		}
 		if (n == 9 && !this.loadedt[8]) {
-			this.stracks[8] = new RadicalMod("music/stage9.zipo", 300, 7900, 125, this.app);
+			this.stracks[8] = new RadicalMod("resources/music/stage9.zipo", 300, 7900, 125, this.app);
 			if (this.stracks[8].stream != null) {
 				this.loadedt[8] = true;
 			}
 		}
 		if (n == 10 && !this.loadedt[9]) {
-			this.stracks[9] = new RadicalMod("music/stage10.zipo", 550, 8100, 145, this.app);
+			this.stracks[9] = new RadicalMod("resources/music/stage10.zipo", 550, 8100, 145, this.app);
 			if (this.stracks[9].stream != null) {
 				this.loadedt[9] = true;
 			}
 		}
 		if (n == 11 && !this.loadedt[10]) {
-			this.stracks[10] = new RadicalMod("music/stage11.zipo", 550, 9000, 145, this.app);
+			this.stracks[10] = new RadicalMod("resources/music/stage11.zipo", 550, 9000, 145, this.app);
 			if (this.stracks[10].stream != null) {
 				this.loadedt[10] = true;
 			}

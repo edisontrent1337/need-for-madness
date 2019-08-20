@@ -1318,7 +1318,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				frametime = n;
 			}
 			try {
-				Thread.sleep((long) (1000.0/60.0));
+				Thread.sleep((long) (1000.0 / 30.0));
 			} catch (InterruptedException ex) {
 			}
 			//this.graphics.drawString("FPS:" + String.valueOf(1000 / frametime), 100, 100);
@@ -1340,57 +1340,6 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		}
 	}
 
-	public boolean keyDown(final Event event, final int n) {
-		if (!this.exwist) {
-			if (n == 1004) {
-				this.controls[0].up = true;
-			}
-			if (n == 1005) {
-				this.controls[0].down = true;
-			}
-			if (n == 1007) {
-				this.controls[0].right = true;
-			}
-			if (n == 1006) {
-				this.controls[0].left = true;
-			}
-			if (n == 32) {
-				this.controls[0].handb = true;
-			}
-			if (n == 10 || n == 80 || n == 112 || n == 27) {
-				this.controls[0].enter = true;
-			}
-			if (n == 97 || n == 65) {
-				if (this.controls[0].arrace) {
-					this.controls[0].arrace = false;
-				} else {
-					this.controls[0].arrace = true;
-				}
-			}
-			if (n == 77 || n == 109) {
-				if (this.controls[0].mutem) {
-					this.controls[0].mutem = false;
-				} else {
-					this.controls[0].mutem = true;
-				}
-			}
-			if (n == 78 || n == 110) {
-				if (this.controls[0].mutes) {
-					this.controls[0].mutes = false;
-				} else {
-					this.controls[0].mutes = true;
-				}
-			}
-			if (n == 118 || n == 86) {
-				++this.view;
-				if (this.view == 3) {
-					this.view = 0;
-				}
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent mouseEvent) {
 		System.out.println("Mouse pressed.");
@@ -1403,44 +1352,38 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 
 	@Override
 	public void mousePressed(MouseEvent mouseEvent) {
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent mouseEvent) {
-		this.mouses = 0;
-		System.out.println("Mouse released.");
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent mouseEvent) {
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent mouseEvent) {
-
 	}
 
 	@Override
 	public void keyTyped(KeyEvent keyEvent) {
-
 	}
 
 	@Override
 	public void keyPressed(KeyEvent keyEvent) {
 		Control controls = this.controls[0];
 		switch (keyEvent.getKeyCode()) {
-			case KeyEvent.VK_W:
+			case KeyEvent.VK_UP:
 				controls.up = true;
 				break;
-			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:
 				controls.left = true;
 				break;
-			case KeyEvent.VK_S:
+			case KeyEvent.VK_DOWN:
 				controls.down = true;
 				break;
-			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:
 				controls.right = true;
 				break;
 			case KeyEvent.VK_SPACE:
@@ -1449,6 +1392,16 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			case KeyEvent.VK_ENTER:
 				controls.enter = true;
 				break;
+			case KeyEvent.VK_A:
+				this.controls[0].arrace = !this.controls[0].arrace;
+				break;
+			case KeyEvent.VK_N:
+				this.controls[0].sound_muted = !this.controls[0].sound_muted;
+			break;
+			case KeyEvent.VK_M:
+				this.controls[0].music_muted = !this.controls[0].music_muted;
+				break;
+
 		}
 		/*if (!this.exwist) {
 			if (n == 1004) {
@@ -1477,17 +1430,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				}
 			}
 			if (n == 77 || n == 109) {
-				if (this.controls[0].mutem) {
-					this.controls[0].mutem = false;
+				if (this.controls[0].music_muted) {
+					this.controls[0].music_muted = false;
 				} else {
-					this.controls[0].mutem = true;
+					this.controls[0].music_muted = true;
 				}
 			}
 			if (n == 78 || n == 110) {
-				if (this.controls[0].mutes) {
-					this.controls[0].mutes = false;
+				if (this.controls[0].sound_muted) {
+					this.controls[0].sound_muted = false;
 				} else {
-					this.controls[0].mutes = true;
+					this.controls[0].sound_muted = true;
 				}
 			}
 			if (n == 118 || n == 86) {
@@ -1504,16 +1457,16 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 	public void keyReleased(KeyEvent keyEvent) {
 		Control controls = this.controls[0];
 		switch (keyEvent.getKeyCode()) {
-			case KeyEvent.VK_W:
+			case KeyEvent.VK_UP:
 				controls.up = false;
 				break;
-			case KeyEvent.VK_A:
+			case KeyEvent.VK_LEFT:
 				controls.left = false;
 				break;
-			case KeyEvent.VK_S:
+			case KeyEvent.VK_DOWN:
 				controls.down = false;
 				break;
-			case KeyEvent.VK_D:
+			case KeyEvent.VK_RIGHT:
 				controls.right = false;
 				break;
 			case KeyEvent.VK_SPACE:

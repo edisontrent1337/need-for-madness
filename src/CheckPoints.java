@@ -58,32 +58,29 @@ public class CheckPoints
 
     public void checkstat(final Madness[] cars, final Geometry[] geometries) {
         if (!this.haltall) {
-            int n = 0;
-            do {
-                this.pos[n] = 0;
-                this.onscreen[n] = geometries[n].dist;
-                this.opx[n] = geometries[n].x;
-                this.opz[n] = geometries[n].z;
-                if (this.dested[n] == 0) {
-                    this.clear[n] = cars[n].clear;
+            for (int i = 0; i < 5; i++) {
+                this.pos[i] = 0;
+                this.onscreen[i] = geometries[i].dist;
+                this.opx[i] = geometries[i].x;
+                this.opz[i] = geometries[i].z;
+                if (this.dested[i] == 0) {
+                    this.clear[i] = cars[i].clear;
                 }
                 else {
-                    this.clear[n] = -1;
+                    this.clear[i] = -1;
                 }
-            } while (++n < 5);
+            }
             int n2 = 0;
             do {
                 for (int i = n2 + 1; i < 5; ++i) {
                     if (this.clear[n2] != this.clear[i]) {
                         if (this.clear[n2] < this.clear[i]) {
                             final int[] pos = this.pos;
-                            final int n3 = n2;
-                            ++pos[n3];
+                            ++pos[n2];
                         }
                         else {
                             final int[] pos2 = this.pos;
-                            final int n4 = i;
-                            ++pos2[n4];
+                            ++pos2[i];
                         }
                     }
                     else {
@@ -95,13 +92,11 @@ public class CheckPoints
                         }
                         if (this.py(geometries[n2].x / 100, this.x[n5] / 100, geometries[n2].z / 100, this.z[n5] / 100) > this.py(geometries[i].x / 100, this.x[n5] / 100, geometries[i].z / 100, this.z[n5] / 100)) {
                             final int[] pos3 = this.pos;
-                            final int n6 = n2;
-                            ++pos3[n6];
+                            ++pos3[n2];
                         }
                         else {
                             final int[] pos4 = this.pos;
-                            final int n7 = i;
-                            ++pos4[n7];
+                            ++pos4[i];
                         }
                     }
                 }
