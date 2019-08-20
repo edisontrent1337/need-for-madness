@@ -1,4 +1,3 @@
-import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.ByteArrayInputStream;
 import java.awt.Color;
@@ -8,7 +7,7 @@ import java.awt.Graphics;
 // Decompiled by Procyon v0.5.36
 //
 
-public class ContO
+public class Geometry
 {
     Medium m;
     Trackers t;
@@ -190,7 +189,7 @@ public class ContO
         return (n2 - this.m.focus_point) * (this.m.cy - n) / n2 + n;
     }
 
-    public ContO(final byte[] array, final Medium m, final Trackers t) {
+    public Geometry(final byte[] array, final Medium m, final Trackers t) {
         this.npl = 0;
         this.x = 0;
         this.y = 0;
@@ -397,7 +396,7 @@ public class ContO
         this.grat = wheels.ground;
     }
 
-    public ContO(final ContO contO, final int x, final int y, final int z, final int a) {
+    public Geometry(final Geometry geometry, final int x, final int y, final int z, final int a) {
         this.npl = 0;
         this.x = 0;
         this.y = 0;
@@ -434,19 +433,19 @@ public class ContO
         this.elc = new int[2];
         this.fix = false;
         this.fcnt = 0;
-        this.m = contO.m;
-        this.t = contO.t;
-        this.npl = contO.npl;
-        this.maxR = contO.maxR;
-        this.disp = contO.disp;
-        this.disline = contO.disline;
-        this.noline = contO.noline;
-        this.shadow = contO.shadow;
-        this.grounded = contO.grounded;
-        this.grat = contO.grat;
-        this.p = new Plane[contO.npl];
+        this.m = geometry.m;
+        this.t = geometry.t;
+        this.npl = geometry.npl;
+        this.maxR = geometry.maxR;
+        this.disp = geometry.disp;
+        this.disline = geometry.disline;
+        this.noline = geometry.noline;
+        this.shadow = geometry.shadow;
+        this.grounded = geometry.grounded;
+        this.grat = geometry.grat;
+        this.p = new Plane[geometry.npl];
         for (int i = 0; i < this.npl; ++i) {
-            this.p[i] = new Plane(this.m, this.t, contO.p[i].ox, contO.p[i].oz, contO.p[i].oy, contO.p[i].n, contO.p[i].oc, contO.p[i].glass, contO.p[i].gr, contO.p[i].wx, contO.p[i].wy, contO.p[i].wz, contO.disline, contO.p[i].bfase, contO.p[i].road);
+            this.p[i] = new Plane(this.m, this.t, geometry.p[i].ox, geometry.p[i].oz, geometry.p[i].oy, geometry.p[i].n, geometry.p[i].oc, geometry.p[i].glass, geometry.p[i].gr, geometry.p[i].wx, geometry.p[i].wy, geometry.p[i].wz, geometry.disline, geometry.p[i].bfase, geometry.p[i].road);
         }
         this.x = x;
         this.y = y;
@@ -455,17 +454,17 @@ public class ContO
         this.xy = 0;
         this.zy = 0;
         for (int j = 0; j < this.npl; ++j) {
-            this.p[j].master = contO.p[j].master;
+            this.p[j].master = geometry.p[j].master;
             this.p[j].rot(this.p[j].ox, this.p[j].oz, 0, 0, a, this.p[j].n);
             this.p[j].loadprojf();
         }
-        if (contO.tnt != 0) {
-            for (int k = 0; k < contO.tnt; ++k) {
-                this.t.xy[this.t.nt] = (int)(contO.txy[k] * this.m.cos(a) - contO.tzy[k] * this.m.sin(a));
-                this.t.zy[this.t.nt] = (int)(contO.tzy[k] * this.m.cos(a) + contO.txy[k] * this.m.sin(a));
+        if (geometry.tnt != 0) {
+            for (int k = 0; k < geometry.tnt; ++k) {
+                this.t.xy[this.t.nt] = (int)(geometry.txy[k] * this.m.cos(a) - geometry.tzy[k] * this.m.sin(a));
+                this.t.zy[this.t.nt] = (int)(geometry.tzy[k] * this.m.cos(a) + geometry.txy[k] * this.m.sin(a));
                 int n = 0;
                 do {
-                    this.t.c[this.t.nt][n] = (int)(contO.tc[k][n] + contO.tc[k][n] * (this.m.snap[n] / 100.0f));
+                    this.t.c[this.t.nt][n] = (int)(geometry.tc[k][n] + geometry.tc[k][n] * (this.m.snap[n] / 100.0f));
                     if (this.t.c[this.t.nt][n] > 255) {
                         this.t.c[this.t.nt][n] = 255;
                     }
@@ -473,18 +472,18 @@ public class ContO
                         this.t.c[this.t.nt][n] = 0;
                     }
                 } while (++n < 3);
-                this.t.x[this.t.nt] = (int)(this.x + contO.tx[k] * this.m.cos(a) - contO.tz[k] * this.m.sin(a));
-                this.t.z[this.t.nt] = (int)(this.z + contO.tz[k] * this.m.cos(a) + contO.tx[k] * this.m.sin(a));
-                this.t.y[this.t.nt] = this.y + contO.ty[k];
-                this.t.skd[this.t.nt] = contO.skd[k];
-                this.t.dam[this.t.nt] = contO.dam[k];
+                this.t.x[this.t.nt] = (int)(this.x + geometry.tx[k] * this.m.cos(a) - geometry.tz[k] * this.m.sin(a));
+                this.t.z[this.t.nt] = (int)(this.z + geometry.tz[k] * this.m.cos(a) + geometry.tx[k] * this.m.sin(a));
+                this.t.y[this.t.nt] = this.y + geometry.ty[k];
+                this.t.skd[this.t.nt] = geometry.skd[k];
+                this.t.dam[this.t.nt] = geometry.dam[k];
                 int abs = Math.abs(a);
                 if (abs == 180) {
                     abs = 0;
                 }
-                this.t.radx[this.t.nt] = (int)(contO.tradx[k] * this.m.cos(abs) + contO.tradz[k] * this.m.sin(abs));
-                this.t.radz[this.t.nt] = (int)(contO.tradx[k] * this.m.sin(abs) + contO.tradz[k] * this.m.cos(abs));
-                this.t.rady[this.t.nt] = contO.trady[k];
+                this.t.radx[this.t.nt] = (int)(geometry.tradx[k] * this.m.cos(abs) + geometry.tradz[k] * this.m.sin(abs));
+                this.t.radz[this.t.nt] = (int)(geometry.tradx[k] * this.m.sin(abs) + geometry.tradz[k] * this.m.cos(abs));
+                this.t.rady[this.t.nt] = geometry.trady[k];
                 final Trackers t = this.t;
                 ++t.nt;
             }
@@ -492,12 +491,12 @@ public class ContO
         int n2 = 0;
         do {
             this.stg[n2] = 0;
-            this.keyx[n2] = contO.keyx[n2];
-            this.keyz[n2] = contO.keyz[n2];
+            this.keyx[n2] = geometry.keyx[n2];
+            this.keyz[n2] = geometry.keyz[n2];
         } while (++n2 < 4);
     }
 
-    public void d(final Graphics graphics) {
+    public void draw(final Graphics graphics) {
         if (this.dist != 0) {
             this.dist = 0;
         }

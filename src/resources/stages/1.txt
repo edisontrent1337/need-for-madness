@@ -4,7 +4,7 @@ name(The Introductory Stage)
 snap(-5,-5,20)
 
 sky(200,227,255)
-fog(215,245,220) 
+fog(215,245,220)
 ground(195,210,210)
 
 fadefrom(5000)

@@ -1,6 +1,6 @@
-// 
+//
 // Decompiled by Procyon v0.5.36
-// 
+//
 
 public class CheckPoints
 {
@@ -28,7 +28,7 @@ public class CheckPoints
     int[] opx;
     int[] opz;
     int[] onscreen;
-    
+
     public CheckPoints() {
         this.x = new int[140];
         this.z = new int[140];
@@ -55,17 +55,17 @@ public class CheckPoints
         this.opz = new int[5];
         this.onscreen = new int[5];
     }
-    
-    public void checkstat(final Madness[] array, final ContO[] array2) {
+
+    public void checkstat(final Madness[] cars, final Geometry[] geometries) {
         if (!this.haltall) {
             int n = 0;
             do {
                 this.pos[n] = 0;
-                this.onscreen[n] = array2[n].dist;
-                this.opx[n] = array2[n].x;
-                this.opz[n] = array2[n].z;
+                this.onscreen[n] = geometries[n].dist;
+                this.opx[n] = geometries[n].x;
+                this.opz[n] = geometries[n].z;
                 if (this.dested[n] == 0) {
-                    this.clear[n] = array[n].clear;
+                    this.clear[n] = cars[n].clear;
                 }
                 else {
                     this.clear[n] = -1;
@@ -87,11 +87,13 @@ public class CheckPoints
                         }
                     }
                     else {
-                        int n5;
-                        for (n5 = array[n2].pcleared + 1; this.typ[n5] <= 0; n5 = 0) {
-                            if (++n5 == this.n) {}
+                        int n5 = 0;
+                        for (n5 = cars[n2].pcleared + 1; this.typ[n5] <= 0; ++n5) {
+                            if (n5 == this.n) {
+                            	n5 = 0;
+							}
                         }
-                        if (this.py(array2[n2].x / 100, this.x[n5] / 100, array2[n2].z / 100, this.z[n5] / 100) > this.py(array2[i].x / 100, this.x[n5] / 100, array2[i].z / 100, this.z[n5] / 100)) {
+                        if (this.py(geometries[n2].x / 100, this.x[n5] / 100, geometries[n2].z / 100, this.z[n5] / 100) > this.py(geometries[i].x / 100, this.x[n5] / 100, geometries[i].z / 100, this.z[n5] / 100)) {
                             final int[] pos3 = this.pos;
                             final int n6 = n2;
                             ++pos3[n6];
@@ -108,12 +110,12 @@ public class CheckPoints
         this.wasted = 0;
         int n8 = 1;
         do {
-            if (array[n8].dest) {
+            if (cars[n8].dest) {
                 ++this.wasted;
             }
         } while (++n8 < 5);
     }
-    
+
     public int py(final int n, final int n2, final int n3, final int n4) {
         return (n - n2) * (n - n2) + (n3 - n4) * (n3 - n4);
     }

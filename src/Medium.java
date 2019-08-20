@@ -1,9 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
-// 
+//
 // Decompiled by Procyon v0.5.36
-// 
+//
 
 public class Medium
 {
@@ -50,7 +50,7 @@ public class Medium
     int nrnd;
     long trx;
     long trz;
-    
+
     public float random() {
         if (this.cntrn == 0) {
             int n = 0;
@@ -95,14 +95,14 @@ public class Medium
         }
         return this.rand[this.trn] / 10.0f;
     }
-    
+
     public int ys(final int n, int n2) {
         if (n2 < 10) {
             n2 = 10;
         }
         return (n2 - this.focus_point) * (this.cy - n) / n2 + n;
     }
-    
+
     public float sin(int i) {
         while (i >= 360) {
             i -= 360;
@@ -112,7 +112,7 @@ public class Medium
         }
         return this.tsin[i];
     }
-    
+
     public Medium() {
         this.focus_point = 400;
         this.ground = 250;
@@ -166,7 +166,7 @@ public class Medium
             this.tsin[n2] = (float)Math.sin(n2 * 0.017453292519943295);
         } while (++n2 < 360);
     }
-    
+
     public void setfade(final int n, final int n2, final int n3) {
         this.cfade[0] = (int)(n + n * (this.snap[0] / 100.0f));
         if (this.cfade[0] > 255) {
@@ -190,8 +190,8 @@ public class Medium
             this.cfade[2] = 0;
         }
     }
-    
-    public void d(final Graphics graphics) {
+
+    public void draw(final Graphics graphics) {
         this.nsp = 0;
         if (this.zy > 90) {
             this.zy = 90;
@@ -302,44 +302,44 @@ public class Medium
             graphics.fillPolygon(array, array2, 4);
         }
     }
-    
-    public void watch(final ContO contO, final int n) {
+
+    public void watch(final Geometry geometry, final int n) {
         if (this.flex != 0) {
             this.flex = 0;
         }
         if (this.td) {
-            this.y = (int)(contO.y - 300 - 1100.0f * this.random());
-            this.x = contO.x + (int)((contO.x + 400 - contO.x) * this.cos(n) - (contO.z + 5000 - contO.z) * this.sin(n));
-            this.z = contO.z + (int)((contO.x + 400 - contO.x) * this.sin(n) + (contO.z + 5000 - contO.z) * this.cos(n));
+            this.y = (int)(geometry.y - 300 - 1100.0f * this.random());
+            this.x = geometry.x + (int)((geometry.x + 400 - geometry.x) * this.cos(n) - (geometry.z + 5000 - geometry.z) * this.sin(n));
+            this.z = geometry.z + (int)((geometry.x + 400 - geometry.x) * this.sin(n) + (geometry.z + 5000 - geometry.z) * this.cos(n));
             this.td = false;
         }
         int n2 = 0;
-        if (contO.x - this.x - this.cx > 0) {
+        if (geometry.x - this.x - this.cx > 0) {
             n2 = 180;
         }
-        final int n3 = -(int)(90 + n2 + Math.atan((contO.z - this.z) / (double)(contO.x - this.x - this.cx)) / 0.017453292519943295);
+        final int n3 = -(int)(90 + n2 + Math.atan((geometry.z - this.z) / (double)(geometry.x - this.x - this.cx)) / 0.017453292519943295);
         int n4 = 0;
-        if (contO.y - this.y - this.cy < 0) {
+        if (geometry.y - this.y - this.cy < 0) {
             n4 = -180;
         }
-        final int n5 = (int)(90 + n4 - Math.atan((int)Math.sqrt((contO.z - this.z) * (contO.z - this.z) + (contO.x - this.x - this.cx) * (contO.x - this.x - this.cx)) / (double)(contO.y - this.y - this.cy)) / 0.017453292519943295);
+        final int n5 = (int)(90 + n4 - Math.atan((int)Math.sqrt((geometry.z - this.z) * (geometry.z - this.z) + (geometry.x - this.x - this.cx) * (geometry.x - this.x - this.cx)) / (double)(geometry.y - this.y - this.cy)) / 0.017453292519943295);
         this.xz += (n3 - this.xz) / this.trns;
         if (this.trns != 1) {
             --this.trns;
         }
         this.zy += (n5 - this.zy) / 5;
-        if ((int)Math.sqrt((contO.z - this.z) * (contO.z - this.z) + (contO.x - this.x - this.cx) * (contO.x - this.x - this.cx) + (contO.y - this.y - this.cy) * (contO.y - this.y - this.cy)) > 6000) {
+        if ((int)Math.sqrt((geometry.z - this.z) * (geometry.z - this.z) + (geometry.x - this.x - this.cx) * (geometry.x - this.x - this.cx) + (geometry.y - this.y - this.cy) * (geometry.y - this.y - this.cy)) > 6000) {
             this.td = true;
         }
     }
-    
+
     public void setsnap(final int n, final int n2, final int n3) {
         this.snap[0] = n;
         this.snap[1] = n2;
         this.snap[2] = n3;
     }
-    
-    public void around(final ContO contO, final boolean b) {
+
+    public void around(final Geometry geometry, final boolean b) {
         if (this.flex != 0) {
             this.flex = 0;
         }
@@ -364,12 +364,12 @@ public class Medium
         if (n < 1000) {
             n = 1000;
         }
-        this.y = contO.y - this.adv;
+        this.y = geometry.y - this.adv;
         if (this.y > 10) {
             this.vert = false;
         }
-        this.x = contO.x + (int)((contO.x - n - contO.x) * this.cos(this.vxz));
-        this.z = contO.z + (int)((contO.x - n - contO.x) * this.sin(this.vxz));
+        this.x = geometry.x + (int)((geometry.x - n - geometry.x) * this.cos(this.vxz));
+        this.z = geometry.z + (int)((geometry.x - n - geometry.x) * this.sin(this.vxz));
         if (!b) {
             this.vxz += 2;
         }
@@ -381,10 +381,10 @@ public class Medium
         if (y > 0) {
             y = 0;
         }
-        if (contO.y - y - this.cy < 0) {
+        if (geometry.y - y - this.cy < 0) {
             n2 = -180;
         }
-        int n3 = (int)(90 + n2 - Math.atan((int)Math.sqrt((contO.z - this.z + this.cz) * (contO.z - this.z + this.cz) + (contO.x - this.x - this.cx) * (contO.x - this.x - this.cx)) / (double)(contO.y - y - this.cy)) / 0.017453292519943295);
+        int n3 = (int)(90 + n2 - Math.atan((int)Math.sqrt((geometry.z - this.z + this.cz) * (geometry.z - this.z + this.cz) + (geometry.x - this.x - this.cx) * (geometry.x - this.x - this.cx)) / (double)(geometry.y - y - this.cy)) / 0.017453292519943295);
         this.xz = -this.vxz + 90;
         if (b) {
             n3 -= 15;
@@ -394,7 +394,7 @@ public class Medium
             this.trns = 5;
         }
     }
-    
+
     public void setgrnd(final int n, final int n2, final int n3) {
         this.cgrnd[0] = (int)(n + n * (this.snap[0] / 100.0f));
         if (this.cgrnd[0] > 255) {
@@ -418,7 +418,7 @@ public class Medium
             this.cgrnd[2] = 0;
         }
     }
-    
+
     public void adjstfade(final float n) {
         if (n < 15.0f) {
             this.fade[0] = (int)(this.origfade - 1000.0f * (15.0f - n));
@@ -437,7 +437,7 @@ public class Medium
             this.fadfrom(this.fade[0]);
         }
     }
-    
+
     public void addsp(final int n, final int n2, final int n3) {
         if (this.nsp != 5) {
             this.spx[this.nsp] = n;
@@ -446,7 +446,7 @@ public class Medium
             ++this.nsp;
         }
     }
-    
+
     public void aroundtrack(final CheckPoints checkPoints) {
         if (this.flex != 0) {
             this.flex = 0;
@@ -493,7 +493,7 @@ public class Medium
             this.zy = (int)(90 + n - Math.atan(n2 / (double)(-this.y - this.cy)) / 0.017453292519943295);
         }
     }
-    
+
     public void setsky(final int n, final int n2, final int n3) {
         this.csky[0] = (int)(n + n * (this.snap[0] / 100.0f));
         if (this.csky[0] > 255) {
@@ -517,25 +517,25 @@ public class Medium
             this.csky[2] = 0;
         }
     }
-    
+
     public void fadfrom(final int n) {
         int n2 = 0;
         do {
             this.fade[n2] = n * (n2 + 1);
         } while (++n2 < 8);
     }
-    
-    public void follow(final ContO contO, final int n) {
+
+    public void follow(final Geometry geometry, final int n) {
         this.zy = 10;
         this.xz = -n;
-        this.x = contO.x - this.cx + (int)(-(contO.z - 800 - contO.z) * this.sin(n));
-        this.z = contO.z - this.cz + (int)((contO.z - 800 - contO.z) * this.cos(n));
-        this.y = contO.y - 250 - this.cy;
+        this.x = geometry.x - this.cx + (int)(-(geometry.z - 800 - geometry.z) * this.sin(n));
+        this.z = geometry.z - this.cz + (int)((geometry.z - 800 - geometry.z) * this.cos(n));
+        this.y = geometry.y - 250 - this.cy;
         if (this.trns != 1) {
             this.trns = 1;
         }
     }
-    
+
     public float cos(int i) {
         while (i >= 360) {
             i -= 360;

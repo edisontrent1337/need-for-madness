@@ -46,7 +46,6 @@ public class RadicalMod {
 			this.stream = null;
 			System.out.println("Error Loading Mod: " + obj);
 		}
-		System.gc();
 	}
 
 	public void resume() {

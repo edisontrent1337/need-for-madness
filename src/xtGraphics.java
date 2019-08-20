@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import java.io.DataInputStream;
 import java.net.URL;
 import java.awt.Toolkit;
 import java.awt.MediaTracker;
@@ -943,7 +942,6 @@ public class xtGraphics extends Panel {
 		} catch (Exception obj) {
 			System.out.println("Error Loading Images Pak 1: " + obj);
 		}
-		System.gc();
 	}
 
 	public void nofocus(final Graphics graphics) {
@@ -1787,7 +1785,7 @@ public class xtGraphics extends Panel {
 		}
 	}
 
-	public void finish(final CheckPoints checkPoints, final ContO[] array, final Control control, final Graphics graphics) {
+	public void finish(final CheckPoints checkPoints, final Geometry[] array, final Control control, final Graphics graphics) {
 		graphics.drawImage(this.fleximg, 0, 0, null);
 		if (this.winner) {
 			if (checkPoints.stage == this.unlocked) {
@@ -1861,12 +1859,12 @@ public class xtGraphics extends Panel {
 						this.m.ground = 2470;
 						array[n].z = 1500;
 						array[n].x = 0;
-						final ContO contO = array[n];
-						contO.xz += 5;
+						final Geometry geometry = array[n];
+						geometry.xz += 5;
 						array[n].zy = 0;
-						final ContO contO2 = array[n];
-						contO2.wzy -= 10;
-						array[n].d(graphics);
+						final Geometry geometry2 = array[n];
+						geometry2.wzy -= 10;
+						array[n].draw(graphics);
 						if (this.aflk) {
 							graphics.setColor(new Color(0, 128, 255));
 						} else {
@@ -2270,7 +2268,7 @@ public class xtGraphics extends Panel {
 		this.auscnt = 45;
 		this.pnext = 0;
 		this.pback = 0;
-		this.starcnt = 90;
+		this.starcnt = 10;
 		this.gocnt = 3;
 		this.grrd = true;
 		this.aird = true;
@@ -2345,7 +2343,6 @@ public class xtGraphics extends Panel {
 		} catch (Exception obj) {
 			System.out.println("Error Reading Images Pak 2: " + obj);
 		}
-		System.gc();
 	}
 
 	public void drawstat(final Graphics graphics, final int n, int n2, final boolean b, final float n3) {
@@ -2514,7 +2511,7 @@ public class xtGraphics extends Panel {
 	}
 
 	public xtGraphics(final Medium m, final Graphics graphics, final Applet app, final int n) throws MalformedURLException, URISyntaxException {
-		this.fase = 111;
+		this.fase = 7;
 		this.oldfase = 0;
 		this.starcnt = 0;
 		this.unlocked = 1;
@@ -2887,7 +2884,7 @@ public class xtGraphics extends Panel {
 					this.oldfase = 7;
 					this.fase = 11;
 				} else {
-					this.fase = -9;
+					this.fase = -9; //-9
 				}
 			}
 			if (this.opselect == 1) {
@@ -2972,7 +2969,6 @@ public class xtGraphics extends Panel {
 			}
 		}
 		if (control.handb || control.enter) {
-			System.gc();
 			this.fase = 0;
 			control.handb = false;
 			control.enter = false;
@@ -3119,7 +3115,6 @@ public class xtGraphics extends Panel {
 		} catch (Exception obj) {
 			System.out.println("Error Reading Images Pak 3: " + obj);
 		}
-		System.gc();
 	}
 
 	public void stopallnow() {
@@ -3143,7 +3138,7 @@ public class xtGraphics extends Panel {
 		this.stages.outwithit();
 	}
 
-	public void carselect(final Control control, final ContO[] array, final Madness madness, final Graphics graphics) {
+	public void carselect(final Control control, final Geometry[] array, final Madness madness, final Graphics graphics) {
 		this.cars.play();
 		graphics.drawImage(this.carsbg, 0, 0, null);
 		graphics.drawImage(this.selectcar, 184, 65, null);
@@ -3154,7 +3149,7 @@ public class xtGraphics extends Panel {
 		this.m.xz = 0;
 		this.m.zy = 10;
 		this.m.ground = 470;
-		array[this.sc[0]].d(graphics);
+		array[this.sc[0]].draw(graphics);
 		if (this.flipo == 0) {
 			graphics.setFont(new Font("SansSerif", 1, 13));
 			this.ftm = graphics.getFontMetrics();
@@ -3168,14 +3163,14 @@ public class xtGraphics extends Panel {
 			array[this.sc[0]].z = 950;
 			array[this.sc[0]].y = -34 - array[this.sc[0]].grat;
 			array[this.sc[0]].x = 0;
-			final ContO contO = array[this.sc[0]];
-			contO.xz += 5;
+			final Geometry geometry = array[this.sc[0]];
+			geometry.xz += 5;
 			array[this.sc[0]].zy = 0;
-			final ContO contO2 = array[this.sc[0]];
-			contO2.wzy -= 10;
+			final Geometry geometry2 = array[this.sc[0]];
+			geometry2.wzy -= 10;
 			if (array[this.sc[0]].wzy < -45) {
-				final ContO contO3 = array[this.sc[0]];
-				contO3.wzy += 45;
+				final Geometry geometry3 = array[this.sc[0]];
+				geometry3.wzy += 45;
 			}
 			if (this.sc[0] != 0) {
 				graphics.drawImage(this.back[this.pback], 23, 270, null);
@@ -3232,14 +3227,14 @@ public class xtGraphics extends Panel {
 			this.pnext = 0;
 			this.gatey = 300;
 			if (this.flipo > 10) {
-				final ContO contO4 = array[this.sc[0]];
-				contO4.y -= 100;
+				final Geometry geometry4 = array[this.sc[0]];
+				geometry4.y -= 100;
 				if (this.nextc) {
-					final ContO contO5 = array[this.sc[0]];
-					contO5.zy += 20;
+					final Geometry geometry5 = array[this.sc[0]];
+					geometry5.zy += 20;
 				} else {
-					final ContO contO6 = array[this.sc[0]];
-					contO6.zy -= 20;
+					final Geometry geometry6 = array[this.sc[0]];
+					geometry6.zy -= 20;
 				}
 			} else {
 				if (this.flipo == 10) {
@@ -3257,8 +3252,8 @@ public class xtGraphics extends Panel {
 					array[this.sc[0]].x = 0;
 					array[this.sc[0]].zy = 0;
 				}
-				final ContO contO7 = array[this.sc[0]];
-				contO7.y += 100;
+				final Geometry geometry7 = array[this.sc[0]];
+				geometry7.y += 100;
 			}
 			--this.flipo;
 		}
@@ -3542,14 +3537,10 @@ public class xtGraphics extends Panel {
 		 AudioClip audioClip = this.app.getAudioClip(this.app.getCodeBase(), name);
 
 		URL resource = this.getClass().getResource(name);
-		File file = new File(resource.toURI());
-		 // FIXME: find sound effect file like we did with the other files
-		// File f = new File(name);
-		// URL url = f.toURL();
 		audioClip = Applet.newAudioClip(resource);
 		if (name.startsWith("resources/sounds/default")) {
 			audioClip.play();
-			Thread.yield();
+			//Thread.yield();
 			audioClip.stop();
 		}
 		return audioClip;
@@ -3625,6 +3616,5 @@ public class xtGraphics extends Panel {
 		} catch (Exception obj) {
 			System.out.println("Error Reading Images Pak 4: " + obj);
 		}
-		System.gc();
 	}
 }

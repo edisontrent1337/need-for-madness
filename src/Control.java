@@ -1,6 +1,6 @@
-// 
+//
 // Decompiled by Procyon v0.5.36
-// 
+//
 
 public class Control
 {
@@ -66,8 +66,8 @@ public class Control
     boolean udswt;
     int actwait;
     int cntrn;
-    
-    public void preform(final Madness madness, final ContO contO, final CheckPoints checkPoints, final Trackers trackers) {
+
+    public void preform(final Madness madness, final Geometry geometry, final CheckPoints checkPoints, final Trackers trackers) {
         this.left = false;
         this.right = false;
         this.up = false;
@@ -279,7 +279,7 @@ public class Control
                         int acr = 0;
                         do {
                             if (acr != madness.im && checkPoints.clear[acr] != -1) {
-                                int i = contO.xz;
+                                int i = geometry.xz;
                                 if (this.zyinv) {
                                     i += 180;
                                 }
@@ -290,11 +290,11 @@ public class Control
                                     i -= 360;
                                 }
                                 int n5 = 0;
-                                if (checkPoints.opx[acr] - contO.x >= 0) {
+                                if (checkPoints.opx[acr] - geometry.x >= 0) {
                                     n5 = 180;
                                 }
                                 int j;
-                                for (j = (int)(90 + n5 + Math.atan((checkPoints.opz[acr] - contO.z) / (double)(checkPoints.opx[acr] - contO.x)) / 0.017453292519943295); j < 0; j += 360) {}
+                                for (j = (int)(90 + n5 + Math.atan((checkPoints.opz[acr] - geometry.z) / (double)(checkPoints.opx[acr] - geometry.x)) / 0.017453292519943295); j < 0; j += 360) {}
                                 while (j > 180) {
                                     j -= 360;
                                 }
@@ -309,7 +309,7 @@ public class Control
                                 if (checkPoints.stage == 3 && madness.im == 4 && checkPoints.wasted < 2 && n7 > 4000) {
                                     n7 = 4000;
                                 }
-                                if (n6 < 85 + 15 * (Math.abs(checkPoints.clear[acr] - madness.clear) + 1) && this.py(contO.x / 100, checkPoints.opx[acr] / 100, contO.z / 100, checkPoints.opz[acr] / 100) < n7 && this.afta && madness.power > n4) {
+                                if (n6 < 85 + 15 * (Math.abs(checkPoints.clear[acr] - madness.clear) + 1) && this.py(geometry.x / 100, checkPoints.opx[acr] / 100, geometry.z / 100, checkPoints.opz[acr] / 100) < n7 && this.afta && madness.power > n4) {
                                     float n8 = (float)(35 - Math.abs(checkPoints.clear[acr] - madness.clear) * 10);
                                     if (n8 < 1.0f) {
                                         n8 = 1.0f;
@@ -367,7 +367,7 @@ public class Control
                                         this.turntyp = (int)(1.0f + this.m.random() * 2.0f);
                                     }
                                 }
-                                if (!afta || n6 <= 100 || this.py(contO.x / 100, checkPoints.opx[acr] / 100, contO.z / 100, checkPoints.opz[acr] / 100) >= 300 || this.m.random() <= 0.6 - checkPoints.pos[madness.im] / 10.0f) {
+                                if (!afta || n6 <= 100 || this.py(geometry.x / 100, checkPoints.opx[acr] / 100, geometry.z / 100, checkPoints.opz[acr] / 100) >= 300 || this.m.random() <= 0.6 - checkPoints.pos[madness.im] / 10.0f) {
                                     continue;
                                 }
                                 this.clrnce = 0;
@@ -524,8 +524,8 @@ public class Control
                             int py = -10;
                             int n17 = 0;
                             for (int n18 = 0; n18 < checkPoints.fn; ++n18) {
-                                if (this.py(contO.x / 100, checkPoints.x[this.fpnt[n18]] / 100, contO.z / 100, checkPoints.z[this.fpnt[n18]] / 100) < py || py == -10) {
-                                    py = this.py(contO.x / 100, checkPoints.x[this.fpnt[n18]] / 100, contO.z / 100, checkPoints.z[this.fpnt[n18]] / 100);
+                                if (this.py(geometry.x / 100, checkPoints.x[this.fpnt[n18]] / 100, geometry.z / 100, checkPoints.z[this.fpnt[n18]] / 100) < py || py == -10) {
+                                    py = this.py(geometry.x / 100, checkPoints.x[this.fpnt[n18]] / 100, geometry.z / 100, checkPoints.z[this.fpnt[n18]] / 100);
                                     n17 = n18;
                                 }
                             }
@@ -541,7 +541,7 @@ public class Control
                             }
                         }
                         for (int n19 = 0; n19 < checkPoints.fn; ++n19) {
-                            if (this.py(contO.x / 100, checkPoints.x[this.fpnt[n19]] / 100, contO.z / 100, checkPoints.z[this.fpnt[n19]] / 100) < 2000) {
+                            if (this.py(geometry.x / 100, checkPoints.x[this.fpnt[n19]] / 100, geometry.z / 100, checkPoints.z[this.fpnt[n19]] / 100) < 2000) {
                                 this.forget = false;
                                 this.actwait = 0;
                                 this.upwait = 0;
@@ -558,10 +558,10 @@ public class Control
                     }
                     if (this.turncnt > this.randtcnt) {
                         int n20 = 0;
-                        if (checkPoints.x[point] - contO.x >= 0) {
+                        if (checkPoints.x[point] - geometry.x >= 0) {
                             n20 = 180;
                         }
-                        this.pan = (int)(90 + n20 + Math.atan((checkPoints.z[point] - contO.z) / (double)(checkPoints.x[point] - contO.x)) / 0.017453292519943295);
+                        this.pan = (int)(90 + n20 + Math.atan((checkPoints.z[point] - geometry.z) / (double)(checkPoints.x[point] - geometry.x)) / 0.017453292519943295);
                         this.turncnt = 0;
                         this.randtcnt = (int)(this.acuracy * this.m.random());
                     }
@@ -572,16 +572,16 @@ public class Control
                 else {
                     this.up = true;
                     int n21 = 0;
-                    if (checkPoints.opx[this.acr] - contO.x >= 0) {
+                    if (checkPoints.opx[this.acr] - geometry.x >= 0) {
                         n21 = 180;
                     }
-                    this.pan = (int)(90 + n21 + Math.atan((checkPoints.opz[this.acr] - contO.z) / (double)(checkPoints.opx[this.acr] - contO.x)) / 0.017453292519943295);
+                    this.pan = (int)(90 + n21 + Math.atan((checkPoints.opz[this.acr] - geometry.z) / (double)(checkPoints.opx[this.acr] - geometry.x)) / 0.017453292519943295);
                     --this.attack;
                     if (this.attack <= 0) {
                         this.attack = 0;
                     }
                 }
-                int xz = contO.xz;
+                int xz = geometry.xz;
                 if (this.zyinv) {
                     xz += 180;
                 }
@@ -680,7 +680,7 @@ public class Control
             }
             else {
                 if (this.trickfase == 0) {
-                    final int n22 = (int)((madness.scy[0] + madness.scy[1] + madness.scy[2] + madness.scy[3]) * (contO.y - 300) / 4000.0f);
+                    final int n22 = (int)((madness.scy[0] + madness.scy[1] + madness.scy[2] + madness.scy[3]) * (geometry.y - 300) / 4000.0f);
                     if (n22 > 9 && this.m.random() > this.trickprf / 3.0f) {
                         this.oxy = madness.pxy;
                         this.ozy = madness.pzy;
@@ -807,7 +807,7 @@ public class Control
                             this.up = true;
                         }
                     }
-                    if ((madness.scy[0] + madness.scy[1] + madness.scy[2] + madness.scy[3]) * 100.0f / (contO.y - 300) < -this.saftey) {
+                    if ((madness.scy[0] + madness.scy[1] + madness.scy[2] + madness.scy[3]) * 100.0f / (geometry.y - 300) < -this.saftey) {
                         this.onceu = false;
                         this.onced = false;
                         this.oncel = false;
@@ -999,7 +999,7 @@ public class Control
             }
         }
     }
-    
+
     public void reset(final CheckPoints checkPoints) {
         this.pan = 0;
         this.attack = 0;
@@ -1038,7 +1038,7 @@ public class Control
         this.mutem = false;
         this.mutes = false;
     }
-    
+
     public Control(final Medium m) {
         this.left = false;
         this.right = false;
@@ -1103,7 +1103,7 @@ public class Control
         this.cntrn = 0;
         this.m = m;
     }
-    
+
     public void falseo() {
         this.left = false;
         this.right = false;
@@ -1115,7 +1115,7 @@ public class Control
         this.mutem = false;
         this.mutes = false;
     }
-    
+
     public int py(final int n, final int n2, final int n3, final int n4) {
         return (n - n2) * (n - n2) + (n3 - n4) * (n3 - n4);
     }
