@@ -11,8 +11,8 @@ public class Madness
     xtGraphics xt;
     int cn;
     int im;
-    int mxz;
-    int cxz;
+    float mxz;
+    float cxz;
     float[][] acelf;
     int[][] swits;
     int[] handb;
@@ -111,24 +111,18 @@ public class Madness
             int n4 = 0;
             int i = geometry.zy;
             int j = geometry.xy;
-            while (i < 360) {
-                i += 360;
-            }
-            while (i > 360) {
-                i -= 360;
-            }
+
+            i = i % 360;
+
             if (i < 210 && i > 150) {
                 n3 = -1;
             }
             if (i > 330 || i < 30) {
                 n3 = 1;
             }
-            while (j < 360) {
-                j += 360;
-            }
-            while (j > 360) {
-                j -= 360;
-            }
+
+            j = j % 360;
+
             if (j < 210 && j > 150) {
                 n4 = -1;
             }
@@ -259,11 +253,11 @@ public class Madness
         this.comprad = new float[] { 0.5f, 0.4f, 0.8f, 0.5f, 0.5f, 0.5f, 0.5f, 1.5f, 0.5f, 0.8f };
         this.push = new int[] { 2, 2, 3, 3, 2, 2, 2, 4, 2, 2 };
         this.revpush = new int[] { 2, 3, 2, 2, 2, 2, 2, 1, 2, 1 };
-        this.lift = new int[] { 0, 30, 0, 20, 0, 30, 0, 0, 30, 0 };
+        this.lift = new int[] { 0, 30, 0, 20, 0, 30, 0, 0, 2000, 0 };
         this.revlift = new int[] { 0, 0, 15, 0, 0, 0, 0, 0, 0, 32 };
         this.powerloss = new int[] { 2500000, 2500000, 3500000, 2500000, 2500000, 2500000, 3200000, 4500000, 3000000, 5500000 };
         this.flipy = new int[] { -50, -26, -90, -41, -55, -53, -54, -85, -60, -127 };
-        this.msquash = new int[] { 7, 3, 7, 2, 3, 3, 6, 10, 3, 8 };
+        this.msquash = new int[] { 7, 3, 7, 2, 3, 3, 6, 10, 10, 8 };
         this.clrad = new int[] { 3300, 1500, 4700, 3000, 1700, 2100, 3500, 7000, 4000, 4000 };
         this.maxmag = new int[] { 3500, 1700, 7500, 5000, 3000, 4100, 6000, 9000, 4400, 9500 };
         this.dammult = new float[] { 1.0f, 2.028f, 0.9375f, 1.1791f, 1.0f, 0.9066f, 1.0f, 0.6969f, 0.8266f, 0.7667f };
@@ -1122,7 +1116,7 @@ public class Madness
                 }
             }
             if (Math.abs(this.mxz - this.cxz) < 30) {
-                this.cxz += (int)((this.mxz - this.cxz) / 4.0f);
+                this.cxz += ((this.mxz - this.cxz) / 4.0f);
             }
             else {
                 if (this.cxz > this.mxz) {
@@ -1330,7 +1324,7 @@ public class Madness
             else {
                 n39 = 1;
             }
-            this.mxz = (int)(Math.acos(n30 / Math.sqrt(n29 * n29 + n30 * n30)) / 0.017453292519943295 * n39);
+            this.mxz = (float)(Math.acos(n30 / Math.sqrt(n29 * n29 + n30 * n30)) / 0.017453292519943295 * n39);
             if (this.skid == 2) {
                 if (!this.capsized) {
                     n29 /= 4.0f;

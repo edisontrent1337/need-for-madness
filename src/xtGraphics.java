@@ -210,7 +210,7 @@ public class xtGraphics extends Panel {
 			b = 201;
 		}
 		graphics.setColor(new Color(r, g, b));
-		graphics.fillRect(0, 0, 550, 400);
+		fillBlankScreen(graphics);
 		graphics.drawImage(this.loadingmusic, 164, 90, null);
 		this.drawcs(graphics, 225, "" + this.sndsize[n - 1] + " KB", 0, 0, 0, 3);
 		this.drawcs(graphics, 260, " Please Wait...", 0, 0, 0, 3);
@@ -235,6 +235,10 @@ public class xtGraphics extends Panel {
 				this.drawcs(graphics, 300, "> Remember the more the power the more faster and powerful your car is...", 100, 100, 100, 4);
 			}
 		}
+	}
+
+	private void fillBlankScreen(Graphics graphics) {
+		graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 	}
 
 	public void cantgo(final Graphics graphics, final Control control) {
@@ -296,19 +300,19 @@ public class xtGraphics extends Panel {
 	public void inst(final Graphics graphics, final Control control) {
 		if (this.flipo == 0) {
 			graphics.setColor(new Color(214, 218, 252));
-			graphics.fillRect(0, 0, 550, 400);
+			fillBlankScreen(graphics);
 			graphics.drawImage(this.inst1, 0, 0, null);
 			this.flipo = 1;
 		}
 		if (this.flipo == 2) {
 			graphics.setColor(new Color(214, 218, 252));
-			graphics.fillRect(0, 0, 550, 400);
+			fillBlankScreen(graphics);
 			graphics.drawImage(this.inst2, 0, 0, null);
 			this.flipo = 3;
 		}
 		if (this.flipo == 4) {
 			graphics.setColor(new Color(214, 218, 252));
-			graphics.fillRect(0, 0, 550, 400);
+			fillBlankScreen(graphics);
 			graphics.drawImage(this.inst3, 0, 0, null);
 			this.flipo = 5;
 		}
@@ -338,7 +342,7 @@ public class xtGraphics extends Panel {
 
 	public void fleximage(final Image img, final Graphics graphics, final int n) {
 		if (n == 0) {
-			final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, 550, 400, this.flexpix, 0, 550);
+			final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, this.flexpix, 0, Config.SCREEN_WIDTH);
 			try {
 				pixelGrabber.grabPixels();
 			} catch (InterruptedException ex) {
@@ -349,7 +353,7 @@ public class xtGraphics extends Panel {
 				final float[] hsbvals = new float[3];
 				Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), hsbvals);
 				this.flexpix[n2] = Color.getHSBColor(0.7f, hsbvals[1], hsbvals[2]).getRGB();
-			} while (++n2 < 220000);
+			} while (++n2 < Config.SCREEN_PIXELS);
 		}
 		int n3 = 0;
 		do {
@@ -378,8 +382,8 @@ public class xtGraphics extends Panel {
 				}
 				this.flexpix[n3] = new Color(r, g, b).getRGB();
 			}
-		} while (++n3 < 220000);
-		graphics.drawImage(this.fleximg = this.createImage(new MemoryImageSource(550, 400, this.flexpix, 0, 550)), 0, 0, null);
+		} while (++n3 < Config.SCREEN_PIXELS);
+		graphics.drawImage(this.fleximg = this.createImage(new MemoryImageSource(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, this.flexpix, 0, Config.SCREEN_WIDTH)), 0, 0, null);
 	}
 
 	public void arrow(final Graphics graphics, final int n, final int n2, final CheckPoints checkPoints, final boolean b) {
@@ -438,7 +442,7 @@ public class xtGraphics extends Panel {
 			this.drawcs(graphics, 13, this.names[this.sc[n9]], 0, 0, 0, 0);
 		}
 		int i;
-		for (i = n8 + this.m.xz; i < 0; i += 360) {
+		for (i = n8 + (int)this.m.xz; i < 0; i += 360) {
 		}
 		while (i > 180) {
 			i -= 360;
@@ -859,7 +863,7 @@ public class xtGraphics extends Panel {
 		if (n2 < 50) {
 			n2 = 50;
 		}
-		return (n2 - this.m.focus_point) * (this.m.cy - n) / n2 + n;
+		return (int)((n2 - this.m.focus_point) * (this.m.cy - n) / n2 + n);
 	}
 
 	public void replyn(final Graphics graphics) {
@@ -974,7 +978,7 @@ public class xtGraphics extends Panel {
 	}
 
 	public void pauseimage(final Image img, final Graphics graphics) {
-		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, 550, 400, this.flexpix, 0, 550);
+		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, this.flexpix, 0, Config.SCREEN_WIDTH);
 		try {
 			pixelGrabber.grabPixels();
 		} catch (InterruptedException ex) {
@@ -992,10 +996,10 @@ public class xtGraphics extends Panel {
 			} else {
 				n6 = (n3 = (color.getRed() + color.getGreen() + color.getBlue() + n3 * 30) / 33);
 			}
-			if (++n4 == 550) {
+			if (++n4 == Config.SCREEN_WIDTH) {
 				n4 = 0;
 			}
-			if (n5 > 550 * (106 + n2) + 156 && n2 < 188) {
+			if (n5 > Config.SCREEN_WIDTH * (106 + n2) + 156 && n2 < 188) {
 				final int r = (n6 + 60) / 3;
 				final int g = (n6 + 135) / 3;
 				final int b = (n6 + 220) / 3;
@@ -1007,8 +1011,8 @@ public class xtGraphics extends Panel {
 			} else {
 				this.flexpix[n5] = new Color(n6, n6, n6).getRGB();
 			}
-		} while (++n5 < 220000);
-		graphics.drawImage(this.fleximg = this.createImage(new MemoryImageSource(550, 400, this.flexpix, 0, 550)), 0, 0, null);
+		} while (++n5 < Config.SCREEN_PIXELS);
+		graphics.drawImage(this.fleximg = this.createImage(new MemoryImageSource(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, this.flexpix, 0, Config.SCREEN_WIDTH)), 0, 0, null);
 		this.m.flex = 0;
 	}
 
@@ -1040,7 +1044,7 @@ public class xtGraphics extends Panel {
 			b = 201;
 		}
 		graphics.setColor(new Color(r, g, b));
-		graphics.fillRect(0, 0, 550, 400);
+		fillBlankScreen(graphics);
 		graphics.drawImage(this.loadingmusic, 164, 90, null);
 		this.drawcs(graphics, 225, "" + this.sndsize[n - 1] + " KB", 0, 0, 0, 3);
 		this.drawcs(graphics, 260, " Please Wait...", 0, 0, 0, 3);
@@ -1245,7 +1249,7 @@ public class xtGraphics extends Panel {
 		}
 		if (this.flipo == 1) {
 			graphics.setColor(new Color(0, 0, 0));
-			graphics.fillRect(0, 0, 550, 400);
+			fillBlankScreen(graphics);
 			graphics.drawImage(this.radicalplay, 87, 110, null);
 			graphics.setFont(new Font("SansSerif", 1, 13));
 			this.ftm = graphics.getFontMetrics();
@@ -2119,14 +2123,14 @@ public class xtGraphics extends Panel {
 		}
 		if (n2 == 1) {
 			graphics.setColor(new Color(0, 0, 0));
-			graphics.drawString(str, 275 - this.ftm.stringWidth(str) / 2 + 1, n + 1);
+			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, n + 1);
 		}
 		if (n2 == 2) {
 			graphics.setColor(new Color((r + this.m.csky[0] * 2) / 3, (g + this.m.csky[1] * 2) / 3, (b + this.m.csky[2] * 2) / 3));
-			graphics.drawString(str, 275 - this.ftm.stringWidth(str) / 2 + 1, n + 1);
+			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, n + 1);
 		}
 		graphics.setColor(new Color(r, g, b));
-		graphics.drawString(str, 275 - this.ftm.stringWidth(str) / 2, n);
+		graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2, n);
 	}
 
 	public int py(final int n, final int n2, final int n3, final int n4) {
@@ -2268,7 +2272,7 @@ public class xtGraphics extends Panel {
 		this.auscnt = 45;
 		this.pnext = 0;
 		this.pback = 0;
-		this.starcnt = 10;
+		this.starcnt = 90;
 		this.gocnt = 3;
 		this.grrd = true;
 		this.aird = true;
@@ -2491,7 +2495,7 @@ public class xtGraphics extends Panel {
 
 	public void loading(final Graphics graphics, final Applet applet) {
 		graphics.setColor(new Color(0, 0, 0));
-		graphics.fillRect(0, 0, 550, 400);
+		fillBlankScreen(graphics);
 		graphics.drawImage(this.sign, 237, 10, this);
 		graphics.drawImage(this.hello, 0, 80, this);
 		graphics.setColor(new Color(198, 214, 255));
@@ -2529,7 +2533,7 @@ public class xtGraphics extends Panel {
 		this.dishandle = new float[]{0.65f, 0.6f, 0.55f, 0.77f, 0.7f, 0.9f, 0.7f, 0.4f, 1.0f, 0.85f};
 		this.holdcnt = 0;
 		this.winner = false;
-		this.flexpix = new int[220000];
+		this.flexpix = new int[Config.SCREEN_PIXELS];
 		this.next = new Image[3];
 		this.back = new Image[3];
 		this.contin1 = new Image[2];
@@ -2928,7 +2932,7 @@ public class xtGraphics extends Panel {
 			b = 201;
 		}
 		graphics.setColor(new Color(r, g, b));
-		graphics.fillRect(0, 0, 550, 400);
+		fillBlankScreen(graphics);
 		graphics.drawImage(this.loadingmusic, 164, 90, null);
 		graphics.setFont(new Font("SansSerif", 1, 11));
 		this.ftm = graphics.getFontMetrics();
@@ -3004,7 +3008,7 @@ public class xtGraphics extends Panel {
 			this.powerup.play();
 		}
 		graphics.setColor(new Color(0, 0, 0));
-		graphics.fillRect(0, 0, 550, 400);
+		fillBlankScreen(graphics);
 		graphics.drawImage(this.radicalplay, 87, 110, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
 		this.ftm = graphics.getFontMetrics();
@@ -3050,7 +3054,7 @@ public class xtGraphics extends Panel {
 		if (n2 < 50) {
 			n2 = 50;
 		}
-		return (n2 - this.m.focus_point) * (this.m.cx - n) / n2 + n;
+		return (int)((n2 - this.m.focus_point) * (this.m.cx - n) / n2 + n);
 	}
 
 	public void cantreply(final Graphics graphics) {
@@ -3138,38 +3142,38 @@ public class xtGraphics extends Panel {
 		this.stages.outwithit();
 	}
 
-	public void carselect(final Control control, final Geometry[] array, final Madness madness, final Graphics graphics) {
+	public void carselect(final Control control, final Geometry[] geometries, final Madness madness, final Graphics graphics) {
 		this.cars.play();
 		graphics.drawImage(this.carsbg, 0, 0, null);
-		graphics.drawImage(this.selectcar, 184, 65, null);
+		graphics.drawImage(this.selectcar, (Config.SCREEN_WIDTH - this.selectcar.getWidth(null)) / 2, 190, null);
 		this.m.crs = true;
-		this.m.x = -275;
-		this.m.y = -500;
+		this.m.x = -Config.SCREEN_WIDTH/2;
+		this.m.y = -Config.SCREEN_HEIGHT + 150;
 		this.m.z = -50;
 		this.m.xz = 0;
 		this.m.zy = 10;
-		this.m.ground = 470;
-		array[this.sc[0]].draw(graphics);
+		this.m.ground = 720;
+		geometries[this.sc[0]].draw(graphics);
 		if (this.flipo == 0) {
-			graphics.setFont(new Font("SansSerif", 1, 13));
+			graphics.setFont(new Font("SansSerif", 1, 26));
 			this.ftm = graphics.getFontMetrics();
 			if (this.aflk) {
-				this.drawcs(graphics, 130, this.names[this.sc[0]], 130, 130, 255, 3);
+				this.drawcs(graphics, 250, this.names[this.sc[0]], 130, 130, 255, 3);
 				this.aflk = false;
 			} else {
-				this.drawcs(graphics, 130, this.names[this.sc[0]], 130, 215, 255, 3);
+				this.drawcs(graphics, 250, this.names[this.sc[0]], 130, 215, 255, 3);
 				this.aflk = true;
 			}
-			array[this.sc[0]].z = 950;
-			array[this.sc[0]].y = -34 - array[this.sc[0]].grat;
-			array[this.sc[0]].x = 0;
-			final Geometry geometry = array[this.sc[0]];
+			geometries[this.sc[0]].z = 950;
+			geometries[this.sc[0]].y = -34 - geometries[this.sc[0]].grat;
+			geometries[this.sc[0]].x = 0;
+			final Geometry geometry = geometries[this.sc[0]];
 			geometry.xz += 5;
-			array[this.sc[0]].zy = 0;
-			final Geometry geometry2 = array[this.sc[0]];
+			geometries[this.sc[0]].zy = 0;
+			final Geometry geometry2 = geometries[this.sc[0]];
 			geometry2.wzy -= 10;
-			if (array[this.sc[0]].wzy < -45) {
-				final Geometry geometry3 = array[this.sc[0]];
+			if (geometries[this.sc[0]].wzy < -45) {
+				final Geometry geometry3 = geometries[this.sc[0]];
 				geometry3.wzy += 45;
 			}
 			if (this.sc[0] != 0) {
@@ -3227,13 +3231,13 @@ public class xtGraphics extends Panel {
 			this.pnext = 0;
 			this.gatey = 300;
 			if (this.flipo > 10) {
-				final Geometry geometry4 = array[this.sc[0]];
+				final Geometry geometry4 = geometries[this.sc[0]];
 				geometry4.y -= 100;
 				if (this.nextc) {
-					final Geometry geometry5 = array[this.sc[0]];
+					final Geometry geometry5 = geometries[this.sc[0]];
 					geometry5.zy += 20;
 				} else {
-					final Geometry geometry6 = array[this.sc[0]];
+					final Geometry geometry6 = geometries[this.sc[0]];
 					geometry6.zy -= 20;
 				}
 			} else {
@@ -3247,12 +3251,12 @@ public class xtGraphics extends Panel {
 						final int n8 = 0;
 						--sc2[n8];
 					}
-					array[this.sc[0]].z = 950;
-					array[this.sc[0]].y = -34 - array[this.sc[0]].grat - 1100;
-					array[this.sc[0]].x = 0;
-					array[this.sc[0]].zy = 0;
+					geometries[this.sc[0]].z = 950;
+					geometries[this.sc[0]].y = -34 - geometries[this.sc[0]].grat - 1100;
+					geometries[this.sc[0]].x = 0;
+					geometries[this.sc[0]].zy = 0;
 				}
-				final Geometry geometry7 = array[this.sc[0]];
+				final Geometry geometry7 = geometries[this.sc[0]];
 				geometry7.y += 100;
 			}
 			--this.flipo;
@@ -3534,7 +3538,7 @@ public class xtGraphics extends Panel {
 
 	private AudioClip getSound(final String name) throws MalformedURLException, URISyntaxException {
 		//
-		 AudioClip audioClip = this.app.getAudioClip(this.app.getCodeBase(), name);
+		AudioClip audioClip = this.app.getAudioClip(this.app.getCodeBase(), name);
 
 		URL resource = this.getClass().getResource(name);
 		audioClip = Applet.newAudioClip(resource);

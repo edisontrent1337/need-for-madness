@@ -86,11 +86,11 @@ public class Geometry
                 this.sy[n] = 250;
             }
             final int n4 = this.sy[n];
-            final int n5 = this.m.cx + (int)((this.sx[n] - this.m.x - this.m.cx) * this.m.cos(this.m.xz) - (this.sz[n] - this.m.z - this.m.cz) * this.m.sin(this.m.xz));
-            final int n6 = this.m.cz + (int)((this.sx[n] - this.m.x - this.m.cx) * this.m.sin(this.m.xz) + (this.sz[n] - this.m.z - this.m.cz) * this.m.cos(this.m.xz));
-            final int n7 = this.m.cy + (int)((this.sy[n] - this.m.y - this.m.cy) * this.m.cos(this.m.zy) - (n6 - this.m.cz) * this.m.sin(this.m.zy));
-            final int n8 = this.m.cz + (int)((this.sy[n] - this.m.y - this.m.cy) * this.m.sin(this.m.zy) + (n6 - this.m.cz) * this.m.cos(this.m.zy));
-            final int n9 = (int)Math.sqrt((this.m.cy - n7) * (this.m.cy - n7) + (this.m.cx - n5) * (this.m.cx - n5) + n8 * n8);
+            final float n5 = this.m.cx + (int)((this.sx[n] - this.m.x - this.m.cx) * this.m.cos(this.m.xz) - (this.sz[n] - this.m.z - this.m.cz) * this.m.sin(this.m.xz));
+            final float n6 = this.m.cz + (int)((this.sx[n] - this.m.x - this.m.cx) * this.m.sin(this.m.xz) + (this.sz[n] - this.m.z - this.m.cz) * this.m.cos(this.m.xz));
+            final float n7 = this.m.cy + (int)((this.sy[n] - this.m.y - this.m.cy) * this.m.cos(this.m.zy) - (n6 - this.m.cz) * this.m.sin(this.m.zy));
+            final float n8 = this.m.cz + (int)((this.sy[n] - this.m.y - this.m.cy) * this.m.sin(this.m.zy) + (n6 - this.m.cz) * this.m.cos(this.m.zy));
+            final float n9 = (int)Math.sqrt((this.m.cy - n7) * (this.m.cy - n7) + (this.m.cx - n5) * (this.m.cx - n5) + n8 * n8);
             int n10 = 0;
             do {
                 if (n9 > this.m.fade[n10]) {
@@ -114,25 +114,25 @@ public class Geometry
             final int[] array = new int[8];
             final int[] array2 = new int[8];
             final int n11 = this.stg[n] - 3;
-            array[0] = this.xs((int)(n5 - (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), n8);
-            array2[0] = this.ys((int)(n7 - (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), n8);
+            array[0] = this.xs((int)(n5 - (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), (int)n8);
+            array2[0] = this.ys((int)(n7 - (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), (int)n8);
             if (array2[0] < 45 && this.m.flex != 0) {
                 this.m.flex = 0;
             }
-            array[1] = this.xs((int)(n5 - (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), n8);
-            array2[1] = this.ys((int)(n7 + (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), n8);
-            array[2] = this.xs((int)(n5 - (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), n8);
-            array2[2] = this.ys((int)(n7 + (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), n8);
-            array[3] = this.xs((int)(n5 + (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), n8);
-            array2[3] = this.ys((int)(n7 + (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), n8);
-            array[4] = this.xs((int)(n5 + (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), n8);
-            array2[4] = this.ys((int)(n7 + (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), n8);
-            array[5] = this.xs((int)(n5 + (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), n8);
-            array2[5] = this.ys((int)(n7 - (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), n8);
-            array[6] = this.xs((int)(n5 + (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), n8);
-            array2[6] = this.ys((int)(n7 - (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), n8);
-            array[7] = this.xs((int)(n5 - (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), n8);
-            array2[7] = this.ys((int)(n7 - (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), n8);
+            array[1] = this.xs((int)(n5 - (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), (int)n8);
+            array2[1] = this.ys((int)(n7 + (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), (int)n8);
+            array[2] = this.xs((int)(n5 - (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), (int)n8);
+            array2[2] = this.ys((int)(n7 + (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), (int)n8);
+            array[3] = this.xs((int)(n5 + (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), (int)n8);
+            array2[3] = this.ys((int)(n7 + (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), (int)n8);
+            array[4] = this.xs((int)(n5 + (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), (int)n8);
+            array2[4] = this.ys((int)(n7 + (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), (int)n8);
+            array[5] = this.xs((int)(n5 + (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), (int)n8);
+            array2[5] = this.ys((int)(n7 - (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), (int)n8);
+            array[6] = this.xs((int)(n5 + (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), (int)n8);
+            array2[6] = this.ys((int)(n7 - (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), (int)n8);
+            array[7] = this.xs((int)(n5 - (7.5 + this.m.random() * 7.5 + n11 * 2.5) * this.smag[n]), (int)n8);
+            array2[7] = this.ys((int)(n7 - (18.0f + this.m.random() * 18.0f + n11 * 6) * this.smag[n]), (int)n8);
             boolean b2 = true;
             int n12 = 0;
             int n13 = 0;
@@ -186,7 +186,14 @@ public class Geometry
         if (n2 < 50) {
             n2 = 50;
         }
-        return (n2 - this.m.focus_point) * (this.m.cy - n) / n2 + n;
+        return (int)((n2 - this.m.focus_point) * (this.m.cy - n) / n2 + n);
+    }
+
+    public float ys(final float n, float n2) {
+        if (n2 < 50) {
+            n2 = 50;
+        }
+        return ((n2 - this.m.focus_point) * (this.m.cy - n) / n2 + n);
     }
 
     public Geometry(final byte[] array, final Medium m, final Trackers t) {
@@ -500,9 +507,9 @@ public class Geometry
         if (this.dist != 0) {
             this.dist = 0;
         }
-        final int n = this.m.cx + (int)((this.x - this.m.x - this.m.cx) * this.m.cos(this.m.xz) - (this.z - this.m.z - this.m.cz) * this.m.sin(this.m.xz));
-        final int n2 = this.m.cz + (int)((this.x - this.m.x - this.m.cx) * this.m.sin(this.m.xz) + (this.z - this.m.z - this.m.cz) * this.m.cos(this.m.xz));
-        final int n3 = this.m.cz + (int)((this.y - this.m.y - this.m.cy) * this.m.sin(this.m.zy) + (n2 - this.m.cz) * this.m.cos(this.m.zy));
+        final float n = this.m.cx + (int)((this.x - this.m.x - this.m.cx) * this.m.cos(this.m.xz) - (this.z - this.m.z - this.m.cz) * this.m.sin(this.m.xz));
+        final float n2 = this.m.cz + (int)((this.x - this.m.x - this.m.cx) * this.m.sin(this.m.xz) + (this.z - this.m.z - this.m.cz) * this.m.cos(this.m.xz));
+        final float n3 = this.m.cz + (int)((this.y - this.m.y - this.m.cy) * this.m.sin(this.m.zy) + (n2 - this.m.cz) * this.m.cos(this.m.zy));
         if (this.xs(n + this.maxR, n3) > 0 && this.xs(n - this.maxR, n3) < this.m.w && n3 > -this.maxR && (n3 < this.m.fade[this.disline] + this.maxR || this.m.trk) && (this.xs(n + this.maxR, n3) - this.xs(n - this.maxR, n3) > this.disp || this.m.trk)) {
             if (this.shadow) {
                 if (!this.m.crs) {
@@ -520,8 +527,8 @@ public class Geometry
                             }
                         }
                         else {
-                            final int n4 = this.m.cy + (int)((this.m.ground - this.m.cy) * this.m.cos(this.m.zy) - (n2 - this.m.cz) * this.m.sin(this.m.zy));
-                            final int n5 = this.m.cz + (int)((this.m.ground - this.m.cy) * this.m.sin(this.m.zy) + (n2 - this.m.cz) * this.m.cos(this.m.zy));
+                            final float n4 = this.m.cy + (int)((this.m.ground - this.m.cy) * this.m.cos(this.m.zy) - (n2 - this.m.cz) * this.m.sin(this.m.zy));
+                            final float n5 = this.m.cz + (int)((this.m.ground - this.m.cy) * this.m.sin(this.m.zy) + (n2 - this.m.cz) * this.m.cos(this.m.zy));
                             if (this.ys(n4 + this.maxR, n5) > 0 && this.ys(n4 - this.maxR, n5) < this.m.h) {
                                 for (int k = 0; k < this.npl; ++k) {
                                     this.p[k].s(graphics, this.x - this.m.x, this.y - this.m.y, this.z - this.m.z, this.xz, this.xy, this.zy, 1);
@@ -531,7 +538,7 @@ public class Geometry
                         this.m.addsp(this.x - this.m.x, this.z - this.m.z, (int)(this.maxR * 0.8));
                     }
                     else {
-                        this.lowshadow(graphics, n3);
+                        this.lowshadow(graphics, (int)n3);
                     }
                 }
                 else {
@@ -540,7 +547,7 @@ public class Geometry
                     }
                 }
             }
-            final int n6 = this.m.cy + (int)((this.y - this.m.y - this.m.cy) * this.m.cos(this.m.zy) - (n2 - this.m.cz) * this.m.sin(this.m.zy));
+            final float n6 = this.m.cy + (int)((this.y - this.m.y - this.m.cy) * this.m.cos(this.m.zy) - (n2 - this.m.cz) * this.m.sin(this.m.zy));
             if (this.ys(n6 + this.maxR, n3) > 0 && this.ys(n6 - this.maxR, n3) < this.m.h) {
                 if (this.elec) {
                     this.electrify(graphics);
@@ -629,6 +636,28 @@ public class Geometry
         }
     }
 
+    public void rot(final int[] array, final int[] array2, final int n, final int n2, final float n3, final int n4) {
+        if (n3 != 0) {
+            for (int i = 0; i < n4; ++i) {
+                final int n5 = array[i];
+                final int n6 = array2[i];
+                array[i] = n + (int)((n5 - n) * this.m.cos(n3) - (n6 - n2) * this.m.sin(n3));
+                array2[i] = n2 + (int)((n5 - n) * this.m.sin(n3) + (n6 - n2) * this.m.cos(n3));
+            }
+        }
+    }
+
+    public void rot(final int[] array, final int[] array2, final float n, final float n2, final float n3, final int n4) {
+        if (n3 != 0) {
+            for (int i = 0; i < n4; ++i) {
+                final int n5 = array[i];
+                final int n6 = array2[i];
+                array[i] = (int)(n + (n5 - n) * this.m.cos(n3) - (n6 - n2) * this.m.sin(n3));
+                array2[i] = (int)(n2 + (n5 - n) * this.m.sin(n3) + (n6 - n2) * this.m.cos(n3));
+            }
+        }
+    }
+
     public void dust(final int n, final float n2, final float n3, final float n4, final float a, final float a2, final float n5, final boolean b, final int n6) {
         boolean b2 = false;
         if (n6 > 5 && (n == 0 || n == 2)) {
@@ -670,6 +699,13 @@ public class Geometry
         if (n2 < 50) {
             n2 = 50;
         }
+        return (int)((n2 - this.m.focus_point) * (this.m.cx - n) / n2 + n);
+    }
+
+    public float xs(final float n, float n2) {
+        if (n2 < 50) {
+            n2 = 50;
+        }
         return (n2 - this.m.focus_point) * (this.m.cx - n) / n2 + n;
     }
 
@@ -697,7 +733,7 @@ public class Geometry
         int b = (int)((float)this.m.cgrnd[2] / 1.5);
         int n3 = 0;
         do {
-            array2[n3] = this.m.ground;
+            array2[n3] = (int)this.m.ground;
         } while (++n3 < 4);
         for (int j = this.t.nt - 1; j >= 0; --j) {
             int n4 = 0;
@@ -851,10 +887,10 @@ public class Geometry
             if (abs2 < n4) {
                 abs2 = n4;
             }
-            final int n5 = this.m.cx + (int)((this.x - this.m.x - this.m.cx) * this.m.cos(this.m.xz) - (this.z - this.m.z - this.m.cz) * this.m.sin(this.m.xz));
-            final int n6 = this.m.cz + (int)((this.x - this.m.x - this.m.cx) * this.m.sin(this.m.xz) + (this.z - this.m.z - this.m.cz) * this.m.cos(this.m.xz));
-            final int n7 = this.m.cy + (int)((this.y - this.m.y - this.m.cy) * this.m.cos(this.m.zy) - (n6 - this.m.cz) * this.m.sin(this.m.zy));
-            final int n8 = this.m.cz + (int)((this.y - this.m.y - this.m.cy) * this.m.sin(this.m.zy) + (n6 - this.m.cz) * this.m.cos(this.m.zy));
+            final int n5 = (int)this.m.cx + (int)((this.x - this.m.x - this.m.cx) * this.m.cos(this.m.xz) - (this.z - this.m.z - this.m.cz) * this.m.sin(this.m.xz));
+            final int n6 = (int)this.m.cz + (int)((this.x - this.m.x - this.m.cx) * this.m.sin(this.m.xz) + (this.z - this.m.z - this.m.cz) * this.m.cos(this.m.xz));
+            final int n7 = (int)this.m.cy + (int)((this.y - this.m.y - this.m.cy) * this.m.cos(this.m.zy) - (n6 - this.m.cz) * this.m.sin(this.m.zy));
+            final int n8 = (int)this.m.cz + (int)((this.y - this.m.y - this.m.cy) * this.m.sin(this.m.zy) + (n6 - this.m.cz) * this.m.cos(this.m.zy));
             array[0] = this.xs((int)(n5 - abs / 0.8 - this.m.random() * (abs / 2.4)), n8);
             array2[0] = this.ys((int)(n7 - abs2 / 1.92 - this.m.random() * (abs2 / 5.67)), n8);
             array[1] = this.xs((int)(n5 - abs / 0.8 - this.m.random() * (abs / 2.4)), n8);

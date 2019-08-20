@@ -115,7 +115,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		return false;
 	}
 
-	public String getstring(final String s, final String s2, final int n) {
+	public String getString(final String s, final String s2, final int n) {
 		int n2 = 0;
 		String string = "";
 		for (int i = s.length() + 1; i < s2.length(); ++i) {
@@ -131,8 +131,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		return string;
 	}
 
-	public int getint(final String s, final String s2, final int n) {
-		int n2 = 0;
+	public int getInt(final String s, final String s2, final int n) {
+		return Integer.valueOf(getString(s, s2, n));
+/*		int n2 = 0;
 		String string = "";
 		for (int i = s.length() + 1; i < s2.length(); ++i) {
 			final String string2 = "" + s2.charAt(i);
@@ -144,7 +145,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				string += s2.charAt(i);
 			}
 		}
-		return Integer.valueOf(string);
+		return Integer.valueOf(string);*/
 	}
 
     /*public int readcookie(final String str) {
@@ -286,28 +287,28 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			while ((line = dataInputStream.readLine()) != null) {
 				string = "" + line.trim();
 				if (string.startsWith("snap")) {
-					medium.setsnap(this.getint("snap", string, 0), this.getint("snap", string, 1), this.getint("snap", string, 2));
+					medium.setsnap(this.getInt("snap", string, 0), this.getInt("snap", string, 1), this.getInt("snap", string, 2));
 				}
 				if (string.startsWith("sky")) {
-					medium.setsky(this.getint("sky", string, 0), this.getint("sky", string, 1), this.getint("sky", string, 2));
+					medium.setsky(this.getInt("sky", string, 0), this.getInt("sky", string, 1), this.getInt("sky", string, 2));
 					xtGraphics.snap(checkPoints.stage);
 				}
 				if (string.startsWith("ground")) {
-					medium.setgrnd(this.getint("ground", string, 0), this.getint("ground", string, 1), this.getint("ground", string, 2));
+					medium.setgrnd(this.getInt("ground", string, 0), this.getInt("ground", string, 1), this.getInt("ground", string, 2));
 				}
 				if (string.startsWith("fog")) {
-					medium.setfade(this.getint("fog", string, 0), this.getint("fog", string, 1), this.getint("fog", string, 2));
+					medium.setfade(this.getInt("fog", string, 0), this.getInt("fog", string, 1), this.getInt("fog", string, 2));
 				}
 				if (string.startsWith("fadefrom")) {
-					medium.fadfrom(this.getint("fadefrom", string, 0));
+					medium.fadfrom(this.getInt("fadefrom", string, 0));
 					medium.origfade = medium.fade[0];
 				}
 				if (string.startsWith("set")) {
-					final int getint = this.getint("set", string, 0);
-					array[this.nob] = new Geometry(array2[getint], this.getint("set", string, 1), medium.ground - array2[getint].grat, this.getint("set", string, 2), this.getint("set", string, 3));
+					final int getint = this.getInt("set", string, 0);
+					array[this.nob] = new Geometry(array2[getint], this.getInt("set", string, 1), (int)medium.ground - array2[getint].grat, this.getInt("set", string, 2), this.getInt("set", string, 3));
 					if (string.indexOf(")p") != -1) {
-						checkPoints.x[checkPoints.n] = this.getint("chk", string, 1);
-						checkPoints.z[checkPoints.n] = this.getint("chk", string, 2);
+						checkPoints.x[checkPoints.n] = this.getInt("chk", string, 1);
+						checkPoints.z[checkPoints.n] = this.getInt("chk", string, 2);
 						checkPoints.y[checkPoints.n] = 0;
 						checkPoints.typ[checkPoints.n] = 0;
 						if (string.indexOf(")pt") != -1) {
@@ -328,12 +329,12 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					++this.nob;
 				}
 				if (string.startsWith("chk")) {
-					final int getint2 = this.getint("chk", string, 0);
-					array[this.nob] = new Geometry(array2[getint2], this.getint("chk", string, 1), medium.ground - array2[getint2].grat, this.getint("chk", string, 2), this.getint("chk", string, 3));
-					checkPoints.x[checkPoints.n] = this.getint("chk", string, 1);
-					checkPoints.z[checkPoints.n] = this.getint("chk", string, 2);
-					checkPoints.y[checkPoints.n] = medium.ground - array2[getint2].grat;
-					if (this.getint("chk", string, 3) == 0) {
+					final int getint2 = this.getInt("chk", string, 0);
+					array[this.nob] = new Geometry(array2[getint2], this.getInt("chk", string, 1), (int)medium.ground - array2[getint2].grat, this.getInt("chk", string, 2), this.getInt("chk", string, 3));
+					checkPoints.x[checkPoints.n] = this.getInt("chk", string, 1);
+					checkPoints.z[checkPoints.n] = this.getInt("chk", string, 2);
+					checkPoints.y[checkPoints.n] = (int)medium.ground - array2[getint2].grat;
+					if (this.getInt("chk", string, 3) == 0) {
 						checkPoints.typ[checkPoints.n] = 1;
 					} else {
 						checkPoints.typ[checkPoints.n] = 2;
@@ -345,12 +346,12 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.notb = this.nob;
 				}
 				if (string.startsWith("fix")) {
-					array[this.nob] = new Geometry(array2[this.getint("fix", string, 0)], this.getint("fix", string, 1), this.getint("fix", string, 3), this.getint("fix", string, 2), this.getint("fix", string, 4));
-					checkPoints.fx[checkPoints.fn] = this.getint("fix", string, 1);
-					checkPoints.fz[checkPoints.fn] = this.getint("fix", string, 2);
-					checkPoints.fy[checkPoints.fn] = this.getint("fix", string, 3);
+					array[this.nob] = new Geometry(array2[this.getInt("fix", string, 0)], this.getInt("fix", string, 1), this.getInt("fix", string, 3), this.getInt("fix", string, 2), this.getInt("fix", string, 4));
+					checkPoints.fx[checkPoints.fn] = this.getInt("fix", string, 1);
+					checkPoints.fz[checkPoints.fn] = this.getInt("fix", string, 2);
+					checkPoints.fy[checkPoints.fn] = this.getInt("fix", string, 3);
 					array[this.nob].elec = true;
-					if (this.getint("fix", string, 4) != 0) {
+					if (this.getInt("fix", string, 4) != 0) {
 						checkPoints.roted[checkPoints.fn] = true;
 						array[this.nob].roted = true;
 					} else {
@@ -366,17 +367,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.notb = this.nob;
 				}
 				if (string.startsWith("nlaps")) {
-					checkPoints.nlaps = this.getint("nlaps", string, 0);
+					checkPoints.nlaps = this.getInt("nlaps", string, 0);
 				}
 				if (string.startsWith("name")) {
-					checkPoints.name = this.getstring("name", string, 0).replace('|', ',');
+					checkPoints.name = this.getString("name", string, 0).replace('|', ',');
 				}
 				if (string.startsWith("maxr")) {
-					final int getint3 = this.getint("maxr", string, 0);
-					final int getint4 = this.getint("maxr", string, 1);
-					final int getint5 = this.getint("maxr", string, 2);
+					final int getint3 = this.getInt("maxr", string, 0);
+					final int getint4 = this.getInt("maxr", string, 1);
+					final int getint5 = this.getInt("maxr", string, 2);
 					for (int i = 0; i < getint3; ++i) {
-						array[this.nob] = new Geometry(array2[39], getint4, medium.ground - array2[39].grat, i * 4800 + getint5, 0);
+						array[this.nob] = new Geometry(array2[39], getint4, (int)medium.ground - array2[39].grat, i * 4800 + getint5, 0);
 						++this.nob;
 					}
 					trackers.y[trackers.nt] = -5000;
@@ -391,11 +392,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					++trackers.nt;
 				}
 				if (string.startsWith("maxl")) {
-					final int getint6 = this.getint("maxl", string, 0);
-					final int getint7 = this.getint("maxl", string, 1);
-					final int getint8 = this.getint("maxl", string, 2);
+					final int getint6 = this.getInt("maxl", string, 0);
+					final int getint7 = this.getInt("maxl", string, 1);
+					final int getint8 = this.getInt("maxl", string, 2);
 					for (int j = 0; j < getint6; ++j) {
-						array[this.nob] = new Geometry(array2[39], getint7, medium.ground - array2[39].grat, j * 4800 + getint8, 0);
+						array[this.nob] = new Geometry(array2[39], getint7, (int)medium.ground - array2[39].grat, j * 4800 + getint8, 0);
 						++this.nob;
 					}
 					trackers.y[trackers.nt] = -5000;
@@ -410,11 +411,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					++trackers.nt;
 				}
 				if (string.startsWith("maxt")) {
-					final int getint9 = this.getint("maxt", string, 0);
-					final int getint10 = this.getint("maxt", string, 1);
-					final int getint11 = this.getint("maxt", string, 2);
+					final int getint9 = this.getInt("maxt", string, 0);
+					final int getint10 = this.getInt("maxt", string, 1);
+					final int getint11 = this.getInt("maxt", string, 2);
 					for (int k = 0; k < getint9; ++k) {
-						array[this.nob] = new Geometry(array2[39], k * 4800 + getint11, medium.ground - array2[39].grat, getint10, 90);
+						array[this.nob] = new Geometry(array2[39], k * 4800 + getint11, (int)medium.ground - array2[39].grat, getint10, 90);
 						++this.nob;
 					}
 					trackers.y[trackers.nt] = -5000;
@@ -429,11 +430,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					++trackers.nt;
 				}
 				if (string.startsWith("maxb")) {
-					final int getint12 = this.getint("maxb", string, 0);
-					final int getint13 = this.getint("maxb", string, 1);
-					final int getint14 = this.getint("maxb", string, 2);
+					final int getint12 = this.getInt("maxb", string, 0);
+					final int getint13 = this.getInt("maxb", string, 1);
+					final int getint14 = this.getInt("maxb", string, 2);
 					for (int l = 0; l < getint12; ++l) {
-						array[this.nob] = new Geometry(array2[39], l * 4800 + getint14, medium.ground - array2[39].grat, getint13, 90);
+						array[this.nob] = new Geometry(array2[39], l * 4800 + getint14, (int)medium.ground - array2[39].grat, getint13, 90);
 						++this.nob;
 					}
 					trackers.y[trackers.nt] = -5000;
@@ -1327,7 +1328,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 	}
 
 	public void init() {
-		this.offImage = this.createImage(550, 400);
+		this.offImage = this.createImage(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 		if (this.offImage != null) {
 			this.graphics = this.offImage.getGraphics();
 		}
@@ -1397,7 +1398,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				break;
 			case KeyEvent.VK_N:
 				this.controls[0].sound_muted = !this.controls[0].sound_muted;
-			break;
+				break;
 			case KeyEvent.VK_M:
 				this.controls[0].music_muted = !this.controls[0].music_muted;
 				break;
@@ -1474,6 +1475,12 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				break;
 			case KeyEvent.VK_ENTER:
 				controls.enter = false;
+				break;
+			case KeyEvent.VK_V:
+				++this.view;
+				if (this.view == 3) {
+					this.view = 0;
+				}
 				break;
 		}
 	}
