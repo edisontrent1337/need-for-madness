@@ -1,5 +1,4 @@
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 //
 // Decompiled by Procyon v0.5.36
@@ -50,16 +49,12 @@ public class Medium {
 	long trx;
 	long trz;
 
-	public float random() {
+	float random() {
 		if (this.cntrn == 0) {
 			int n = 0;
 			do {
 				this.rand[n] = (int) (10.0 * Math.random());
-				if (Math.random() > Math.random()) {
-					this.diup[n] = false;
-				} else {
-					this.diup[n] = true;
-				}
+				this.diup[n] = !(Math.random() > Math.random());
 			} while (++n < 3);
 			this.cntrn = 20;
 		} else {
@@ -96,7 +91,7 @@ public class Medium {
 		if (n2 < 10) {
 			n2 = 10;
 		}
-		return (n2 - this.focus_point) * ((int)this.cy - n) / n2 + n;
+		return (n2 - this.focus_point) * ((int) this.cy - n) / n2 + n;
 	}
 
 	public float ys(final float n, float n2) {
@@ -107,7 +102,7 @@ public class Medium {
 	}
 
 
-	public Medium() {
+	Medium() {
 		this.focus_point = Config.SCREEN_HEIGHT;
 		this.ground = 250;
 		this.skyline = -300;
@@ -152,7 +147,7 @@ public class Medium {
 		int n = 0;
 	}
 
-	public void setfade(final int n, final int n2, final int n3) {
+	void setFade(final int n, final int n2, final int n3) {
 		this.cfade[0] = (int) (n + n * (this.snap[0] / 100.0f));
 		if (this.cfade[0] > 255) {
 			this.cfade[0] = 255;
@@ -176,7 +171,7 @@ public class Medium {
 		}
 	}
 
-	public void draw(final Graphics graphics) {
+	void draw(final Graphics graphics) {
 		this.nsp = 0;
 		if (this.zy > 90) {
 			this.zy = 90;
@@ -208,7 +203,7 @@ public class Medium {
 				ground = this.cy + (int) ((this.ground - this.cy) * this.cos(this.zy) - (this.fade[n] - this.cz) * this.sin(this.zy));
 				n2 = this.cz + (int) ((this.ground - this.cy) * this.sin(this.zy) + (this.fade[n] - this.cz) * this.cos(this.zy));
 			}
-			array2[array[0] = 0] = (int)this.ys(ground, n2);
+			array2[array[0] = 0] = (int) this.ys(ground, n2);
 			if (array2[0] < 0) {
 				array2[0] = 0;
 			}
@@ -251,8 +246,8 @@ public class Medium {
 			int n8 = this.fade[n7];
 			int skyline = this.skyline;
 			if (this.zy != 0) {
-				skyline = (int)this.cy + (int) ((this.skyline - this.cy) * this.cos(this.zy) - (this.fade[n7] - this.cz) * this.sin(this.zy));
-				n8 = (int)this.cz + (int) ((this.skyline - this.cy) * this.sin(this.zy) + (this.fade[n7] - this.cz) * this.cos(this.zy));
+				skyline = (int) this.cy + (int) ((this.skyline - this.cy) * this.cos(this.zy) - (this.fade[n7] - this.cz) * this.sin(this.zy));
+				n8 = (int) this.cz + (int) ((this.skyline - this.cy) * this.sin(this.zy) + (this.fade[n7] - this.cz) * this.cos(this.zy));
 			}
 			array2[array[0] = 0] = this.ys(skyline, n8);
 			if (array2[0] > this.h) {
@@ -288,7 +283,7 @@ public class Medium {
 		}
 	}
 
-	public void watch(final Geometry geometry, final float n) {
+	void watchFromStationaryPoint(final Geometry geometry, final float n) {
 		if (this.flex != 0) {
 			this.flex = 0;
 		}
@@ -320,13 +315,13 @@ public class Medium {
 		}
 	}
 
-	public void setsnap(final int n, final int n2, final int n3) {
+	void setSnap(final int n, final int n2, final int n3) {
 		this.snap[0] = n;
 		this.snap[1] = n2;
 		this.snap[2] = n3;
 	}
 
-	public void around(final Geometry geometry, final boolean b) {
+	void circleAround(final Geometry geometry, final boolean b) {
 
 		if (this.zy > 90) {
 			this.zy = 90;
@@ -391,7 +386,7 @@ public class Medium {
 
 	}
 
-	public void setgrnd(final int n, final int n2, final int n3) {
+	void setGround(final int n, final int n2, final int n3) {
 		this.cgrnd[0] = (int) (n + n * (this.snap[0] / 100.0f));
 		if (this.cgrnd[0] > 255) {
 			this.cgrnd[0] = 255;
@@ -415,13 +410,13 @@ public class Medium {
 		}
 	}
 
-	public void adjstfade(final float n) {
+	void adjustFade(final float n) {
 		if (n < 15.0f) {
 			this.fade[0] = (int) (this.origfade - 1000.0f * (15.0f - n));
 			if (this.fade[0] < 3000) {
 				this.fade[0] = 3000;
 			}
-			this.fadfrom(this.fade[0]);
+			this.fadeFrom(this.fade[0]);
 		} else if (this.fade[0] != this.origfade) {
 			final int[] fade = this.fade;
 			final int n2 = 0;
@@ -429,11 +424,12 @@ public class Medium {
 			if (this.fade[0] > this.origfade) {
 				this.fade[0] = this.origfade;
 			}
-			this.fadfrom(this.fade[0]);
+			this.fadeFrom(this.fade[0]);
 		}
 	}
 
-	public void addsp(final int n, final int n2, final int n3) {
+
+	void addsp(final int n, final int n2, final int n3) {
 		if (this.nsp != 5) {
 			this.spx[this.nsp] = n;
 			this.spz[this.nsp] = n2;
@@ -442,7 +438,7 @@ public class Medium {
 		}
 	}
 
-	public void aroundtrack(final CheckPoints checkPoints) {
+	void aroundTrackAtStart(final CheckPoints checkPoints) {
 		if (this.flex != 0) {
 			this.flex = 0;
 		}
@@ -474,7 +470,7 @@ public class Medium {
 		if (-this.y - this.cy < 0) {
 			n = -180;
 		}
-		final float n2 = (float)Math.sqrt((double) ((this.trz - this.z + this.cz) * (this.trz - this.z + this.cz) + (this.trx - this.x - this.cx) * (this.trx - this.x - this.cx)));
+		final float n2 = (float) Math.sqrt((double) ((this.trz - this.z + this.cz) * (this.trz - this.z + this.cz) + (this.trx - this.x - this.cx) * (this.trx - this.x - this.cx)));
 		if (this.zy < 30 && this.hit != 57000) {
 			if (this.zy > 9) {
 				--this.zy;
@@ -482,11 +478,11 @@ public class Medium {
 				this.zy = 9;
 			}
 		} else {
-			this.zy = (float)(90 + n - Math.atan(n2 / (double) (-this.y - this.cy)) / 0.017453292519943295);
+			this.zy = (float) (90 + n - Math.atan(n2 / (double) (-this.y - this.cy)) / 0.017453292519943295);
 		}
 	}
 
-	public void setsky(final int n, final int n2, final int n3) {
+	void setSky(final int n, final int n2, final int n3) {
 		this.csky[0] = (int) (n + n * (this.snap[0] / 100.0f));
 		if (this.csky[0] > 255) {
 			this.csky[0] = 255;
@@ -510,15 +506,15 @@ public class Medium {
 		}
 	}
 
-	public void fadfrom(final int n) {
+	void fadeFrom(final int n) {
 		int n2 = 0;
 		do {
 			this.fade[n2] = n * (n2 + 1);
 		} while (++n2 < 8);
 	}
 
-	public void follow(final Geometry geometry, final float n) {
-		this.zy += 0.05f;
+	void follow(final Geometry geometry, final float n) {
+		this.zy = 10;
 		this.xz = -n;
 		this.x = geometry.x - (int) this.cx + (int) (-(geometry.z - 800 - geometry.z) * this.sin(n));
 		this.z = geometry.z - (int) this.cz + (int) ((geometry.z - 800 - geometry.z) * this.cos(n));
@@ -528,11 +524,11 @@ public class Medium {
 		}
 	}
 
-	public float cos(int i) {
+	float cos(int i) {
 		return (float) (Math.cos(i * 2 * Math.PI / 360));
 	}
 
-	public float cos(float i) {
+	float cos(float i) {
 		return (float) (Math.cos(i * 2 * Math.PI / 360));
 	}
 

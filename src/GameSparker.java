@@ -287,20 +287,20 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			while ((line = dataInputStream.readLine()) != null) {
 				string = "" + line.trim();
 				if (string.startsWith("snap")) {
-					medium.setsnap(this.getInt("snap", string, 0), this.getInt("snap", string, 1), this.getInt("snap", string, 2));
+					medium.setSnap(this.getInt("snap", string, 0), this.getInt("snap", string, 1), this.getInt("snap", string, 2));
 				}
 				if (string.startsWith("sky")) {
-					medium.setsky(this.getInt("sky", string, 0), this.getInt("sky", string, 1), this.getInt("sky", string, 2));
+					medium.setSky(this.getInt("sky", string, 0), this.getInt("sky", string, 1), this.getInt("sky", string, 2));
 					xtGraphics.snap(checkPoints.stage);
 				}
 				if (string.startsWith("ground")) {
-					medium.setgrnd(this.getInt("ground", string, 0), this.getInt("ground", string, 1), this.getInt("ground", string, 2));
+					medium.setGround(this.getInt("ground", string, 0), this.getInt("ground", string, 1), this.getInt("ground", string, 2));
 				}
 				if (string.startsWith("fog")) {
-					medium.setfade(this.getInt("fog", string, 0), this.getInt("fog", string, 1), this.getInt("fog", string, 2));
+					medium.setFade(this.getInt("fog", string, 0), this.getInt("fog", string, 1), this.getInt("fog", string, 2));
 				}
 				if (string.startsWith("fadefrom")) {
-					medium.fadfrom(this.getInt("fadefrom", string, 0));
+					medium.fadeFrom(this.getInt("fadefrom", string, 0));
 					medium.origfade = medium.fade[0];
 				}
 				if (string.startsWith("set")) {
@@ -694,7 +694,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			}
 			if (xtGraphics.fase == 1) {
 				xtGraphics.trackbg(this.graphics);
-				medium.aroundtrack(checkPoints);
+				medium.aroundTrackAtStart(checkPoints);
 				int n11 = 0;
 				final int[] array4 = new int[200];
 				for (int i = 5; i < this.notb; ++i) {
@@ -899,11 +899,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						xtGraphics.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
 					}
 					if (this.view == 1) {
-						medium.around(geometries[0], false);
+						medium.circleAround(geometries[0], false);
 						xtGraphics.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
 					}
 					if (this.view == 2) {
-						medium.watch(geometries[0], cars[0].mxz);
+						medium.watchFromStationaryPoint(geometries[0], cars[0].mxz);
 						xtGraphics.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
 					}
 					if (this.mouses == 1) {
@@ -911,7 +911,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						this.mouses = 0;
 					}
 				} else {
-					medium.around(geometries[3], true);
+					medium.circleAround(geometries[3], true);
 					if (this.controls[0].enter || this.controls[0].handb) {
 						xtGraphics.starcnt = 35;
 						this.controls[0].enter = false;
@@ -1012,7 +1012,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				} else {
 					xtGraphics.replyn(this.graphics);
 				}
-				medium.around(geometries[0], false);
+				medium.circleAround(geometries[0], false);
 			}
 			if (xtGraphics.fase == -2) {
 				if (record.hcaught) {
@@ -1120,9 +1120,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 							this.graphics.fillRect(0, 0, 550, 400);
 						}
 						if (n9 >= 10) {
-							medium.around(geometries[record.wasted], false);
+							medium.circleAround(geometries[record.wasted], false);
 						} else {
-							medium.around(geometries[0], false);
+							medium.circleAround(geometries[0], false);
 						}
 						if (n8 > record.whenwasted && n9 != 20) {
 							++n9;
@@ -1140,7 +1140,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						if (n8 > record.whenwasted && n9 != 67) {
 							++n9;
 						}
-						medium.around(geometries[0], false);
+						medium.circleAround(geometries[0], false);
 						if ((n9 == 0 || n9 == 67) && ++n8 == 300) {
 							n8 = 0;
 							n9 = 0;
@@ -1242,7 +1242,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						}
 					}
 					if (xtGraphics.starcnt == 0) {
-						medium.adjstfade(a);
+						medium.adjustFade(a);
 					}
 					time = time3;
 					n7 = 0;
