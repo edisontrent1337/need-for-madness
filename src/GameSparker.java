@@ -305,7 +305,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				}
 				if (string.startsWith("set")) {
 					final int getint = this.getInt("set", string, 0);
-					array[this.nob] = new Geometry(array2[getint], this.getInt("set", string, 1), (int)medium.ground - array2[getint].grat, this.getInt("set", string, 2), this.getInt("set", string, 3));
+					array[this.nob] = new Geometry(array2[getint], this.getInt("set", string, 1), (int) medium.ground - array2[getint].grat, this.getInt("set", string, 2), this.getInt("set", string, 3));
 					if (string.indexOf(")p") != -1) {
 						checkPoints.x[checkPoints.n] = this.getInt("chk", string, 1);
 						checkPoints.z[checkPoints.n] = this.getInt("chk", string, 2);
@@ -330,10 +330,10 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				}
 				if (string.startsWith("chk")) {
 					final int getint2 = this.getInt("chk", string, 0);
-					array[this.nob] = new Geometry(array2[getint2], this.getInt("chk", string, 1), (int)medium.ground - array2[getint2].grat, this.getInt("chk", string, 2), this.getInt("chk", string, 3));
+					array[this.nob] = new Geometry(array2[getint2], this.getInt("chk", string, 1), (int) medium.ground - array2[getint2].grat, this.getInt("chk", string, 2), this.getInt("chk", string, 3));
 					checkPoints.x[checkPoints.n] = this.getInt("chk", string, 1);
 					checkPoints.z[checkPoints.n] = this.getInt("chk", string, 2);
-					checkPoints.y[checkPoints.n] = (int)medium.ground - array2[getint2].grat;
+					checkPoints.y[checkPoints.n] = (int) medium.ground - array2[getint2].grat;
 					if (this.getInt("chk", string, 3) == 0) {
 						checkPoints.typ[checkPoints.n] = 1;
 					} else {
@@ -377,7 +377,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					final int getint4 = this.getInt("maxr", string, 1);
 					final int getint5 = this.getInt("maxr", string, 2);
 					for (int i = 0; i < getint3; ++i) {
-						array[this.nob] = new Geometry(array2[39], getint4, (int)medium.ground - array2[39].grat, i * 4800 + getint5, 0);
+						array[this.nob] = new Geometry(array2[39], getint4, (int) medium.ground - array2[39].grat, i * 4800 + getint5, 0);
 						++this.nob;
 					}
 					trackers.y[trackers.nt] = -5000;
@@ -396,7 +396,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					final int getint7 = this.getInt("maxl", string, 1);
 					final int getint8 = this.getInt("maxl", string, 2);
 					for (int j = 0; j < getint6; ++j) {
-						array[this.nob] = new Geometry(array2[39], getint7, (int)medium.ground - array2[39].grat, j * 4800 + getint8, 0);
+						array[this.nob] = new Geometry(array2[39], getint7, (int) medium.ground - array2[39].grat, j * 4800 + getint8, 0);
 						++this.nob;
 					}
 					trackers.y[trackers.nt] = -5000;
@@ -415,7 +415,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					final int getint10 = this.getInt("maxt", string, 1);
 					final int getint11 = this.getInt("maxt", string, 2);
 					for (int k = 0; k < getint9; ++k) {
-						array[this.nob] = new Geometry(array2[39], k * 4800 + getint11, (int)medium.ground - array2[39].grat, getint10, 90);
+						array[this.nob] = new Geometry(array2[39], k * 4800 + getint11, (int) medium.ground - array2[39].grat, getint10, 90);
 						++this.nob;
 					}
 					trackers.y[trackers.nt] = -5000;
@@ -434,7 +434,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					final int getint13 = this.getInt("maxb", string, 1);
 					final int getint14 = this.getInt("maxb", string, 2);
 					for (int l = 0; l < getint12; ++l) {
-						array[this.nob] = new Geometry(array2[39], l * 4800 + getint14, (int)medium.ground - array2[39].grat, getint13, 90);
+						array[this.nob] = new Geometry(array2[39], l * 4800 + getint14, (int) medium.ground - array2[39].grat, getint13, 90);
 						++this.nob;
 					}
 					trackers.y[trackers.nt] = -5000;
@@ -713,22 +713,18 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					for (int l = k + 1; l < n11; ++l) {
 						if (geometries[array4[k]].dist != geometries[array4[l]].dist) {
 							if (geometries[array4[k]].dist < geometries[array4[l]].dist) {
-								final int[] array6 = array5;
 								final int n12 = k;
-								++array6[n12];
+								++array5[n12];
 							} else {
-								final int[] array7 = array5;
 								final int n13 = l;
-								++array7[n13];
+								++array5[n13];
 							}
 						} else if (l > k) {
-							final int[] array8 = array5;
 							final int n14 = k;
-							++array8[n14];
+							++array5[n14];
 						} else {
-							final int[] array9 = array5;
 							final int n15 = l;
-							++array9[n15];
+							++array5[n15];
 						}
 					}
 				}
@@ -768,22 +764,18 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					for (int n22 = n21 + 1; n22 < n18; ++n22) {
 						if (geometries[array10[n21]].dist != geometries[array10[n22]].dist) {
 							if (geometries[array10[n21]].dist < geometries[array10[n22]].dist) {
-								final int[] array12 = array11;
 								final int n23 = n21;
-								++array12[n23];
+								++array11[n23];
 							} else {
-								final int[] array13 = array11;
 								final int n24 = n22;
-								++array13[n24];
+								++array11[n24];
 							}
 						} else if (n22 > n21) {
-							final int[] array14 = array11;
 							final int n25 = n21;
-							++array14[n25];
+							++array11[n25];
 						} else {
-							final int[] array15 = array11;
 							final int n26 = n22;
-							++array15[n26];
+							++array11[n26];
 						}
 					}
 				}
@@ -898,8 +890,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						this.graphics.fillRect(0, 0, 550, 400);
 					}
 					if (xtGraphics.starcnt != 0) {
-						final xtGraphics xtGraphics3 = xtGraphics;
-						--xtGraphics3.starcnt;
+						--xtGraphics.starcnt;
 					}
 				}
 				if (xtGraphics.starcnt < 35) {
@@ -966,22 +957,18 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					for (int n51 = n50 + 1; n51 < n47; ++n51) {
 						if (geometries[array22[n50]].dist != geometries[array22[n51]].dist) {
 							if (geometries[array22[n50]].dist < geometries[array22[n51]].dist) {
-								final int[] array24 = array23;
 								final int n52 = n50;
-								++array24[n52];
+								++array23[n52];
 							} else {
-								final int[] array25 = array23;
 								final int n53 = n51;
-								++array25[n53];
+								++array23[n53];
 							}
 						} else if (n51 > n50) {
-							final int[] array26 = array23;
 							final int n54 = n50;
-							++array26[n54];
+							++array23[n54];
 						} else {
-							final int[] array27 = array23;
 							final int n55 = n51;
-							++array27[n55];
+							++array23[n55];
 						}
 					}
 				}
@@ -1323,7 +1310,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			} catch (InterruptedException ex) {
 			}
 			//this.graphics.drawString("FPS:" + String.valueOf(1000 / frametime), 100, 100);
-			//System.out.println(xtGraphics.fase);
+			System.out.println(xtGraphics.fase);
 		}
 	}
 
@@ -1404,54 +1391,6 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				break;
 
 		}
-		/*if (!this.exwist) {
-			if (n == 1004) {
-				this.controls[0].up = true;
-			}
-			if (n == 1005) {
-				this.controls[0].down = true;
-			}
-			if (n == 1007) {
-				this.controls[0].right = true;
-			}
-			if (n == 1006) {
-				this.controls[0].left = true;
-			}
-			if (n == 32) {
-				this.controls[0].handb = true;
-			}
-			if (n == 10 || n == 80 || n == 112 || n == 27) {
-				this.controls[0].enter = true;
-			}
-			if (n == 97 || n == 65) {
-				if (this.controls[0].arrace) {
-					this.controls[0].arrace = false;
-				} else {
-					this.controls[0].arrace = true;
-				}
-			}
-			if (n == 77 || n == 109) {
-				if (this.controls[0].music_muted) {
-					this.controls[0].music_muted = false;
-				} else {
-					this.controls[0].music_muted = true;
-				}
-			}
-			if (n == 78 || n == 110) {
-				if (this.controls[0].sound_muted) {
-					this.controls[0].sound_muted = false;
-				} else {
-					this.controls[0].sound_muted = true;
-				}
-			}
-			if (n == 118 || n == 86) {
-				++this.view;
-				if (this.view == 3) {
-					this.view = 0;
-				}
-			}
-		}
-*/
 	}
 
 	@Override
