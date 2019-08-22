@@ -49,59 +49,6 @@ public class Medium {
 	long trx;
 	long trz;
 
-	float random() {
-		if (this.cntrn == 0) {
-			int n = 0;
-			do {
-				this.rand[n] = (int) (10.0 * Math.random());
-				this.diup[n] = !(Math.random() > Math.random());
-			} while (++n < 3);
-			this.cntrn = 20;
-		} else {
-			--this.cntrn;
-		}
-		int n2 = 0;
-		do {
-			if (this.diup[n2]) {
-				final int[] rand = this.rand;
-				final int n3 = n2;
-				++rand[n3];
-				if (this.rand[n2] != 10) {
-					continue;
-				}
-				this.rand[n2] = 0;
-			} else {
-				final int[] rand2 = this.rand;
-				final int n4 = n2;
-				--rand2[n4];
-				if (this.rand[n2] != -1) {
-					continue;
-				}
-				this.rand[n2] = 9;
-			}
-		} while (++n2 < 3);
-		++this.trn;
-		if (this.trn == 3) {
-			this.trn = 0;
-		}
-		return this.rand[this.trn] / 10.0f;
-	}
-
-	public int ys(final int n, int n2) {
-		if (n2 < 10) {
-			n2 = 10;
-		}
-		return (n2 - this.focus_point) * ((int) this.cy - n) / n2 + n;
-	}
-
-	public float ys(final float n, float n2) {
-		if (n2 < 10) {
-			n2 = 10;
-		}
-		return (n2 - this.focus_point) * (this.cy - n) / n2 + n;
-	}
-
-
 	Medium() {
 		this.focus_point = Config.SCREEN_HEIGHT;
 		this.ground = 250;
@@ -115,8 +62,8 @@ public class Medium {
 		this.flex = 0;
 		this.trk = false;
 		this.crs = false;
-		this.cx = (int) Config.SCREEN_WIDTH / 2;
-		this.cy = (int) Config.SCREEN_HEIGHT / 2;
+		this.cx = Config.SCREEN_WIDTH / 2;
+		this.cy = Config.SCREEN_HEIGHT / 2;
 		this.cz = 70;
 		this.xz = 0;
 		this.zy = 0;
@@ -144,31 +91,68 @@ public class Medium {
 		this.nrnd = 0;
 		this.trx = 0L;
 		this.trz = 0L;
-		int n = 0;
 	}
 
-	void setFade(final int n, final int n2, final int n3) {
-		this.cfade[0] = (int) (n + n * (this.snap[0] / 100.0f));
-		if (this.cfade[0] > 255) {
-			this.cfade[0] = 255;
+	public int ys(final int n, int n2) {
+		if (n2 < 10) {
+			n2 = 10;
 		}
-		if (this.cfade[0] < 0) {
-			this.cfade[0] = 0;
+		return (n2 - this.focus_point) * ((int) this.cy - n) / n2 + n;
+	}
+
+	float random() {
+		if (this.cntrn == 0) {
+			int n = 0;
+			do {
+				this.rand[n] = (int) (10.0 * Math.random());
+				this.diup[n] = !(Math.random() > Math.random());
+			} while (++n < 3);
+			this.cntrn = 20;
+		} else {
+			--this.cntrn;
 		}
-		this.cfade[1] = (int) (n2 + n2 * (this.snap[1] / 100.0f));
-		if (this.cfade[1] > 255) {
-			this.cfade[1] = 255;
+		int n2 = 0;
+		do {
+			if (this.diup[n2]) {
+				final int[] rand = this.rand;
+				++rand[n2];
+				if (this.rand[n2] != 10) {
+					continue;
+				}
+				this.rand[n2] = 0;
+			} else {
+				final int[] rand2 = this.rand;
+				--rand2[n2];
+				if (this.rand[n2] != -1) {
+					continue;
+				}
+				this.rand[n2] = 9;
+			}
+		} while (++n2 < 3);
+		++this.trn;
+		if (this.trn == 3) {
+			this.trn = 0;
 		}
-		if (this.cfade[1] < 0) {
-			this.cfade[1] = 0;
+		return this.rand[this.trn] / 10.0f;
+	}
+
+	public float ys(final float n, float n2) {
+		if (n2 < 10) {
+			n2 = 10;
 		}
-		this.cfade[2] = (int) (n3 + n3 * (this.snap[2] / 100.0f));
-		if (this.cfade[2] > 255) {
-			this.cfade[2] = 255;
-		}
-		if (this.cfade[2] < 0) {
-			this.cfade[2] = 0;
-		}
+		return (n2 - this.focus_point) * (this.cy - n) / n2 + n;
+	}
+
+
+	void setFade(final int red, final int green, final int blue) {
+		this.cfade[0] = (int) (red + red * (this.snap[0] / 100.0f));
+		this.cfade[0] = Util.clamp(this.cfade[0], 0, 255);
+
+		this.cfade[1] = (int) (green + green * (this.snap[1] / 100.0f));
+		this.cfade[1] = Util.clamp(this.cfade[1], 0, 255);
+
+		this.cfade[2] = (int) (blue + blue * (this.snap[2] / 100.0f));
+		this.cfade[2] = Util.clamp(this.cfade[2], 0, 255);
 	}
 
 	void draw(final Graphics graphics) {
@@ -297,19 +281,19 @@ public class Medium {
 		if (geometry.x - this.x - this.cx > 0) {
 			n2 = 180;
 		}
-		final float n3 = -(float) (90 + n2 + Math.atan((geometry.z - this.z) / (float) (geometry.x - this.x - this.cx)) / 0.017453292519943295);
+		final float n3 = -(float) (90 + n2 + Math.atan((geometry.z - this.z) / (geometry.x - this.x - this.cx)) / 0.017453292519943295);
 		int n4 = 0;
 		if (geometry.y - this.y - this.cy < 0) {
 			n4 = -180;
 		}
-		final float n5 = (float) (90 + n4 - Math.atan((float) Math.sqrt((geometry.z - this.z) * (geometry.z - this.z) + (geometry.x - this.x - this.cx) * (geometry.x - this.x - this.cx)) / (float) (geometry.y - this.y - this.cy)) / 0.017453292519943295);
+		final float n5 = (float) (90 + n4 - Math.atan((float) Math.sqrt((geometry.z - this.z) * (geometry.z - this.z) + (geometry.x - this.x - this.cx) * (geometry.x - this.x - this.cx)) / (geometry.y - this.y - this.cy)) / 0.017453292519943295);
 		this.xz += (n3 - this.xz) / this.trns;
 		if (this.trns != 1) {
 			--this.trns;
 		}
 		this.zy += (n5 - this.zy) / 5;
-		System.out.println(this.zy);
-		System.out.println((n5 - this.zy) / 5);
+		//System.out.println(this.zy);
+		//System.out.println((n5 - this.zy) / 5);
 		if ((int) Math.sqrt((geometry.z - this.z) * (geometry.z - this.z) + (geometry.x - this.x - this.cx) * (geometry.x - this.x - this.cx) + (geometry.y - this.y - this.cy) * (geometry.y - this.y - this.cy)) > 6000) {
 			this.td = true;
 		}
@@ -382,7 +366,7 @@ public class Medium {
 		if (this.trns != 5) {
 			this.trns = 5;
 		}
-		System.out.println("hit:" + this.hit + ", vxz:" + this.vxz + ", zy:" + this.zy + ", xz:" + this.xz);
+		//System.out.println("hit:" + this.hit + ", vxz:" + this.vxz + ", zy:" + this.zy + ", xz:" + this.xz);
 
 	}
 

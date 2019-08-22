@@ -1310,7 +1310,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			} catch (InterruptedException ex) {
 			}
 			//this.graphics.drawString("FPS:" + String.valueOf(1000 / frametime), 100, 100);
-			System.out.println(xtGraphics.fase);
+			//System.out.println(xtGraphics.fase);
 		}
 	}
 
