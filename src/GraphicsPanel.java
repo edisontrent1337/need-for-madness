@@ -1,32 +1,24 @@
-import java.awt.Cursor;
+import java.applet.Applet;
+import java.applet.AudioClip;
+import java.awt.*;
+import java.awt.image.ImageObserver;
+import java.awt.image.MemoryImageSource;
+import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import java.net.URL;
-import java.awt.Toolkit;
-import java.awt.MediaTracker;
-import java.awt.image.MemoryImageSource;
-import java.awt.image.PixelGrabber;
-import java.awt.Font;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.applet.AudioClip;
-import java.awt.Image;
-import java.applet.Applet;
-import java.awt.image.ImageObserver;
-import java.awt.FontMetrics;
-import java.awt.Panel;
 
 //
 // Decompiled by Procyon v0.5.36
 //
 
-public class xtGraphics extends Panel {
-	Medium m;
+public class GraphicsPanel extends Panel {
+	Medium medium;
 	FontMetrics ftm;
 	ImageObserver ob;
 	Applet app;
@@ -132,7 +124,7 @@ public class xtGraphics extends Panel {
 	boolean pwastd;
 	AudioClip[] skid;
 	AudioClip[] dustskid;
-	boolean mutes;
+	boolean isSoundMuted;
 	RadicalMod stages;
 	RadicalMod cars;
 	RadicalMod[] stracks;
@@ -183,21 +175,21 @@ public class xtGraphics extends Panel {
 	int dskflg;
 
 	public void framer(final int n, final Graphics graphics) {
-		int r = (int) (230.0f - 230.0f * (this.m.snap[0] / (float) (100 * this.hipno[n - 1])));
+		int r = (int) (230.0f - 230.0f * (this.medium.snap[0] / (float) (100 * this.hipno[n - 1])));
 		if (r > 255) {
 			r = 255;
 		}
 		if (r < 0) {
 			r = 0;
 		}
-		int g = (int) (230.0f - 230.0f * (this.m.snap[1] / (float) (100 * this.hipno[n - 1])));
+		int g = (int) (230.0f - 230.0f * (this.medium.snap[1] / (float) (100 * this.hipno[n - 1])));
 		if (g > 255) {
 			g = 255;
 		}
 		if (g < 0) {
 			g = 0;
 		}
-		int b = (int) (230.0f - 230.0f * (this.m.snap[2] / (float) (100 * this.hipno[n - 1])));
+		int b = (int) (230.0f - 230.0f * (this.medium.snap[2] / (float) (100 * this.hipno[n - 1])));
 		if (b > 255) {
 			b = 255;
 		}
@@ -212,27 +204,27 @@ public class xtGraphics extends Panel {
 		graphics.setColor(new Color(r, g, b));
 		fillBlankScreen(graphics);
 		graphics.drawImage(this.loadingmusic, 164, 90, null);
-		this.drawcs(graphics, 225, "" + this.sndsize[n - 1] + " KB", 0, 0, 0, 3);
-		this.drawcs(graphics, 260, " Please Wait...", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 225, "" + this.sndsize[n - 1] + " KB", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 260, " Please Wait...", 0, 0, 0, 3);
 		if (n == 10) {
-			this.drawcs(graphics, 300, "> Note: Guidance Arrow is disabled in this stage!", 100, 100, 100, 4);
+			this.drawCharacters(graphics, 300, "> Note: Guidance Arrow is disabled in this stage!", 100, 100, 100, 4);
 		}
 		if (n == this.unlocked) {
 			if (n == 1) {
-				this.drawcs(graphics, 300, "> Don't forget, you must pass in all checkpoints to complete a lap...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Don't forget, you must pass in all checkpoints to complete a lap...", 100, 100, 100, 4);
 			}
 			if (n == 2) {
-				this.drawcs(graphics, 300, "> Don't forget, you need power to be up to race faster...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Don't forget, you need power to be up to race faster...", 100, 100, 100, 4);
 			}
 			if (n == 3) {
-				this.drawcs(graphics, 300, "> Hint: its easier to waste the other cars then to finish 1st in this stage...", 100, 100, 100, 4);
-				this.drawcs(graphics, 320, "( Press [A] to make Guidance Arrow point to cars )", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Hint: its easier to waste the other cars then to finish 1st in this stage...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 320, "( Press [A] to make Guidance Arrow point to cars )", 100, 100, 100, 4);
 			}
 			if (n == 4) {
-				this.drawcs(graphics, 300, "> Remember the better the stunt the better the power you get...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Remember the better the stunt the better the power you get...", 100, 100, 100, 4);
 			}
 			if (n == 5) {
-				this.drawcs(graphics, 300, "> Remember the more the power the more faster and powerful your car is...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Remember the more the power the more faster and powerful your car is...", 100, 100, 100, 4);
 			}
 		}
 	}
@@ -246,13 +238,13 @@ public class xtGraphics extends Panel {
 		graphics.drawImage(this.trackbg, 0, 0, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 110, "> You need to complete current stage " + this.unlocked + " before playing this one...", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 110, "> You need to complete current stage " + this.unlocked + " before playing this one...", 0, 0, 0, 3);
 		graphics.drawImage(this.pgate, 96, 150, null);
 		if (this.aflk) {
-			this.drawcs(graphics, 160, "[ Stage " + (this.unlocked + 1) + " Locked ]", 0, 0, 0, 3);
+			this.drawCharacters(graphics, 160, "[ Stage " + (this.unlocked + 1) + " Locked ]", 0, 0, 0, 3);
 			this.aflk = false;
 		} else {
-			this.drawcs(graphics, 160, "[ Stage " + (this.unlocked + 1) + " Locked ]", 255, 0, 0, 3);
+			this.drawCharacters(graphics, 160, "[ Stage " + (this.unlocked + 1) + " Locked ]", 255, 0, 0, 3);
 			this.aflk = true;
 		}
 		graphics.drawImage(this.select, 201, 45, null);
@@ -263,7 +255,7 @@ public class xtGraphics extends Panel {
 		graphics.drawImage(this.back[this.pback], 245, 320, null);
 		graphics.setFont(new Font("SansSerif", 1, 11));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
 		--this.lockcnt;
 		if (this.lockcnt == 0 || control.enter || control.handb || control.left) {
 			control.left = false;
@@ -279,13 +271,13 @@ public class xtGraphics extends Panel {
 		return n > n3 - 5 && n < n3 + width + 5 && n2 > n4 - 5 && n2 < n4 + height + 5;
 	}
 
-	public void loadingstage(final int i, final Graphics graphics) {
+	public void loadingStage(final int stageNumber, final Graphics graphics) {
 		this.cars.stop();
 		this.stages.stop();
 		graphics.drawImage(this.trackbg, 0, 0, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 180, "Loading Stage " + i + ", please wait...", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 180, "Loading Stage " + stageNumber + ", please wait...", 0, 0, 0, 3);
 		graphics.drawImage(this.select, 201, 45, null);
 		graphics.drawImage(this.bl, 0, 0, null);
 		graphics.drawImage(this.bt, 0, 0, null);
@@ -293,7 +285,7 @@ public class xtGraphics extends Panel {
 		graphics.drawImage(this.bb, 0, 357, null);
 		graphics.setFont(new Font("SansSerif", 1, 11));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
 		this.app.repaint();
 	}
 
@@ -340,12 +332,13 @@ public class xtGraphics extends Panel {
 		}
 	}
 
-	public void fleximage(final Image img, final Graphics graphics, final int n) {
+	public void flexImage(final Image img, final Graphics graphics, final int n) {
 		if (n == 0) {
 			final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, this.flexpix, 0, Config.SCREEN_WIDTH);
 			try {
 				pixelGrabber.grabPixels();
 			} catch (InterruptedException ex) {
+				ex.printStackTrace();
 			}
 			int n2 = 0;
 			do {
@@ -357,62 +350,47 @@ public class xtGraphics extends Panel {
 		}
 		int n3 = 0;
 		do {
-			if (this.m.random() > 0.2) {
+			if (this.medium.random() > 0.2) {
 				final Color color2 = new Color(this.flexpix[n3]);
 				int r = (int) (color2.getRed() - color2.getRed() * 0.4);
-				if (r > 225) {
-					r = 225;
-				}
-				if (r < 0) {
-					r = 0;
-				}
+				r = Util.clamp(r, 0, 255);
 				int g = (int) (color2.getGreen() - color2.getGreen() * 0.35);
-				if (g > 225) {
-					g = 225;
-				}
-				if (g < 0) {
-					g = 0;
-				}
+				g = Util.clamp(g, 0, 255);
 				int b = (int) (color2.getBlue() - color2.getBlue() * (0.25 + n / 30.0f));
-				if (b > 225) {
-					b = 225;
-				}
-				if (b < 0) {
-					b = 0;
-				}
+				b = Util.clamp(b, 0, 255);
 				this.flexpix[n3] = new Color(r, g, b).getRGB();
 			}
 		} while (++n3 < Config.SCREEN_PIXELS);
 		graphics.drawImage(this.fleximg = this.createImage(new MemoryImageSource(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, this.flexpix, 0, Config.SCREEN_WIDTH)), 0, 0, null);
 	}
 
-	public void arrow(final Graphics graphics, final int n, final int n2, final CheckPoints checkPoints, final boolean b) {
-		final int[] array = new int[7];
-		final int[] array2 = new int[7];
-		final int[] array3 = new int[7];
-		final int n3 = 275;
-		final int n4 = -90;
-		final int n5 = 700;
-		int n6 = 0;
-		do {
-			array2[n6] = n4;
-		} while (++n6 < 7);
-		array[0] = n3;
-		array3[0] = n5 + 110;
-		array[1] = n3 - 35;
-		array3[1] = n5 + 50;
-		array[2] = n3 - 15;
-		array3[2] = n5 + 50;
-		array[3] = n3 - 15;
-		array3[3] = n5 - 50;
-		array[4] = n3 + 15;
-		array3[4] = n5 - 50;
-		array[5] = n3 + 15;
-		array3[5] = n5 + 50;
-		array[6] = n3 + 35;
-		array3[6] = n5 + 50;
+	public void arrow(final Graphics graphics, final int n, final int n2, final CheckPoints checkPoints, final boolean shouldPointAtCars) {
+		final int[] xCoordinates = new int[7];
+		final int[] yCoordinates = new int[7];
+		int[] zCoordinates = new int[]{
+				-90, -90, -90, -90, -90, -90, -90, -90,
+		};
+
+		final int xPosition = Config.SCREEN_WIDTH / 2;
+		final int yPosition = 1020;
+
+		xCoordinates[0] = xPosition;
+		yCoordinates[0] = yPosition + 110;
+		xCoordinates[1] = xPosition - 35;
+		yCoordinates[1] = yPosition + 50;
+		xCoordinates[2] = xPosition - 15;
+		yCoordinates[2] = yPosition + 50;
+		xCoordinates[3] = xPosition - 15;
+		yCoordinates[3] = yPosition - 50;
+		xCoordinates[4] = xPosition + 15;
+		yCoordinates[4] = yPosition - 50;
+		xCoordinates[5] = xPosition + 15;
+		yCoordinates[5] = yPosition + 50;
+		xCoordinates[6] = xPosition + 35;
+		yCoordinates[6] = yPosition + 50;
+
 		int n8;
-		if (!b) {
+		if (!shouldPointAtCars) {
 			int n7 = 0;
 			if (checkPoints.x[n] - checkPoints.opx[0] >= 0) {
 				n7 = 180;
@@ -438,16 +416,18 @@ public class xtGraphics extends Panel {
 				n12 = 180;
 			}
 			n8 = (int) (90 + n12 + Math.atan((checkPoints.opz[n9] - checkPoints.opz[0]) / (double) (checkPoints.opx[n9] - checkPoints.opx[0])) / 0.017453292519943295);
-			this.drawcs(graphics, 13, "[                              ]", 76, 67, 240, 0);
-			this.drawcs(graphics, 13, this.names[this.sc[n9]], 0, 0, 0, 0);
+			this.drawCharacters(graphics, 13, "[                              ]", 76, 67, 240, 0);
+			this.drawCharacters(graphics, 13, this.names[this.sc[n9]], 0, 0, 0, 0);
 		}
 		int i;
-		for (i = n8 + (int)this.m.xz; i < 0; i += 360) {
+		i = n8 + (int)this.medium.xz;
+		while (i < 0) {
+			i += 360;
 		}
 		while (i > 180) {
 			i -= 360;
 		}
-		if (!b) {
+		if (!shouldPointAtCars) {
 			if (i > 130) {
 				i = 130;
 			}
@@ -484,38 +464,28 @@ public class xtGraphics extends Panel {
 				}
 			}
 		}
-		this.rot(array, array3, n3, n5, this.ana, 7);
+		this.rot(xCoordinates, yCoordinates, xPosition, yPosition, this.ana, 7);
 		final int abs = Math.abs(this.ana);
-		if (!b) {
+		if (!shouldPointAtCars) {
 			if (abs > 7 || n2 > 0 || n2 == -2 || this.cntan != 0) {
 				int n13 = 0;
 				do {
-					array[n13] = this.xs(array[n13], array3[n13]);
-					array2[n13] = this.ys(array2[n13], array3[n13]);
+					xCoordinates[n13] = this.xs(xCoordinates[n13], yCoordinates[n13]);
+					zCoordinates[n13] = this.ys(zCoordinates[n13], yCoordinates[n13]);
 				} while (++n13 < 7);
-				int r = (int) (190.0f + 190.0f * (this.m.snap[0] / 100.0f));
-				if (r > 255) {
-					r = 255;
-				}
-				if (r < 0) {
-					r = 0;
-				}
-				int g = (int) (255.0f + 255.0f * (this.m.snap[1] / 100.0f));
-				if (g > 255) {
-					g = 255;
-				}
-				if (g < 0) {
-					g = 0;
-				}
+				int r = (int) (190.0f + 190.0f * (this.medium.snap[0] / 100.0f));
+				r = Util.clamp(r, 0, 255);
+				int g = (int) (255.0f + 255.0f * (this.medium.snap[1] / 100.0f));
+				g = Util.clamp(g, 0, 255);
 				int b2 = 0;
 				if (n2 <= 0) {
 					if (abs <= 45 && n2 != -2 && this.cntan == 0) {
-						r = (r * abs + this.m.csky[0] * (45 - abs)) / 45;
-						g = (g * abs + this.m.csky[1] * (45 - abs)) / 45;
-						b2 = (b2 * abs + this.m.csky[2] * (45 - abs)) / 45;
+						r = (r * abs + this.medium.skyColor[0] * (45 - abs)) / 45;
+						g = (g * abs + this.medium.skyColor[1] * (45 - abs)) / 45;
+						b2 = (b2 * abs + this.medium.skyColor[2] * (45 - abs)) / 45;
 					}
 					if (abs >= 90) {
-						int n14 = (int) (255.0f + 255.0f * (this.m.snap[0] / 100.0f));
+						int n14 = (int) (255.0f + 255.0f * (this.medium.snap[0] / 100.0f));
 						if (n14 > 255) {
 							n14 = 255;
 						}
@@ -528,7 +498,7 @@ public class xtGraphics extends Panel {
 						}
 					}
 				} else if (this.flk) {
-					r = (int) (255.0f + 255.0f * (this.m.snap[0] / 100.0f));
+					r = (int) (255.0f + 255.0f * (this.medium.snap[0] / 100.0f));
 					if (r > 255) {
 						r = 255;
 					}
@@ -537,14 +507,14 @@ public class xtGraphics extends Panel {
 					}
 					this.flk = false;
 				} else {
-					r = (int) (255.0f + 255.0f * (this.m.snap[0] / 100.0f));
+					r = (int) (255.0f + 255.0f * (this.medium.snap[0] / 100.0f));
 					if (r > 255) {
 						r = 255;
 					}
 					if (r < 0) {
 						r = 0;
 					}
-					g = (int) (220.0f + 220.0f * (this.m.snap[1] / 100.0f));
+					g = (int) (220.0f + 220.0f * (this.medium.snap[1] / 100.0f));
 					if (g > 255) {
 						g = 255;
 					}
@@ -554,15 +524,15 @@ public class xtGraphics extends Panel {
 					this.flk = true;
 				}
 				graphics.setColor(new Color(r, g, b2));
-				graphics.fillPolygon(array, array2, 7);
-				int r2 = (int) (115.0f + 115.0f * (this.m.snap[0] / 100.0f));
+				graphics.fillPolygon(xCoordinates, zCoordinates, 7);
+				int r2 = (int) (115.0f + 115.0f * (this.medium.snap[0] / 100.0f));
 				if (r2 > 255) {
 					r2 = 255;
 				}
 				if (r2 < 0) {
 					r2 = 0;
 				}
-				int g2 = (int) (170.0f + 170.0f * (this.m.snap[1] / 100.0f));
+				int g2 = (int) (170.0f + 170.0f * (this.medium.snap[1] / 100.0f));
 				if (g2 > 255) {
 					g2 = 255;
 				}
@@ -572,12 +542,12 @@ public class xtGraphics extends Panel {
 				int b3 = 0;
 				if (n2 <= 0) {
 					if (abs <= 45 && n2 != -2 && this.cntan == 0) {
-						r2 = (r2 * abs + this.m.csky[0] * (45 - abs)) / 45;
-						g2 = (g2 * abs + this.m.csky[1] * (45 - abs)) / 45;
-						b3 = (b3 * abs + this.m.csky[2] * (45 - abs)) / 45;
+						r2 = (r2 * abs + this.medium.skyColor[0] * (45 - abs)) / 45;
+						g2 = (g2 * abs + this.medium.skyColor[1] * (45 - abs)) / 45;
+						b3 = (b3 * abs + this.medium.skyColor[2] * (45 - abs)) / 45;
 					}
 				} else if (this.flk) {
-					r2 = (int) (255.0f + 255.0f * (this.m.snap[0] / 100.0f));
+					r2 = (int) (255.0f + 255.0f * (this.medium.snap[0] / 100.0f));
 					if (r2 > 255) {
 						r2 = 255;
 					}
@@ -587,29 +557,29 @@ public class xtGraphics extends Panel {
 					g2 = 0;
 				}
 				graphics.setColor(new Color(r2, g2, b3));
-				graphics.drawPolygon(array, array2, 7);
+				graphics.drawPolygon(xCoordinates, zCoordinates, 7);
 			}
 		} else {
 			int n15 = 0;
 			do {
-				array[n15] = this.xs(array[n15], array3[n15]);
-				array2[n15] = this.ys(array2[n15], array3[n15]);
+				xCoordinates[n15] = this.xs(xCoordinates[n15], yCoordinates[n15]);
+				zCoordinates[n15] = this.ys(zCoordinates[n15], yCoordinates[n15]);
 			} while (++n15 < 7);
-			int r3 = (int) (159.0f + 159.0f * (this.m.snap[0] / 100.0f));
+			int r3 = (int) (159.0f + 159.0f * (this.medium.snap[0] / 100.0f));
 			if (r3 > 255) {
 				r3 = 255;
 			}
 			if (r3 < 0) {
 				r3 = 0;
 			}
-			int g3 = (int) (207.0f + 207.0f * (this.m.snap[1] / 100.0f));
+			int g3 = (int) (207.0f + 207.0f * (this.medium.snap[1] / 100.0f));
 			if (g3 > 255) {
 				g3 = 255;
 			}
 			if (g3 < 0) {
 				g3 = 0;
 			}
-			int b4 = (int) (255.0f + 255.0f * (this.m.snap[2] / 100.0f));
+			int b4 = (int) (255.0f + 255.0f * (this.medium.snap[2] / 100.0f));
 			if (b4 > 255) {
 				b4 = 255;
 			}
@@ -617,22 +587,22 @@ public class xtGraphics extends Panel {
 				b4 = 0;
 			}
 			graphics.setColor(new Color(r3, g3, b4));
-			graphics.fillPolygon(array, array2, 7);
-			int r4 = (int) (120.0f + 120.0f * (this.m.snap[0] / 100.0f));
+			graphics.fillPolygon(xCoordinates, zCoordinates, 7);
+			int r4 = (int) (120.0f + 120.0f * (this.medium.snap[0] / 100.0f));
 			if (r4 > 255) {
 				r4 = 255;
 			}
 			if (r4 < 0) {
 				r4 = 0;
 			}
-			int g4 = (int) (114.0f + 114.0f * (this.m.snap[1] / 100.0f));
+			int g4 = (int) (114.0f + 114.0f * (this.medium.snap[1] / 100.0f));
 			if (g4 > 255) {
 				g4 = 255;
 			}
 			if (g4 < 0) {
 				g4 = 0;
 			}
-			int b5 = (int) (255.0f + 255.0f * (this.m.snap[2] / 100.0f));
+			int b5 = (int) (255.0f + 255.0f * (this.medium.snap[2] / 100.0f));
 			if (b5 > 255) {
 				b5 = 255;
 			}
@@ -640,24 +610,24 @@ public class xtGraphics extends Panel {
 				b5 = 0;
 			}
 			graphics.setColor(new Color(r4, g4, b5));
-			graphics.drawPolygon(array, array2, 7);
+			graphics.drawPolygon(xCoordinates, zCoordinates, 7);
 		}
 	}
 
 	public void levelhigh(final Graphics graphics, final int n, final int n2) {
 		graphics.drawImage(this.gameh, 176, 20, null);
 		if (n != 0) {
-			this.drawcs(graphics, 60, "You wasted 'em!", 16, 48, 96, 0);
+			this.drawCharacters(graphics, 60, "You wasted 'em!", 16, 48, 96, 0);
 		} else if (n2 == 229) {
-			this.drawcs(graphics, 60, "Wasted!", 16, 48, 96, 0);
+			this.drawCharacters(graphics, 60, "Wasted!", 16, 48, 96, 0);
 		} else {
-			this.drawcs(graphics, 60, "Stunts!", 16, 48, 96, 0);
+			this.drawCharacters(graphics, 60, "Stunts!", 16, 48, 96, 0);
 		}
-		this.drawcs(graphics, 380, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
+		this.drawCharacters(graphics, 380, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
 	}
 
 	public void playsounds(final Madness madness, final Control control, final int n) {
-		if (this.fase == 0 && this.starcnt < 35 && this.cntwis != 8 && !this.mutes) {
+		if (this.fase == 0 && this.starcnt < 35 && this.cntwis != 8 && !this.isSoundMuted) {
 			boolean b = (control.up && madness.speed > 0.0f) || (control.down && madness.speed < 10.0f);
 			boolean b2 = (madness.skid == 1 && control.handb) || Math.abs(madness.scz[0] - (madness.scz[1] + madness.scz[0] + madness.scz[2] + madness.scz[3]) / 4.0f) > 1.0f || Math.abs(madness.scx[0] - (madness.scx[1] + madness.scx[0] + madness.scx[2] + madness.scx[3]) / 4.0f) > 1.0f;
 			boolean b3 = false;
@@ -718,7 +688,7 @@ public class xtGraphics extends Panel {
 								this.stopcnt = 10;
 							}
 						} else if (this.stopcnt <= -2) {
-							this.air[2 + (int) (this.m.random() * 3.0f)].loop();
+							this.air[2 + (int) (this.medium.random() * 3.0f)].loop();
 							this.stopcnt = 7;
 						}
 					}
@@ -729,14 +699,14 @@ public class xtGraphics extends Panel {
 				this.aird = false;
 			} else {
 				this.pwait = 15;
-				if (!madness.mtouch && !this.grrd && this.m.random() > 0.4) {
-					this.air[(int) (this.m.random() * 4.0f)].loop();
+				if (!madness.mtouch && !this.grrd && this.medium.random() > 0.4) {
+					this.air[(int) (this.medium.random() * 4.0f)].loop();
 					this.stopcnt = 5;
 					this.grrd = true;
 				}
 				if (!madness.wtouch && !this.aird) {
 					this.stopairs();
-					this.air[(int) (this.m.random() * 4.0f)].loop();
+					this.air[(int) (this.medium.random() * 4.0f)].loop();
 					this.stopcnt = 10;
 					this.aird = true;
 				}
@@ -752,7 +722,7 @@ public class xtGraphics extends Panel {
 					this.wastd.stop();
 					this.pwastd = false;
 				}
-				if (this.cntwis == 7 && !this.mutes) {
+				if (this.cntwis == 7 && !this.isSoundMuted) {
 					this.firewasted.play();
 				}
 			}
@@ -779,8 +749,8 @@ public class xtGraphics extends Panel {
 			this.cntwis = 0;
 		}
 		if (this.fase == 0 || this.fase == 6 || this.fase == -1 || this.fase == -2 || this.fase == -3 || this.fase == -4 || this.fase == -5) {
-			if (this.mutes != control.sound_muted) {
-				this.mutes = control.sound_muted;
+			if (this.isSoundMuted != control.sound_muted) {
+				this.isSoundMuted = control.sound_muted;
 			}
 			if (control.music_muted != this.mutem) {
 				this.mutem = control.music_muted;
@@ -811,13 +781,13 @@ public class xtGraphics extends Panel {
 		if (this.bfcrash == 0) {
 			if (n == 0) {
 				if (Math.abs(a) > 25.0f && Math.abs(a) < 170.0f) {
-					if (!this.mutes) {
+					if (!this.isSoundMuted) {
 						this.lowcrash[this.crshturn].play();
 					}
 					this.bfcrash = 2;
 				}
 				if (Math.abs(a) > 170.0f) {
-					if (!this.mutes) {
+					if (!this.isSoundMuted) {
 						this.crash[this.crshturn].play();
 					}
 					this.bfcrash = 2;
@@ -838,20 +808,20 @@ public class xtGraphics extends Panel {
 			}
 			if (n == -1) {
 				if (Math.abs(a) > 25.0f && Math.abs(a) < 170.0f) {
-					if (!this.mutes) {
+					if (!this.isSoundMuted) {
 						this.lowcrash[2].play();
 					}
 					this.bfcrash = 2;
 				}
 				if (Math.abs(a) > 170.0f) {
-					if (!this.mutes) {
+					if (!this.isSoundMuted) {
 						this.crash[2].play();
 					}
 					this.bfcrash = 2;
 				}
 			}
 			if (n == 1) {
-				if (!this.mutes) {
+				if (!this.isSoundMuted) {
 					this.tires.play();
 				}
 				this.bfcrash = 3;
@@ -863,15 +833,15 @@ public class xtGraphics extends Panel {
 		if (n2 < 50) {
 			n2 = 50;
 		}
-		return (int)((n2 - this.m.focus_point) * (this.m.cy - n) / n2 + n);
+		return (int)((n2 - this.medium.focusPoint) * (this.medium.centerY - n) / n2 + n);
 	}
 
 	public void replyn(final Graphics graphics) {
 		if (this.aflk) {
-			this.drawcs(graphics, 30, "Replay  >", 0, 0, 0, 0);
+			this.drawCharacters(graphics, 30, "Replay  >", 0, 0, 0, 0);
 			this.aflk = false;
 		} else {
-			this.drawcs(graphics, 30, "Replay  >", 0, 128, 255, 0);
+			this.drawCharacters(graphics, 30, "Replay  >", 0, 128, 255, 0);
 			this.aflk = true;
 		}
 	}
@@ -958,8 +928,8 @@ public class xtGraphics extends Panel {
 		graphics.drawRect(20, 20, 510, 360);
 		graphics.setFont(new Font("SansSerif", 1, 11));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 14, "Game lost its focus -Click- screen with mouse to continue.", 100, 100, 100, 3);
-		this.drawcs(graphics, 395, "Game lost its focus -Click- screen with mouse to continue.", 100, 100, 100, 3);
+		this.drawCharacters(graphics, 14, "Game lost its focus -Click- screen with mouse to continue.", 100, 100, 100, 3);
+		this.drawCharacters(graphics, 395, "Game lost its focus -Click- screen with mouse to continue.", 100, 100, 100, 3);
 	}
 
 	public void rot(final int[] array, final int[] array2, final int n, final int n2, final int n3, final int n4) {
@@ -967,8 +937,8 @@ public class xtGraphics extends Panel {
 			for (int i = 0; i < n4; ++i) {
 				final int n5 = array[i];
 				final int n6 = array2[i];
-				array[i] = n + (int) ((n5 - n) * this.m.cos(n3) - (n6 - n2) * this.m.sin(n3));
-				array2[i] = n2 + (int) ((n5 - n) * this.m.sin(n3) + (n6 - n2) * this.m.cos(n3));
+				array[i] = n + (int) ((n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3));
+				array2[i] = n2 + (int) ((n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3));
 			}
 		}
 	}
@@ -1013,25 +983,25 @@ public class xtGraphics extends Panel {
 			}
 		} while (++n5 < Config.SCREEN_PIXELS);
 		graphics.drawImage(this.fleximg = this.createImage(new MemoryImageSource(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, this.flexpix, 0, Config.SCREEN_WIDTH)), 0, 0, null);
-		this.m.flex = 0;
+		this.medium.flex = 0;
 	}
 
 	public void loadmusic(final int n, final int n2, final Graphics graphics) {
-		int r = (int) (230.0f - 230.0f * (this.m.snap[0] / (float) (100 * this.hipno[n - 1])));
+		int r = (int) (230.0f - 230.0f * (this.medium.snap[0] / (float) (100 * this.hipno[n - 1])));
 		if (r > 255) {
 			r = 255;
 		}
 		if (r < 0) {
 			r = 0;
 		}
-		int g = (int) (230.0f - 230.0f * (this.m.snap[1] / (float) (100 * this.hipno[n - 1])));
+		int g = (int) (230.0f - 230.0f * (this.medium.snap[1] / (float) (100 * this.hipno[n - 1])));
 		if (g > 255) {
 			g = 255;
 		}
 		if (g < 0) {
 			g = 0;
 		}
-		int b = (int) (230.0f - 230.0f * (this.m.snap[2] / (float) (100 * this.hipno[n - 1])));
+		int b = (int) (230.0f - 230.0f * (this.medium.snap[2] / (float) (100 * this.hipno[n - 1])));
 		if (b > 255) {
 			b = 255;
 		}
@@ -1046,27 +1016,27 @@ public class xtGraphics extends Panel {
 		graphics.setColor(new Color(r, g, b));
 		fillBlankScreen(graphics);
 		graphics.drawImage(this.loadingmusic, 164, 90, null);
-		this.drawcs(graphics, 225, "" + this.sndsize[n - 1] + " KB", 0, 0, 0, 3);
-		this.drawcs(graphics, 260, " Please Wait...", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 225, "" + this.sndsize[n - 1] + " KB", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 260, " Please Wait...", 0, 0, 0, 3);
 		if (n == 10) {
-			this.drawcs(graphics, 300, "> Note: Guidance Arrow is disabled in this stage!", 100, 100, 100, 4);
+			this.drawCharacters(graphics, 300, "> Note: Guidance Arrow is disabled in this stage!", 100, 100, 100, 4);
 		}
 		if (n == this.unlocked) {
 			if (n == 1) {
-				this.drawcs(graphics, 300, "> Don't forget, you must pass in all checkpoints to complete a lap...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Don't forget, you must pass in all checkpoints to complete a lap...", 100, 100, 100, 4);
 			}
 			if (n == 2) {
-				this.drawcs(graphics, 300, "> Don't forget, you need power to be up to race faster...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Don't forget, you need power to be up to race faster...", 100, 100, 100, 4);
 			}
 			if (n == 3) {
-				this.drawcs(graphics, 300, "> Hint: its easier to waste the other cars then to finish 1st in this stage...", 100, 100, 100, 4);
-				this.drawcs(graphics, 320, "( Press [A] to make Guidance Arrow point to cars )", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Hint: its easier to waste the other cars then to finish 1st in this stage...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 320, "( Press [A] to make Guidance Arrow point to cars )", 100, 100, 100, 4);
 			}
 			if (n == 4) {
-				this.drawcs(graphics, 300, "> Remember the better the stunt the better the power you get...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Remember the better the stunt the better the power you get...", 100, 100, 100, 4);
 			}
 			if (n == 5) {
-				this.drawcs(graphics, 300, "> Remember the more the power the more faster and powerful your car is...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 300, "> Remember the more the power the more faster and powerful your car is...", 100, 100, 100, 4);
 			}
 		}
 		this.app.setCursor(new Cursor(3));
@@ -1148,7 +1118,7 @@ public class xtGraphics extends Panel {
 		}
 		this.pcontin = 0;
 		this.mutem = false;
-		this.mutes = false;
+		this.isSoundMuted = false;
 	}
 
 	public void pausedgame(final Graphics graphics, final int n, final Control control, final Record record) {
@@ -1253,14 +1223,14 @@ public class xtGraphics extends Panel {
 			graphics.drawImage(this.radicalplay, 87, 110, null);
 			graphics.setFont(new Font("SansSerif", 1, 13));
 			this.ftm = graphics.getFontMetrics();
-			this.drawcs(graphics, 150 + (int) (10.0f * this.m.random()), "www.radicalplay.com", 112, 120, 143, 3);
+			this.drawCharacters(graphics, 150 + (int) (10.0f * this.medium.random()), "www.radicalplay.com", 112, 120, 143, 3);
 			graphics.setFont(new Font("SansSerif", 1, 11));
 			this.ftm = graphics.getFontMetrics();
 			if (this.aflk) {
-				this.drawcs(graphics, 190, "And we are never going to find the new unless we get a little crazy...", 112, 120, 143, 3);
+				this.drawCharacters(graphics, 190, "And we are never going to find the new unless we get a little crazy...", 112, 120, 143, 3);
 				this.aflk = false;
 			} else {
-				this.drawcs(graphics, 192, "And we are never going to find the new unless we get a little crazy...", 150, 150, 150, 3);
+				this.drawCharacters(graphics, 192, "And we are never going to find the new unless we get a little crazy...", 150, 150, 150, 3);
 				this.aflk = true;
 			}
 			graphics.drawImage(this.rpro, 150, 240, null);
@@ -1270,17 +1240,17 @@ public class xtGraphics extends Panel {
 			graphics.drawImage(this.omdness, 158, 7, null);
 			graphics.setFont(new Font("SansSerif", 1, 13));
 			this.ftm = graphics.getFontMetrics();
-			this.drawcs(graphics, 65, "At Radicalplay.com", 0, 0, 0, 3);
-			this.drawcs(graphics, 100, "Cartoon 3D Engine, Game Programming, 3D Models, Graphics and Sound Effects", 0, 0, 0, 3);
-			this.drawcs(graphics, 120, "By Omar Waly", 0, 0, 100, 3);
-			this.drawcs(graphics, 180, "Thanks for Game Testing", 0, 0, 0, 3);
-			this.drawcs(graphics, 200, "Khaled Helmy, Ismail Gorilaz,", 0, 0, 100, 3);
-			this.drawcs(graphics, 215, "Karim AboSamra, Mahmoud Waly", 0, 0, 100, 3);
-			this.drawcs(graphics, 230, "Karim Khadem, Ahmed Ismail", 0, 0, 100, 3);
-			this.drawcs(graphics, 245, "and Mahmoud EzzElDien (Turbo)", 0, 0, 100, 3);
-			this.drawcs(graphics, 305, "Music From", 0, 0, 0, 3);
-			this.drawcs(graphics, 325, "www.ModArchive.com", 0, 0, 100, 3);
-			this.drawcs(graphics, 385, "For any comments: Omar@radicalplay.com", 0, 0, 0, 3);
+			this.drawCharacters(graphics, 65, "At Radicalplay.com", 0, 0, 0, 3);
+			this.drawCharacters(graphics, 100, "Cartoon 3D Engine, Game Programming, 3D Models, Graphics and Sound Effects", 0, 0, 0, 3);
+			this.drawCharacters(graphics, 120, "By Omar Waly", 0, 0, 100, 3);
+			this.drawCharacters(graphics, 180, "Thanks for Game Testing", 0, 0, 0, 3);
+			this.drawCharacters(graphics, 200, "Khaled Helmy, Ismail Gorilaz,", 0, 0, 100, 3);
+			this.drawCharacters(graphics, 215, "Karim AboSamra, Mahmoud Waly", 0, 0, 100, 3);
+			this.drawCharacters(graphics, 230, "Karim Khadem, Ahmed Ismail", 0, 0, 100, 3);
+			this.drawCharacters(graphics, 245, "and Mahmoud EzzElDien (Turbo)", 0, 0, 100, 3);
+			this.drawCharacters(graphics, 305, "Music From", 0, 0, 0, 3);
+			this.drawCharacters(graphics, 325, "www.ModArchive.com", 0, 0, 100, 3);
+			this.drawCharacters(graphics, 385, "For any comments: Omar@radicalplay.com", 0, 0, 0, 3);
 		}
 		if (this.flipo == 3) {
 			graphics.drawImage(this.bgmain, 0, 0, null);
@@ -1302,34 +1272,34 @@ public class xtGraphics extends Panel {
 	public void stat(final Madness madness, final CheckPoints checkPoints, final Control control, final boolean b, final Graphics graphics) {
 		int n = 0;
 		if (this.wasted == 4) {
-			if (this.m.flex != 2) {
-				graphics.setColor(new Color(this.m.csky[0], this.m.csky[1], this.m.csky[2]));
+			if (this.medium.flex != 2) {
+				graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
 				graphics.fillRect(166, 70, this.youwastedem.getWidth(this.ob), this.youwastedem.getHeight(this.ob));
-				graphics.setColor(new Color(this.m.cfade[0], this.m.cfade[1], this.m.cfade[2]));
+				graphics.setColor(new Color(this.medium.cfade[0], this.medium.cfade[1], this.medium.cfade[2]));
 				graphics.drawRect(166, 70, this.youwastedem.getWidth(this.ob), this.youwastedem.getHeight(this.ob));
 			}
 			graphics.drawImage(this.youwastedem, 166, 70, null);
 			if (this.aflk) {
-				this.drawcs(graphics, 120, "You Won, all cars have been wasted!", 0, 0, 0, 0);
+				this.drawCharacters(graphics, 120, "You Won, all cars have been wasted!", 0, 0, 0, 0);
 				this.aflk = false;
 			} else {
-				this.drawcs(graphics, 120, "You Won, all cars have been wasted!", 0, 128, 255, 0);
+				this.drawCharacters(graphics, 120, "You Won, all cars have been wasted!", 0, 128, 255, 0);
 				this.aflk = true;
 			}
-			this.drawcs(graphics, 350, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
+			this.drawCharacters(graphics, 350, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
 			checkPoints.haltall = true;
 			n = 1;
 			this.winner = true;
 		}
 		if (n == 0 && madness.dest && this.cntwis == 8) {
-			if (this.m.flex != 2) {
-				graphics.setColor(new Color(this.m.csky[0], this.m.csky[1], this.m.csky[2]));
+			if (this.medium.flex != 2) {
+				graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
 				graphics.fillRect(172, 70, this.yourwasted.getWidth(this.ob), this.yourwasted.getHeight(this.ob));
-				graphics.setColor(new Color(this.m.cfade[0], this.m.cfade[1], this.m.cfade[2]));
+				graphics.setColor(new Color(this.medium.cfade[0], this.medium.cfade[1], this.medium.cfade[2]));
 				graphics.drawRect(172, 70, this.yourwasted.getWidth(this.ob), this.yourwasted.getHeight(this.ob));
 			}
 			graphics.drawImage(this.yourwasted, 172, 70, null);
-			this.drawcs(graphics, 350, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
+			this.drawCharacters(graphics, 350, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
 			n = 1;
 			this.winner = false;
 		}
@@ -1338,39 +1308,39 @@ public class xtGraphics extends Panel {
 			do {
 				if (checkPoints.clear[n2] == checkPoints.nlaps * checkPoints.nsp && checkPoints.pos[n2] == 0) {
 					if (n2 == 0) {
-						if (this.m.flex != 2) {
-							graphics.setColor(new Color(this.m.csky[0], this.m.csky[1], this.m.csky[2]));
+						if (this.medium.flex != 2) {
+							graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
 							graphics.fillRect(208, 70, this.youwon.getWidth(this.ob), this.youwon.getHeight(this.ob));
-							graphics.setColor(new Color(this.m.cfade[0], this.m.cfade[1], this.m.cfade[2]));
+							graphics.setColor(new Color(this.medium.cfade[0], this.medium.cfade[1], this.medium.cfade[2]));
 							graphics.drawRect(208, 70, this.youwon.getWidth(this.ob), this.youwon.getHeight(this.ob));
 						}
 						graphics.drawImage(this.youwon, 208, 70, null);
 						if (this.aflk) {
-							this.drawcs(graphics, 120, "You finished first, nice job!", 0, 0, 0, 0);
+							this.drawCharacters(graphics, 120, "You finished first, nice job!", 0, 0, 0, 0);
 							this.aflk = false;
 						} else {
-							this.drawcs(graphics, 120, "You finished first, nice job!", 0, 128, 255, 0);
+							this.drawCharacters(graphics, 120, "You finished first, nice job!", 0, 128, 255, 0);
 							this.aflk = true;
 						}
 						this.winner = true;
 					} else {
-						if (this.m.flex != 2) {
-							graphics.setColor(new Color(this.m.csky[0], this.m.csky[1], this.m.csky[2]));
+						if (this.medium.flex != 2) {
+							graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
 							graphics.fillRect(211, 70, this.youlost.getWidth(this.ob), this.youlost.getHeight(this.ob));
-							graphics.setColor(new Color(this.m.cfade[0], this.m.cfade[1], this.m.cfade[2]));
+							graphics.setColor(new Color(this.medium.cfade[0], this.medium.cfade[1], this.medium.cfade[2]));
 							graphics.drawRect(211, 70, this.youlost.getWidth(this.ob), this.youlost.getHeight(this.ob));
 						}
 						graphics.drawImage(this.youlost, 211, 70, null);
 						if (this.aflk) {
-							this.drawcs(graphics, 120, "" + this.names[this.sc[n2]] + " finished first, race over!", 0, 0, 0, 0);
+							this.drawCharacters(graphics, 120, "" + this.names[this.sc[n2]] + " finished first, race over!", 0, 0, 0, 0);
 							this.aflk = false;
 						} else {
-							this.drawcs(graphics, 120, "" + this.names[this.sc[n2]] + " finished first, race over!", 0, 128, 255, 0);
+							this.drawCharacters(graphics, 120, "" + this.names[this.sc[n2]] + " finished first, race over!", 0, 128, 255, 0);
 							this.aflk = true;
 						}
 						this.winner = false;
 					}
-					this.drawcs(graphics, 350, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
+					this.drawCharacters(graphics, 350, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
 					checkPoints.haltall = true;
 					n = 1;
 				}
@@ -1410,19 +1380,19 @@ public class xtGraphics extends Panel {
 				}
 			}
 			if (n == 0 && checkPoints.stage != 10 && this.starcnt == 0) {
-				this.arrow(graphics, madness.point, madness.missedcp, checkPoints, this.arrace);
+				this.arrow(graphics, madness.point, madness.missedCheckpoint, checkPoints, this.arrace);
 				if (!this.arrace && this.auscnt == 45 && madness.capcnt == 0) {
-					if (madness.missedcp > 0) {
-						if (madness.missedcp > 15 && madness.missedcp < 50) {
+					if (madness.missedCheckpoint > 0) {
+						if (madness.missedCheckpoint > 15 && madness.missedCheckpoint < 50) {
 							if (this.flk) {
-								this.drawcs(graphics, 70, "CheckPoint Missed!", 255, 150, 0, 2);
+								this.drawCharacters(graphics, 70, "CheckPoint Missed!", 255, 150, 0, 2);
 							} else {
-								this.drawcs(graphics, 70, "CheckPoint Missed!", 255, 0, 0, 2);
+								this.drawCharacters(graphics, 70, "CheckPoint Missed!", 255, 0, 0, 2);
 							}
 						}
-						++madness.missedcp;
-						if (madness.missedcp == 70) {
-							madness.missedcp = -2;
+						++madness.missedCheckpoint;
+						if (madness.missedCheckpoint == 70) {
+							madness.missedCheckpoint = -2;
 						}
 					} else if (madness.mtouch && this.cntovn < 70) {
 						if (Math.abs(this.ana) > 100) {
@@ -1434,17 +1404,17 @@ public class xtGraphics extends Panel {
 							++this.cntovn;
 							this.cntan = 40;
 							if (this.flk) {
-								this.drawcs(graphics, 70, "Wrong Way!", 255, 150, 0, 2);
+								this.drawCharacters(graphics, 70, "Wrong Way!", 255, 150, 0, 2);
 								this.flk = false;
 							} else {
-								this.drawcs(graphics, 70, "Wrong Way!", 255, 0, 0, 2);
+								this.drawCharacters(graphics, 70, "Wrong Way!", 255, 0, 0, 2);
 								this.flk = true;
 							}
 						}
 					}
 				}
 			}
-			if (this.m.flex != 2) {
+			if (this.medium.flex != 2) {
 				graphics.drawImage(this.dmg, 360, 7, null);
 				graphics.drawImage(this.pwr, 360, 27, null);
 				graphics.drawImage(this.lap, 19, 7, null);
@@ -1455,7 +1425,7 @@ public class xtGraphics extends Panel {
 				graphics.drawString("" + checkPoints.wasted + " / 4", 150, 18);
 				graphics.drawImage(this.pos, 42, 27, null);
 				graphics.drawImage(this.rank[checkPoints.pos[madness.im]], 110, 28, null);
-				final Medium m = this.m;
+				final Medium m = this.medium;
 				++m.flex;
 			} else {
 				if (this.posit != checkPoints.pos[madness.im]) {
@@ -1463,14 +1433,14 @@ public class xtGraphics extends Panel {
 					this.posit = checkPoints.pos[madness.im];
 				}
 				if (this.wasted != checkPoints.wasted) {
-					graphics.setColor(new Color(this.m.csky[0], this.m.csky[1], this.m.csky[2]));
+					graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
 					graphics.fillRect(150, 8, 30, 10);
 					graphics.setColor(new Color(0, 0, 100));
 					graphics.drawString("" + checkPoints.wasted + " / 4", 150, 18);
 					this.wasted = checkPoints.wasted;
 				}
 				if (this.laps != madness.nlaps) {
-					graphics.setColor(new Color(this.m.csky[0], this.m.csky[1], this.m.csky[2]));
+					graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
 					graphics.fillRect(51, 8, 40, 10);
 					graphics.setColor(new Color(0, 0, 100));
 					graphics.drawString("" + (madness.nlaps + 1) + " / " + checkPoints.nlaps + "", 51, 18);
@@ -1481,24 +1451,24 @@ public class xtGraphics extends Panel {
 		}
 		if (n == 0) {
 			if (this.starcnt != 0) {
-				if (this.starcnt == 35 && !this.mutes) {
+				if (this.starcnt == 35 && !this.isSoundMuted) {
 					this.three.play();
 				}
 				if (this.starcnt == 24) {
 					this.gocnt = 2;
-					if (!this.mutes) {
+					if (!this.isSoundMuted) {
 						this.two.play();
 					}
 				}
 				if (this.starcnt == 13) {
 					this.gocnt = 1;
-					if (!this.mutes) {
+					if (!this.isSoundMuted) {
 						this.one.play();
 					}
 				}
 				if (this.starcnt == 2) {
 					this.gocnt = 0;
-					if (!this.mutes) {
+					if (!this.isSoundMuted) {
 						this.go.play();
 					}
 				}
@@ -1516,17 +1486,17 @@ public class xtGraphics extends Panel {
 					if (this.pwcnt < 70) {
 						if (this.looped != 3) {
 							if (this.pwflk) {
-								this.drawcs(graphics, 110, "Power low, perform stunt!", 0, 0, 200, 0);
+								this.drawCharacters(graphics, 110, "Power low, perform stunt!", 0, 0, 200, 0);
 								this.pwflk = false;
 							} else {
-								this.drawcs(graphics, 110, "Power low, perform stunt!", 255, 100, 0, 0);
+								this.drawCharacters(graphics, 110, "Power low, perform stunt!", 255, 100, 0, 0);
 								this.pwflk = true;
 							}
 						} else if (this.pwflk) {
-							this.drawcs(graphics, 110, ">> Press Enter for game instructions! <<", 0, 0, 200, 0);
+							this.drawCharacters(graphics, 110, ">> Press Enter for game instructions! <<", 0, 0, 200, 0);
 							this.pwflk = false;
 						} else {
-							this.drawcs(graphics, 110, ">> Press Enter for game instructions! <<", 255, 100, 0, 0);
+							this.drawCharacters(graphics, 110, ">> Press Enter for game instructions! <<", 255, 100, 0, 0);
 							this.pwflk = true;
 						}
 					}
@@ -1548,16 +1518,16 @@ public class xtGraphics extends Panel {
 				if (this.tcnt < 30) {
 					if (this.tflk) {
 						if (!this.wasay) {
-							this.drawcs(graphics, 105, this.say, 0, 0, 0, 0);
+							this.drawCharacters(graphics, 105, this.say, 0, 0, 0, 0);
 						} else {
-							this.drawcs(graphics, 105, this.say, 0, 0, 0, 0);
+							this.drawCharacters(graphics, 105, this.say, 0, 0, 0, 0);
 						}
 						this.tflk = false;
 					} else {
 						if (!this.wasay) {
-							this.drawcs(graphics, 105, this.say, 0, 128, 255, 0);
+							this.drawCharacters(graphics, 105, this.say, 0, 128, 255, 0);
 						} else {
-							this.drawcs(graphics, 105, this.say, 255, 128, 0, 0);
+							this.drawCharacters(graphics, 105, this.say, 255, 128, 0, 0);
 						}
 						this.tflk = true;
 					}
@@ -1567,19 +1537,19 @@ public class xtGraphics extends Panel {
 				}
 				if (this.auscnt < 45) {
 					if (this.aflk) {
-						this.drawcs(graphics, 85, this.asay, 98, 176, 255, 0);
+						this.drawCharacters(graphics, 85, this.asay, 98, 176, 255, 0);
 						this.aflk = false;
 					} else {
-						this.drawcs(graphics, 85, this.asay, 0, 128, 255, 0);
+						this.drawCharacters(graphics, 85, this.asay, 0, 128, 255, 0);
 						this.aflk = true;
 					}
 					++this.auscnt;
 				}
 			} else if (this.tflk) {
-				this.drawcs(graphics, 110, "Bad Landing!", 0, 0, 200, 0);
+				this.drawCharacters(graphics, 110, "Bad Landing!", 0, 0, 200, 0);
 				this.tflk = false;
 			} else {
-				this.drawcs(graphics, 110, "Bad Landing!", 255, 100, 0, 0);
+				this.drawCharacters(graphics, 110, "Bad Landing!", 255, 100, 0, 0);
 				this.tflk = true;
 			}
 			if (madness.trcnt == 10) {
@@ -1642,7 +1612,7 @@ public class xtGraphics extends Panel {
 					++n4;
 				}
 				if (n4 == 0 && madness.rtab) {
-					if (this.loop == "") {
+					if ("".equals(this.loop)) {
 						this.spin = "Tabletop";
 					} else {
 						this.spin = "Flipside";
@@ -1672,14 +1642,14 @@ public class xtGraphics extends Panel {
 					}
 				}
 				if (n5 != 0) {
-					if (this.loop == "" && this.spin == "") {
+					if ("".equals(this.loop) && "".equals(this.spin)) {
 						this.asay = this.asay + " " + n5;
 						if (b2) {
 							this.asay += " and beyond";
 						}
 					} else {
-						if (this.spin != "") {
-							if (this.loop == "") {
+						if (!"".equals(this.spin)) {
+							if ("".equals(this.loop)) {
 								this.asay = this.asay + " " + this.spin;
 							} else {
 								this.asay = this.asay + " with " + this.spin;
@@ -1690,27 +1660,27 @@ public class xtGraphics extends Panel {
 							this.asay += " and beyond";
 						}
 					}
-				} else if (this.spin != "") {
-					if (this.loop == "") {
+				} else if (!"".equals(this.spin)) {
+					if ("".equals(this.loop)) {
 						this.asay = this.asay + " " + this.spin;
 					} else {
 						this.asay = this.asay + " by " + this.spin;
 					}
 				}
-				if (this.asay != "") {
+				if (!"".equals(this.asay)) {
 					this.auscnt -= 15;
 				}
-				if (this.loop != "") {
+				if (!"".equals(this.loop)) {
 					this.auscnt -= 25;
 				}
-				if (this.spin != "") {
+				if (!"".equals(this.spin)) {
 					this.auscnt -= 25;
 				}
 				if (n5 != 0) {
 					this.auscnt -= 25;
 				}
 				if (this.auscnt < 45) {
-					if (!this.mutes) {
+					if (!this.isSoundMuted) {
 						this.powerup.play();
 					}
 					if (this.auscnt < -20) {
@@ -1727,12 +1697,12 @@ public class xtGraphics extends Panel {
 						n6 = 3;
 					}
 					if (madness.surfer) {
-						this.asay = " " + this.adj[4][(int) (this.m.random() * 3.0f)] + this.asay;
+						this.asay = " " + this.adj[4][(int) (this.medium.random() * 3.0f)] + this.asay;
 					}
 					if (n6 != 3) {
-						this.asay = this.adj[n6][(int) (this.m.random() * 3.0f)] + this.asay + this.exlm[n6];
+						this.asay = this.adj[n6][(int) (this.medium.random() * 3.0f)] + this.asay + this.exlm[n6];
 					} else {
-						this.asay = this.adj[n6][(int) (this.m.random() * 3.0f)];
+						this.asay = this.adj[n6][(int) (this.medium.random() * 3.0f)];
 					}
 					if (!this.wasay) {
 						this.tcnt = this.auscnt;
@@ -1761,7 +1731,7 @@ public class xtGraphics extends Panel {
 					this.tcnt = 15;
 				}
 				this.clear = madness.clear;
-				if (!this.mutes) {
+				if (!this.isSoundMuted) {
 					this.checkpoint.play();
 				}
 				this.cntovn = 0;
@@ -1795,9 +1765,9 @@ public class xtGraphics extends Panel {
 			if (checkPoints.stage == this.unlocked) {
 				if (checkPoints.stage != 11) {
 					graphics.drawImage(this.congrd, 140, 30, null);
-					this.drawcs(graphics, 80, "You completed stage " + checkPoints.stage + " : " + checkPoints.name + " !", 144, 167, 255, 3);
+					this.drawCharacters(graphics, 80, "You completed stage " + checkPoints.stage + " : " + checkPoints.name + " !", 144, 167, 255, 3);
 				} else {
-					graphics.drawImage(this.congrd, 135 + (int) (this.m.random() * 10.0f), 30, null);
+					graphics.drawImage(this.congrd, 135 + (int) (this.medium.random() * 10.0f), 30, null);
 				}
 				int n = 0;
 				int y = 0;
@@ -1836,15 +1806,15 @@ public class xtGraphics extends Panel {
 					graphics.setFont(new Font("SansSerif", 1, 13));
 					this.ftm = graphics.getFontMetrics();
 					if (this.aflk) {
-						this.drawcs(graphics, 120 + this.pin, "Stage " + (checkPoints.stage + 1) + " unlocked!", 144, 167, 255, 3);
+						this.drawCharacters(graphics, 120 + this.pin, "Stage " + (checkPoints.stage + 1) + " unlocked!", 144, 167, 255, 3);
 					} else {
-						this.drawcs(graphics, 120 + this.pin, "Stage " + (checkPoints.stage + 1) + " unlocked!", 208, 240, 255, 3);
+						this.drawCharacters(graphics, 120 + this.pin, "Stage " + (checkPoints.stage + 1) + " unlocked!", 208, 240, 255, 3);
 					}
 					if (n != 0) {
 						if (this.aflk) {
-							this.drawcs(graphics, 150, "And:", 144, 167, 255, 3);
+							this.drawCharacters(graphics, 150, "And:", 144, 167, 255, 3);
 						} else {
-							this.drawcs(graphics, 150, "And:", 208, 240, 255, 3);
+							this.drawCharacters(graphics, 150, "And:", 208, 240, 255, 3);
 						}
 						graphics.setColor(new Color(208, 240, 255));
 						graphics.fillRect(200, 170, 150, 100);
@@ -1854,13 +1824,13 @@ public class xtGraphics extends Panel {
 						graphics.fillRect(201, 265, 148, 4);
 						graphics.fillRect(345, 171, 4, 98);
 						array[n].y = y;
-						this.m.crs = true;
-						this.m.x = -275;
-						this.m.y = -500;
-						this.m.z = -50;
-						this.m.xz = 0;
-						this.m.zy = 10;
-						this.m.ground = 2470;
+						this.medium.crs = true;
+						this.medium.positionX = -275;
+						this.medium.positionY = -500;
+						this.medium.positionZ = -50;
+						this.medium.xz = 0;
+						this.medium.zy = 10;
+						this.medium.ground = 2470;
 						array[n].z = 1500;
 						array[n].x = 0;
 						final Geometry geometry = array[n];
@@ -1876,43 +1846,43 @@ public class xtGraphics extends Panel {
 						}
 						graphics.drawRect(197, 167, 155, 105);
 						if (this.aflk) {
-							this.drawcs(graphics, 300, "" + this.names[n] + " has been unlocked!", 144, 167, 255, 3);
+							this.drawCharacters(graphics, 300, "" + this.names[n] + " has been unlocked!", 144, 167, 255, 3);
 						} else {
-							this.drawcs(graphics, 300, "" + this.names[n] + " has been unlocked!", 208, 240, 255, 3);
+							this.drawCharacters(graphics, 300, "" + this.names[n] + " has been unlocked!", 208, 240, 255, 3);
 						}
 					}
 					graphics.setFont(new Font("SansSerif", 1, 11));
 					this.ftm = graphics.getFontMetrics();
 					if (this.aflk) {
-						this.drawcs(graphics, 335 - this.pin, "( Game Saved )", 112, 120, 143, 3);
+						this.drawCharacters(graphics, 335 - this.pin, "( Game Saved )", 112, 120, 143, 3);
 					} else {
-						this.drawcs(graphics, 335 - this.pin, "( Game Saved )", 150, 150, 150, 3);
+						this.drawCharacters(graphics, 335 - this.pin, "( Game Saved )", 150, 150, 150, 3);
 					}
 				} else {
 					graphics.setFont(new Font("SansSerif", 1, 13));
 					this.ftm = graphics.getFontMetrics();
 					if (this.aflk) {
-						this.drawcs(graphics, 120, "Woohoooo you finished the game!!!", 144, 167, 255, 3);
+						this.drawCharacters(graphics, 120, "Woohoooo you finished the game!!!", 144, 167, 255, 3);
 					} else {
-						this.drawcs(graphics, 120, "Woohoooo you finished the game!!!", 208, 240, 255, 3);
+						this.drawCharacters(graphics, 120, "Woohoooo you finished the game!!!", 208, 240, 255, 3);
 					}
 					if (this.aflk) {
-						this.drawcs(graphics, 150, "Your Awesome!", 144, 167, 255, 3);
+						this.drawCharacters(graphics, 150, "Your Awesome!", 144, 167, 255, 3);
 					} else {
-						this.drawcs(graphics, 152, "Your Awesome!", 228, 240, 255, 3);
+						this.drawCharacters(graphics, 152, "Your Awesome!", 228, 240, 255, 3);
 					}
 					if (this.aflk) {
-						this.drawcs(graphics, 200, "Your Truely a RADICAL GAMER!", 144, 167, 255, 3);
+						this.drawCharacters(graphics, 200, "Your Truely a RADICAL GAMER!", 144, 167, 255, 3);
 					} else {
-						this.drawcs(graphics, 200, "Your Truely a RADICAL GAMER!", 228, 240, 255, 3);
+						this.drawCharacters(graphics, 200, "Your Truely a RADICAL GAMER!", 228, 240, 255, 3);
 					}
 					graphics.drawImage(this.radicalplay, 95, 205, null);
 					graphics.setFont(new Font("SansSerif", 1, 11));
 					this.ftm = graphics.getFontMetrics();
 					if (this.aflk) {
-						this.drawcs(graphics, 270, "Be sure to check Radicalplay.com for more action!", 144, 167, 255, 3);
+						this.drawCharacters(graphics, 270, "Be sure to check Radicalplay.com for more action!", 144, 167, 255, 3);
 					} else {
-						this.drawcs(graphics, 270, "Be sure to check Radicalplay.com for more action!", 208, 240, 255, 3);
+						this.drawCharacters(graphics, 270, "Be sure to check Radicalplay.com for more action!", 208, 240, 255, 3);
 					}
 					this.pin = 40;
 				}
@@ -1924,28 +1894,28 @@ public class xtGraphics extends Panel {
 			} else {
 				this.pin = 100;
 				graphics.drawImage(this.congrd, 140, 117, null);
-				this.drawcs(graphics, 167, "You completed stage " + checkPoints.stage + " : " + checkPoints.name + " !", 144, 167, 255, 3);
+				this.drawCharacters(graphics, 167, "You completed stage " + checkPoints.stage + " : " + checkPoints.name + " !", 144, 167, 255, 3);
 			}
 		} else {
 			this.pin = 100;
 			graphics.drawImage(this.gameov, 190, 117, null);
-			this.drawcs(graphics, 167, "You lost at stage " + checkPoints.stage + " : " + checkPoints.name + " !", 144, 167, 255, 3);
+			this.drawCharacters(graphics, 167, "You lost at stage " + checkPoints.stage + " : " + checkPoints.name + " !", 144, 167, 255, 3);
 			if (checkPoints.stage == this.unlocked) {
 				if (checkPoints.stage == 1) {
-					this.drawcs(graphics, 205, "> Don't forget, you must pass in all checkpoints to complete a lap...", 128, 128, 128, 3);
+					this.drawCharacters(graphics, 205, "> Don't forget, you must pass in all checkpoints to complete a lap...", 128, 128, 128, 3);
 				}
 				if (checkPoints.stage == 2) {
-					this.drawcs(graphics, 205, "> Don't forget, you need power to be up to race faster...", 128, 128, 128, 3);
+					this.drawCharacters(graphics, 205, "> Don't forget, you need power to be up to race faster...", 128, 128, 128, 3);
 				}
 				if (checkPoints.stage == 3) {
-					this.drawcs(graphics, 205, "> Hint: its easier to waste the other cars then to finish 1st in this stage...", 128, 128, 128, 3);
-					this.drawcs(graphics, 220, "( Press [A] to make Guidance Arrow point to cars )", 128, 128, 128, 3);
+					this.drawCharacters(graphics, 205, "> Hint: its easier to waste the other cars then to finish 1st in this stage...", 128, 128, 128, 3);
+					this.drawCharacters(graphics, 220, "( Press [A] to make Guidance Arrow point to cars )", 128, 128, 128, 3);
 				}
 				if (checkPoints.stage == 4) {
-					this.drawcs(graphics, 205, "> Remember the better the stunt the better the power you get...", 128, 128, 128, 3);
+					this.drawCharacters(graphics, 205, "> Remember the better the stunt the better the power you get...", 128, 128, 128, 3);
 				}
 				if (checkPoints.stage == 5) {
-					this.drawcs(graphics, 205, "> Remember the more the power the more faster and powerful your car is...", 128, 128, 128, 3);
+					this.drawCharacters(graphics, 205, "> Remember the more the power the more faster and powerful your car is...", 128, 128, 128, 3);
 				}
 			}
 		}
@@ -2074,23 +2044,23 @@ public class xtGraphics extends Panel {
 		} while (++n2 < 5);
 	}
 
-	public void drawcs(final Graphics graphics, final int n, final String str, int r, int g, int b, final int n2) {
+	public void drawCharacters(final Graphics graphics, final int n, final String str, int r, int g, int b, final int n2) {
 		if (n2 != 3 && n2 != 4) {
-			r += (int) (r * (this.m.snap[0] / 100.0f));
+			r += (int) (r * (this.medium.snap[0] / 100.0f));
 			if (r > 255) {
 				r = 255;
 			}
 			if (r < 0) {
 				r = 0;
 			}
-			g += (int) (g * (this.m.snap[1] / 100.0f));
+			g += (int) (g * (this.medium.snap[1] / 100.0f));
 			if (g > 255) {
 				g = 255;
 			}
 			if (g < 0) {
 				g = 0;
 			}
-			b += (int) (b * (this.m.snap[2] / 100.0f));
+			b += (int) (b * (this.medium.snap[2] / 100.0f));
 			if (b > 255) {
 				b = 255;
 			}
@@ -2099,21 +2069,21 @@ public class xtGraphics extends Panel {
 			}
 		}
 		if (n2 == 4) {
-			r -= (int) (r * (this.m.snap[0] / 100.0f));
+			r -= (int) (r * (this.medium.snap[0] / 100.0f));
 			if (r > 255) {
 				r = 255;
 			}
 			if (r < 0) {
 				r = 0;
 			}
-			g -= (int) (g * (this.m.snap[1] / 100.0f));
+			g -= (int) (g * (this.medium.snap[1] / 100.0f));
 			if (g > 255) {
 				g = 255;
 			}
 			if (g < 0) {
 				g = 0;
 			}
-			b -= (int) (b * (this.m.snap[2] / 100.0f));
+			b -= (int) (b * (this.medium.snap[2] / 100.0f));
 			if (b > 255) {
 				b = 255;
 			}
@@ -2126,7 +2096,7 @@ public class xtGraphics extends Panel {
 			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, n + 1);
 		}
 		if (n2 == 2) {
-			graphics.setColor(new Color((r + this.m.csky[0] * 2) / 3, (g + this.m.csky[1] * 2) / 3, (b + this.m.csky[2] * 2) / 3));
+			graphics.setColor(new Color((r + this.medium.skyColor[0] * 2) / 3, (g + this.medium.skyColor[1] * 2) / 3, (b + this.medium.skyColor[2] * 2) / 3));
 			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, n + 1);
 		}
 		graphics.setColor(new Color(r, g, b));
@@ -2138,7 +2108,7 @@ public class xtGraphics extends Panel {
 	}
 
 	public void trackbg(final Graphics graphics) {
-		if (this.stages.posit() > 240000 || this.m.nrnd <= 1) {
+		if (this.stages.posit() > 240000 || this.medium.nrnd <= 1) {
 			graphics.drawImage(this.trackbg, 0, 0, null);
 		}
 	}
@@ -2160,17 +2130,17 @@ public class xtGraphics extends Panel {
 		graphics.setFont(new Font("SansSerif", 1, 13));
 		this.ftm = graphics.getFontMetrics();
 		if (checkPoints.stage != 11) {
-			this.drawcs(graphics, 110, "Stage " + checkPoints.stage + "  >", 255, 255, 255, 3);
+			this.drawCharacters(graphics, 110, "Stage " + checkPoints.stage + "  >", 255, 255, 255, 3);
 		} else {
-			this.drawcs(graphics, 110, "Final Party Stage  >", 255, 255, 255, 3);
+			this.drawCharacters(graphics, 110, "Final Party Stage  >", 255, 255, 255, 3);
 		}
-		this.drawcs(graphics, 130, "| " + checkPoints.name + " |", 32, 48, 98, 3);
+		this.drawCharacters(graphics, 130, "| " + checkPoints.name + " |", 32, 48, 98, 3);
 		graphics.setFont(new Font("SansSerif", 1, 11));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
 		if (control.handb || control.enter) {
 			this.fase = 5;
-			this.m.trk = false;
+			this.medium.trk = false;
 			control.handb = false;
 			control.enter = false;
 			this.stages.stop();
@@ -2213,9 +2183,9 @@ public class xtGraphics extends Panel {
 		this.youwastedem = this.loadsnap(this.oyouwastedem);
 		this.gameh = this.loadsnap(this.ogameh);
 		this.mdness = this.loadsnap(this.omdness);
-		this.loadingmusic = this.loadopsnap(this.oloadingmusic, n);
-		this.star[0] = this.loadopsnap(this.ostar[0], n);
-		this.star[1] = this.loadopsnap(this.ostar[1], n);
+		this.loadingmusic = this.loadOpSnap(this.oloadingmusic, n);
+		this.star[0] = this.loadOpSnap(this.ostar[0], n);
+		this.star[1] = this.loadOpSnap(this.ostar[1], n);
 	}
 
 	private Image loadsnap(final Image img) {
@@ -2230,21 +2200,21 @@ public class xtGraphics extends Panel {
 		for (int i = 0; i < width * height; ++i) {
 			if (array[i] != -4144960 && array[i] != array[width * height - 1]) {
 				final Color color = new Color(array[i]);
-				int r = (int) (color.getRed() + color.getRed() * (this.m.snap[0] / 100.0f));
+				int r = (int) (color.getRed() + color.getRed() * (this.medium.snap[0] / 100.0f));
 				if (r > 225) {
 					r = 225;
 				}
 				if (r < 0) {
 					r = 0;
 				}
-				int g = (int) (color.getGreen() + color.getGreen() * (this.m.snap[1] / 100.0f));
+				int g = (int) (color.getGreen() + color.getGreen() * (this.medium.snap[1] / 100.0f));
 				if (g > 225) {
 					g = 225;
 				}
 				if (g < 0) {
 					g = 0;
 				}
-				int b = (int) (color.getBlue() + color.getBlue() * (this.m.snap[2] / 100.0f));
+				int b = (int) (color.getBlue() + color.getBlue() * (this.medium.snap[2] / 100.0f));
 				if (b > 225) {
 					b = 225;
 				}
@@ -2253,7 +2223,7 @@ public class xtGraphics extends Panel {
 				}
 				array[i] = new Color(r, g, b).getRGB();
 			} else if (array[i] == -4144960) {
-				array[i] = new Color(this.m.csky[0], this.m.csky[1], this.m.csky[2]).getRGB();
+				array[i] = new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]).getRGB();
 			}
 		}
 		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
@@ -2361,7 +2331,7 @@ public class xtGraphics extends Panel {
 			array2[2] = 19;
 			array[3] = 520;
 			array2[3] = 11;
-			graphics.setColor(new Color(this.m.csky[0], this.m.csky[1], this.m.csky[2]));
+			graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
 			graphics.fillPolygon(array, array2, 4);
 		}
 		if (n2 > n) {
@@ -2396,21 +2366,21 @@ public class xtGraphics extends Panel {
 				this.dmcnt = 0;
 			}
 		}
-		int r = (int) (n5 + n5 * (this.m.snap[0] / 100.0f));
+		int r = (int) (n5 + n5 * (this.medium.snap[0] / 100.0f));
 		if (r > 255) {
 			r = 255;
 		}
 		if (r < 0) {
 			r = 0;
 		}
-		int g = (int) (n6 + n6 * (this.m.snap[1] / 100.0f));
+		int g = (int) (n6 + n6 * (this.medium.snap[1] / 100.0f));
 		if (g > 255) {
 			g = 255;
 		}
 		if (g < 0) {
 			g = 0;
 		}
-		int b2 = (int) (n7 + n7 * (this.m.snap[2] / 100.0f));
+		int b2 = (int) (n7 + n7 * (this.medium.snap[2] / 100.0f));
 		if (b2 > 255) {
 			b2 = 255;
 		}
@@ -2438,21 +2408,21 @@ public class xtGraphics extends Panel {
 			n9 = 244;
 			n10 = 244;
 		}
-		int r2 = (int) (n8 + n8 * (this.m.snap[0] / 100.0f));
+		int r2 = (int) (n8 + n8 * (this.medium.snap[0] / 100.0f));
 		if (r2 > 255) {
 			r2 = 255;
 		}
 		if (r2 < 0) {
 			r2 = 0;
 		}
-		int g2 = (int) (n9 + n9 * (this.m.snap[1] / 100.0f));
+		int g2 = (int) (n9 + n9 * (this.medium.snap[1] / 100.0f));
 		if (g2 > 255) {
 			g2 = 255;
 		}
 		if (g2 < 0) {
 			g2 = 0;
 		}
-		int b3 = (int) (n10 + n10 * (this.m.snap[2] / 100.0f));
+		int b3 = (int) (n10 + n10 * (this.medium.snap[2] / 100.0f));
 		if (b3 > 255) {
 			b3 = 255;
 		}
@@ -2461,7 +2431,7 @@ public class xtGraphics extends Panel {
 		}
 		graphics.setColor(new Color(r2, g2, b3));
 		graphics.fillPolygon(array, array2, 4);
-		if (this.m.flex == 2 && n3 != 98.0f) {
+		if (this.medium.flex == 2 && n3 != 98.0f) {
 			array[0] = (int) (422.0f + n3);
 			array2[0] = 31;
 			array[1] = (int) (422.0f + n3);
@@ -2470,7 +2440,7 @@ public class xtGraphics extends Panel {
 			array2[2] = 39;
 			array[3] = 520;
 			array2[3] = 31;
-			graphics.setColor(new Color(this.m.csky[0], this.m.csky[1], this.m.csky[2]));
+			graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
 			graphics.fillPolygon(array, array2, 4);
 		}
 	}
@@ -2505,16 +2475,16 @@ public class xtGraphics extends Panel {
 		graphics.drawImage(this.loadbar, 156, 340, this);
 		graphics.setFont(new Font("SansSerif", 1, 11));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 333, "Loading game, please wait.", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 333, "Loading game, please wait.", 0, 0, 0, 3);
 		graphics.setColor(new Color(255, 255, 255));
 		graphics.fillRect(170, 373, 210, 17);
-		this.drawcs(graphics, 385, "" + (int) ((26.0f + this.dnload / (float) this.kbload * 200.0f) / 226.0f * 100.0f) + " % loaded    |    " + (this.kbload - this.dnload) + " KB remaining", 32, 64, 128, 3);
+		this.drawCharacters(graphics, 385, "" + (int) ((26.0f + this.dnload / (float) this.kbload * 200.0f) / 226.0f * 100.0f) + " % loaded    |    " + (this.kbload - this.dnload) + " KB remaining", 32, 64, 128, 3);
 		graphics.setColor(new Color(32, 64, 128));
 		graphics.fillRect(162, 346, 26 + (int) (this.dnload / (float) this.kbload * 200.0f), 10);
 		applet.repaint();
 	}
 
-	public xtGraphics(final Medium m, final Graphics graphics, final Applet app, final int n) throws MalformedURLException, URISyntaxException {
+	public GraphicsPanel(final Medium medium, final Graphics graphics, final Applet app, final int n) throws MalformedURLException, URISyntaxException {
 		this.fase = 7;
 		this.oldfase = 0;
 		this.starcnt = 0;
@@ -2567,7 +2537,7 @@ public class xtGraphics extends Panel {
 		this.pwastd = false;
 		this.skid = new AudioClip[2];
 		this.dustskid = new AudioClip[2];
-		this.mutes = false;
+		this.isSoundMuted = false;
 		this.stracks = new RadicalMod[11];
 		this.loadedt = new boolean[11];
 		this.mutem = false;
@@ -2611,7 +2581,7 @@ public class xtGraphics extends Panel {
 		this.crashup = false;
 		this.skflg = 0;
 		this.dskflg = 0;
-		this.m = m;
+		this.medium = medium;
 		this.app = app;
 		final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
 		final MediaTracker mediaTracker = new MediaTracker(this.app);
@@ -2905,21 +2875,21 @@ public class xtGraphics extends Panel {
 	}
 
 	public void musicomp(final int n, final Graphics graphics, final Control control) {
-		int r = (int) (230.0f - 230.0f * (this.m.snap[0] / (float) (100 * this.hipno[n - 1])));
+		int r = (int) (230.0f - 230.0f * (this.medium.snap[0] / (float) (100 * this.hipno[n - 1])));
 		if (r > 255) {
 			r = 255;
 		}
 		if (r < 0) {
 			r = 0;
 		}
-		int g = (int) (230.0f - 230.0f * (this.m.snap[1] / (float) (100 * this.hipno[n - 1])));
+		int g = (int) (230.0f - 230.0f * (this.medium.snap[1] / (float) (100 * this.hipno[n - 1])));
 		if (g > 255) {
 			g = 255;
 		}
 		if (g < 0) {
 			g = 0;
 		}
-		int b = (int) (230.0f - 230.0f * (this.m.snap[2] / (float) (100 * this.hipno[n - 1])));
+		int b = (int) (230.0f - 230.0f * (this.medium.snap[2] / (float) (100 * this.hipno[n - 1])));
 		if (b > 255) {
 			b = 255;
 		}
@@ -2936,33 +2906,33 @@ public class xtGraphics extends Panel {
 		graphics.drawImage(this.loadingmusic, 164, 90, null);
 		graphics.setFont(new Font("SansSerif", 1, 11));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 250, "Loading complete!  press start to begin...", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 250, "Loading complete!  press start to begin...", 0, 0, 0, 3);
 		graphics.drawImage(this.star[this.pstar], 234, 280, null);
 		if (n == 10) {
 			if (this.aflk) {
-				this.drawcs(graphics, 340, "> Note: Guidance Arrow is disabled in this stage!", 200, 0, 0, 3);
+				this.drawCharacters(graphics, 340, "> Note: Guidance Arrow is disabled in this stage!", 200, 0, 0, 3);
 				this.aflk = false;
 			} else {
-				this.drawcs(graphics, 340, "> Note: Guidance Arrow is disabled in this stage!", 0, 0, 0, 3);
+				this.drawCharacters(graphics, 340, "> Note: Guidance Arrow is disabled in this stage!", 0, 0, 0, 3);
 				this.aflk = true;
 			}
 		}
 		if (n == this.unlocked) {
 			if (n == 1) {
-				this.drawcs(graphics, 340, "> Don't forget, you must pass in all checkpoints to complete a lap...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 340, "> Don't forget, you must pass in all checkpoints to complete a lap...", 100, 100, 100, 4);
 			}
 			if (n == 2) {
-				this.drawcs(graphics, 340, "> Don't forget, you need power to be up to race faster...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 340, "> Don't forget, you need power to be up to race faster...", 100, 100, 100, 4);
 			}
 			if (n == 3) {
-				this.drawcs(graphics, 340, "> Hint: its easier to waste the other cars then to finish 1st in this stage...", 100, 100, 100, 4);
-				this.drawcs(graphics, 360, "( Press [A] to make Guidance Arrow point to cars )", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 340, "> Hint: its easier to waste the other cars then to finish 1st in this stage...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 360, "( Press [A] to make Guidance Arrow point to cars )", 100, 100, 100, 4);
 			}
 			if (n == 4) {
-				this.drawcs(graphics, 340, "> Remember the better the stunt the better the power you get...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 340, "> Remember the better the stunt the better the power you get...", 100, 100, 100, 4);
 			}
 			if (n == 5) {
-				this.drawcs(graphics, 340, "> Remember the more the power the more faster and powerful your car is...", 100, 100, 100, 4);
+				this.drawCharacters(graphics, 340, "> Remember the more the power the more faster and powerful your car is...", 100, 100, 100, 4);
 			}
 		}
 		if (this.pstar != 2) {
@@ -2985,10 +2955,10 @@ public class xtGraphics extends Panel {
 		graphics.setColor(new Color(128, 167, 255));
 		graphics.drawRoundRect(125, 315, 300, 80, 30, 70);
 		if (this.aflk) {
-			this.drawcs(graphics, 355, "Click here to Start", 0, 0, 0, 3);
+			this.drawCharacters(graphics, 355, "Click here to Start", 0, 0, 0, 3);
 			this.aflk = false;
 		} else {
-			this.drawcs(graphics, 355, "Click here to Start", 0, 67, 200, 3);
+			this.drawCharacters(graphics, 355, "Click here to Start", 0, 67, 200, 3);
 			this.aflk = true;
 		}
 	}
@@ -3012,14 +2982,14 @@ public class xtGraphics extends Panel {
 		graphics.drawImage(this.radicalplay, 87, 110, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 150 + (int) (10.0f * this.m.random()), "www.radicalplay.com", 112, 120, 143, 3);
+		this.drawCharacters(graphics, 150 + (int) (10.0f * this.medium.random()), "www.radicalplay.com", 112, 120, 143, 3);
 		graphics.setFont(new Font("SansSerif", 1, 11));
 		this.ftm = graphics.getFontMetrics();
 		if (this.aflk) {
-			this.drawcs(graphics, 190, "And we are never going to find the new unless we get a little crazy...", 112, 120, 143, 3);
+			this.drawCharacters(graphics, 190, "And we are never going to find the new unless we get a little crazy...", 112, 120, 143, 3);
 			this.aflk = false;
 		} else {
-			this.drawcs(graphics, 192, "And we are never going to find the new unless we get a little crazy...", 150, 150, 150, 3);
+			this.drawCharacters(graphics, 192, "And we are never going to find the new unless we get a little crazy...", 150, 150, 150, 3);
 			this.aflk = true;
 		}
 		graphics.drawImage(this.rpro, 150, 240, null);
@@ -3028,7 +2998,7 @@ public class xtGraphics extends Panel {
 	public void skid(final int n, final float n2) {
 		if (this.bfcrash == 0 && this.bfskid == 0 && n2 > 150.0f) {
 			if (n == 0) {
-				if (!this.mutes) {
+				if (!this.isSoundMuted) {
 					this.skid[this.skflg].play();
 				}
 				if (this.skflg == 0) {
@@ -3037,7 +3007,7 @@ public class xtGraphics extends Panel {
 					this.skflg = 0;
 				}
 			} else {
-				if (!this.mutes) {
+				if (!this.isSoundMuted) {
 					this.dustskid[this.dskflg].play();
 				}
 				if (this.dskflg == 0) {
@@ -3054,7 +3024,7 @@ public class xtGraphics extends Panel {
 		if (n2 < 50) {
 			n2 = 50;
 		}
-		return (int)((n2 - this.m.focus_point) * (this.m.cx - n) / n2 + n);
+		return (int)((n2 - this.medium.focusPoint) * (this.medium.centerX - n) / n2 + n);
 	}
 
 	public void cantreply(final Graphics graphics) {
@@ -3062,7 +3032,7 @@ public class xtGraphics extends Panel {
 		graphics.fillRoundRect(75, 171, 400, 23, 7, 20);
 		graphics.setColor(new Color(0, 89, 223));
 		graphics.drawRoundRect(75, 171, 400, 23, 7, 20);
-		this.drawcs(graphics, 187, "Sorry not enough replay data to play available, please try again later.", 255, 255, 255, 1);
+		this.drawCharacters(graphics, 187, "Sorry not enough replay data to play available, please try again later.", 255, 255, 255, 1);
 	}
 
 	public void loadpak3(final MediaTracker mediaTracker, final Toolkit toolkit) {
@@ -3146,35 +3116,33 @@ public class xtGraphics extends Panel {
 		this.cars.play();
 		graphics.drawImage(this.carsbg, 0, 0, null);
 		graphics.drawImage(this.selectcar, (Config.SCREEN_WIDTH - this.selectcar.getWidth(null)) / 2, 190, null);
-		this.m.crs = true;
-		this.m.x = -Config.SCREEN_WIDTH/2;
-		this.m.y = -Config.SCREEN_HEIGHT + 150;
-		this.m.z = -50;
-		this.m.xz = 0;
-		this.m.zy = 10;
-		this.m.ground = 720;
-		geometries[this.sc[0]].draw(graphics);
+		this.medium.crs = true;
+		this.medium.positionX = -Config.SCREEN_WIDTH/2;
+		this.medium.positionY = -Config.SCREEN_HEIGHT + 150;
+		this.medium.positionZ = -50;
+		this.medium.xz = 0;
+		this.medium.zy = 10;
+		this.medium.ground = 720;
+		Geometry geometry = geometries[this.sc[0]];
+		geometry.draw(graphics);
 		if (this.flipo == 0) {
 			graphics.setFont(new Font("SansSerif", 1, 26));
 			this.ftm = graphics.getFontMetrics();
 			if (this.aflk) {
-				this.drawcs(graphics, 250, this.names[this.sc[0]], 130, 130, 255, 3);
+				this.drawCharacters(graphics, 250, this.names[this.sc[0]], 130, 130, 255, 3);
 				this.aflk = false;
 			} else {
-				this.drawcs(graphics, 250, this.names[this.sc[0]], 130, 215, 255, 3);
+				this.drawCharacters(graphics, 250, this.names[this.sc[0]], 130, 215, 255, 3);
 				this.aflk = true;
 			}
-			geometries[this.sc[0]].z = 950;
-			geometries[this.sc[0]].y = -34 - geometries[this.sc[0]].grat;
-			geometries[this.sc[0]].x = 0;
-			final Geometry geometry = geometries[this.sc[0]];
+			geometry.z = 950;
+			geometry.y = -34 - geometry.grat;
+			geometry.x = 0;
 			geometry.xz += 5;
-			geometries[this.sc[0]].zy = 0;
-			final Geometry geometry2 = geometries[this.sc[0]];
-			geometry2.wzy -= 10;
-			if (geometries[this.sc[0]].wzy < -45) {
-				final Geometry geometry3 = geometries[this.sc[0]];
-				geometry3.wzy += 45;
+			geometry.zy = 0;
+			geometry.wzy -= 10;
+			if (geometry.wzy < -45) {
+				geometry.wzy += 45;
 			}
 			if (this.sc[0] != 0) {
 				graphics.drawImage(this.back[this.pback], 23, 270, null);
@@ -3187,8 +3155,8 @@ public class xtGraphics extends Panel {
 				if (this.gatey != 0) {
 					this.gatey -= 100;
 				}
-				this.drawcs(graphics, 320, "[ Car Locked ]", 224, 63, 63, 3);
-				this.drawcs(graphics, 345, "This car unlocks when stage " + (this.sc[0] - 4) * 2 + " is completed...", 160, 176, 255, 3);
+				this.drawCharacters(graphics, 320, "[ Car Locked ]", 224, 63, 63, 3);
+				this.drawCharacters(graphics, 345, "This car unlocks when stage " + (this.sc[0] - 4) * 2 + " is completed...", 160, 176, 255, 3);
 			} else {
 				graphics.setFont(new Font("SansSerif", 1, 11));
 				this.ftm = graphics.getFontMetrics();
@@ -3231,13 +3199,13 @@ public class xtGraphics extends Panel {
 			this.pnext = 0;
 			this.gatey = 300;
 			if (this.flipo > 10) {
-				final Geometry geometry4 = geometries[this.sc[0]];
+				final Geometry geometry4 = geometry;
 				geometry4.y -= 100;
 				if (this.nextc) {
-					final Geometry geometry5 = geometries[this.sc[0]];
+					final Geometry geometry5 = geometry;
 					geometry5.zy += 20;
 				} else {
-					final Geometry geometry6 = geometries[this.sc[0]];
+					final Geometry geometry6 = geometry;
 					geometry6.zy -= 20;
 				}
 			} else {
@@ -3251,19 +3219,19 @@ public class xtGraphics extends Panel {
 						final int n8 = 0;
 						--sc2[n8];
 					}
-					geometries[this.sc[0]].z = 950;
-					geometries[this.sc[0]].y = -34 - geometries[this.sc[0]].grat - 1100;
-					geometries[this.sc[0]].x = 0;
-					geometries[this.sc[0]].zy = 0;
+					geometry.z = 950;
+					geometry.y = -34 - geometry.grat - 1100;
+					geometry.x = 0;
+					geometry.zy = 0;
 				}
-				final Geometry geometry7 = geometries[this.sc[0]];
+				final Geometry geometry7 = geometry;
 				geometry7.y += 100;
 			}
 			--this.flipo;
 		}
 		graphics.setFont(new Font("SansSerif", 1, 11));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 396, "Use keyboard Arrows and press Enter to continue", 112, 151, 208, 3);
+		this.drawCharacters(graphics, 396, "Use keyboard Arrows and press Enter to continue", 112, 151, 208, 3);
 		if (control.right) {
 			control.right = false;
 			if (this.sc[0] != 9 && this.flipo == 0) {
@@ -3280,7 +3248,7 @@ public class xtGraphics extends Panel {
 		}
 		if (control.handb || control.enter) {
 			if (this.flipo == 0 && (this.sc[0] - 4) * 2 < this.unlocked) {
-				this.m.crs = false;
+				this.medium.crs = false;
 				this.fase = 2;
 			}
 			control.handb = false;
@@ -3456,7 +3424,7 @@ public class xtGraphics extends Panel {
 		} while (++n < 6);
 	}
 
-	private Image loadopsnap(final Image img, final int n) {
+	private Image loadOpSnap(final Image img, final int n) {
 		final int height = img.getHeight(this.ob);
 		final int width = img.getWidth(this.ob);
 		final int[] array = new int[width * height];
@@ -3472,21 +3440,21 @@ public class xtGraphics extends Panel {
 				int green;
 				int b;
 				if (this.hipno[n - 1] != 0) {
-					r = (int) (color.getRed() - color.getRed() * (this.m.snap[0] / (float) (50 * this.hipno[n - 1])));
+					r = (int) (color.getRed() - color.getRed() * (this.medium.snap[0] / (float) (50 * this.hipno[n - 1])));
 					if (r > 255) {
 						r = 255;
 					}
 					if (r < 0) {
 						r = 0;
 					}
-					green = (int) (color.getGreen() - color.getGreen() * (this.m.snap[1] / (float) (50 * this.hipno[n - 1])));
+					green = (int) (color.getGreen() - color.getGreen() * (this.medium.snap[1] / (float) (50 * this.hipno[n - 1])));
 					if (green > 255) {
 						green = 255;
 					}
 					if (green < 0) {
 						green = 0;
 					}
-					b = (int) (color.getBlue() - color.getBlue() * (this.m.snap[2] / (float) (50 * this.hipno[n - 1])));
+					b = (int) (color.getBlue() - color.getBlue() * (this.medium.snap[2] / (float) (50 * this.hipno[n - 1])));
 					if (b > 255) {
 						b = 255;
 					}
@@ -3516,14 +3484,14 @@ public class xtGraphics extends Panel {
 		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
 	}
 
-	public void loadingfailed(final int i, final Control control, final Graphics graphics) {
+	public void loadingFailed(final int i, final Control control, final Graphics graphics) {
 		graphics.drawImage(this.trackbg, 0, 0, null);
 		graphics.drawImage(this.select, 201, 45, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
 		this.ftm = graphics.getFontMetrics();
-		this.drawcs(graphics, 140, "Error Loading Stage " + i, 200, 0, 70, 3);
-		this.drawcs(graphics, 170, "Your internet connection may have been lost...", 0, 0, 0, 3);
-		this.drawcs(graphics, 220, "Press Enter to try again.", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 140, "Error Loading Stage " + i, 200, 0, 70, 3);
+		this.drawCharacters(graphics, 170, "Your internet connection may have been lost...", 0, 0, 0, 3);
+		this.drawCharacters(graphics, 220, "Press Enter to try again.", 0, 0, 0, 3);
 		graphics.drawImage(this.contin1[this.pcontin], 232, 270, null);
 		graphics.drawImage(this.bl, 0, 0, null);
 		graphics.drawImage(this.bt, 0, 0, null);

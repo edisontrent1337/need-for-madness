@@ -112,59 +112,59 @@ public class Record
                 n4 = 1;
             }
             if (n4 * n3 == 0 || b) {
-                for (int k = 0; k < geometry.npl; ++k) {
+                for (int k = 0; k < geometry.numberOfPlanes; ++k) {
                     float n5 = 0.0f;
-                    for (int l = 0; l < geometry.p[k].n; ++l) {
-                        if (geometry.p[k].wz == 0 && this.py(geometry.keyx[n], geometry.p[k].ox[l], geometry.keyz[n], geometry.p[k].oz[l]) < madness.clrad[madness.cn]) {
+                    for (int l = 0; l < geometry.planes[k].n; ++l) {
+                        if (geometry.planes[k].wz == 0 && this.py(geometry.keyx[n], geometry.planes[k].ox[l], geometry.keyz[n], geometry.planes[k].oz[l]) < madness.clrad[madness.cn]) {
                             n5 = n2 / 20.0f * this.m.random();
-                            final int[] oz = geometry.p[k].oz;
+                            final int[] oz = geometry.planes[k].oz;
                             final int n6 = l;
                             oz[n6] += (int)(n5 * this.m.sin(i));
-                            final int[] ox = geometry.p[k].ox;
+                            final int[] ox = geometry.planes[k].ox;
                             final int n7 = l;
                             ox[n7] -= (int)(n5 * this.m.sin(j));
                         }
                     }
                     if (n5 != 0.0f) {
                         if (Math.abs(n5) >= 1.0f) {
-                            geometry.p[k].chip = 1;
-                            geometry.p[k].ctmag = n5;
+                            geometry.planes[k].chip = 1;
+                            geometry.planes[k].ctmag = n5;
                         }
-                        if (!geometry.p[k].nocol && !geometry.p[k].glass) {
-                            if (geometry.p[k].bfase > 20 && geometry.p[k].hsb[1] > 0.2) {
-                                geometry.p[k].hsb[1] = 0.2f;
+                        if (!geometry.planes[k].nocol && !geometry.planes[k].glass) {
+                            if (geometry.planes[k].bfase > 20 && geometry.planes[k].hsb[1] > 0.2) {
+                                geometry.planes[k].hsb[1] = 0.2f;
                             }
-                            if (geometry.p[k].bfase > 30) {
-                                if (geometry.p[k].hsb[2] < 0.5) {
-                                    geometry.p[k].hsb[2] = 0.5f;
+                            if (geometry.planes[k].bfase > 30) {
+                                if (geometry.planes[k].hsb[2] < 0.5) {
+                                    geometry.planes[k].hsb[2] = 0.5f;
                                 }
-                                if (geometry.p[k].hsb[1] > 0.1) {
-                                    geometry.p[k].hsb[1] = 0.1f;
+                                if (geometry.planes[k].hsb[1] > 0.1) {
+                                    geometry.planes[k].hsb[1] = 0.1f;
                                 }
                             }
-                            if (geometry.p[k].bfase > 40) {
-                                geometry.p[k].hsb[1] = 0.05f;
+                            if (geometry.planes[k].bfase > 40) {
+                                geometry.planes[k].hsb[1] = 0.05f;
                             }
-                            if (geometry.p[k].bfase > 50) {
-                                if (geometry.p[k].hsb[2] > 0.8) {
-                                    geometry.p[k].hsb[2] = 0.8f;
+                            if (geometry.planes[k].bfase > 50) {
+                                if (geometry.planes[k].hsb[2] > 0.8) {
+                                    geometry.planes[k].hsb[2] = 0.8f;
                                 }
-                                geometry.p[k].hsb[0] = 0.075f;
-                                geometry.p[k].hsb[1] = 0.05f;
+                                geometry.planes[k].hsb[0] = 0.075f;
+                                geometry.planes[k].hsb[1] = 0.05f;
                             }
-                            if (geometry.p[k].bfase > 60) {
-                                geometry.p[k].hsb[0] = 0.05f;
+                            if (geometry.planes[k].bfase > 60) {
+                                geometry.planes[k].hsb[0] = 0.05f;
                             }
-                            final Plane plane = geometry.p[k];
+                            final Plane plane = geometry.planes[k];
                             plane.bfase += (int)n5;
-                            new Color(geometry.p[k].c[0], geometry.p[k].c[1], geometry.p[k].c[2]);
-                            final Color hsbColor = Color.getHSBColor(geometry.p[k].hsb[0], geometry.p[k].hsb[1], geometry.p[k].hsb[2]);
-                            geometry.p[k].c[0] = hsbColor.getRed();
-                            geometry.p[k].c[1] = hsbColor.getGreen();
-                            geometry.p[k].c[2] = hsbColor.getBlue();
+                            new Color(geometry.planes[k].c[0], geometry.planes[k].c[1], geometry.planes[k].c[2]);
+                            final Color hsbColor = Color.getHSBColor(geometry.planes[k].hsb[0], geometry.planes[k].hsb[1], geometry.planes[k].hsb[2]);
+                            geometry.planes[k].c[0] = hsbColor.getRed();
+                            geometry.planes[k].c[1] = hsbColor.getGreen();
+                            geometry.planes[k].c[2] = hsbColor.getBlue();
                         }
-                        if (geometry.p[k].glass) {
-                            final Plane plane2 = geometry.p[k];
+                        if (geometry.planes[k].glass) {
+                            final Plane plane2 = geometry.planes[k];
                             plane2.gr -= (int)Math.abs(n5 * 1.5);
                         }
                     }
@@ -173,13 +173,13 @@ public class Record
             if (n4 * n3 == -1) {
                 int n8 = 0;
                 int n9 = 1;
-                for (int n10 = 0; n10 < geometry.npl; ++n10) {
+                for (int n10 = 0; n10 < geometry.numberOfPlanes; ++n10) {
                     float n11 = 0.0f;
-                    for (int n12 = 0; n12 < geometry.p[n10].n; ++n12) {
-                        if (geometry.p[n10].wz == 0) {
+                    for (int n12 = 0; n12 < geometry.planes[n10].n; ++n12) {
+                        if (geometry.planes[n10].wz == 0) {
                             n11 = n2 / 15.0f * this.m.random();
-                            if ((Math.abs(geometry.p[n10].oy[n12] - madness.flipy[madness.cn] - this.squash[0][madness.im]) < madness.msquash[madness.cn] * 3 || geometry.p[n10].oy[n12] < madness.flipy[madness.cn] + this.squash[0][madness.im]) && this.squash[0][madness.im] < madness.msquash[madness.cn]) {
-                                final int[] oy = geometry.p[n10].oy;
+                            if ((Math.abs(geometry.planes[n10].oy[n12] - madness.flipy[madness.cn] - this.squash[0][madness.im]) < madness.msquash[madness.cn] * 3 || geometry.planes[n10].oy[n12] < madness.flipy[madness.cn] + this.squash[0][madness.im]) && this.squash[0][madness.im] < madness.msquash[madness.cn]) {
+                                final int[] oy = geometry.planes[n10].oy;
                                 final int n13 = n12;
                                 oy[n13] += (int)n11;
                                 n8 += (int)n11;
@@ -187,17 +187,17 @@ public class Record
                             }
                         }
                     }
-                    if (geometry.p[n10].glass) {
-                        final Plane plane3 = geometry.p[n10];
+                    if (geometry.planes[n10].glass) {
+                        final Plane plane3 = geometry.planes[n10];
                         plane3.gr -= 5;
                     }
                     else if (n11 != 0.0f) {
-                        final Plane plane4 = geometry.p[n10];
+                        final Plane plane4 = geometry.planes[n10];
                         plane4.bfase += (int)n11;
                     }
                     if (Math.abs(n11) >= 1.0f) {
-                        geometry.p[n10].chip = 1;
-                        geometry.p[n10].ctmag = n11;
+                        geometry.planes[n10].chip = 1;
+                        geometry.planes[n10].ctmag = n11;
                     }
                 }
                 final int[] array = this.squash[0];
@@ -346,16 +346,16 @@ public class Record
             this.cntdest[n] = 7;
         }
         if (lastfr == 0 && this.hdest[n] < -1) {
-            for (int i = 0; i < geometry.npl; ++i) {
-                if (geometry.p[i].wz == 0) {
-                    geometry.p[i].embos = 13;
+            for (int i = 0; i < geometry.numberOfPlanes; ++i) {
+                if (geometry.planes[i].wz == 0) {
+                    geometry.planes[i].embos = 13;
                 }
             }
         }
         if (this.cntdest[n] != 0) {
-            for (int j = 0; j < geometry.npl; ++j) {
-                if (geometry.p[j].wz == 0) {
-                    geometry.p[j].embos = 1;
+            for (int j = 0; j < geometry.numberOfPlanes; ++j) {
+                if (geometry.planes[j].wz == 0) {
+                    geometry.planes[j].embos = 1;
                 }
             }
             final int[] cntdest = this.cntdest;
@@ -411,16 +411,16 @@ public class Record
             if (a < -100.0f) {
                 a += 100.0f;
             }
-            for (int i = 0; i < geometry.npl; ++i) {
+            for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
-                for (int j = 0; j < geometry.p[i].n; ++j) {
-                    if (geometry.p[i].wz == 0 && this.py(geometry.keyx[n], geometry.p[i].ox[j], geometry.keyz[n], geometry.p[i].oz[j]) < madness.clrad[madness.cn]) {
+                for (int j = 0; j < geometry.planes[i].n; ++j) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.cn]) {
                         n2 = a / 20.0f * this.m.random();
                     }
                 }
                 if (n2 != 0.0f && Math.abs(n2) >= 1.0f) {
-                    geometry.p[i].chip = 1;
-                    geometry.p[i].ctmag = n2;
+                    geometry.planes[i].chip = 1;
+                    geometry.planes[i].ctmag = n2;
                 }
             }
         }
@@ -434,59 +434,59 @@ public class Record
             if (a < -100.0f) {
                 a += 100.0f;
             }
-            for (int i = 0; i < geometry.npl; ++i) {
+            for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float a2 = 0.0f;
-                for (int j = 0; j < geometry.p[i].n; ++j) {
-                    if (geometry.p[i].wz == 0 && this.py(geometry.keyx[n], geometry.p[i].ox[j], geometry.keyz[n], geometry.p[i].oz[j]) < madness.clrad[madness.cn]) {
+                for (int j = 0; j < geometry.planes[i].n; ++j) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.cn]) {
                         a2 = a / 20.0f * this.m.random();
-                        final int[] oz = geometry.p[i].oz;
+                        final int[] oz = geometry.planes[i].oz;
                         final int n2 = j;
                         oz[n2] += (int)(a2 * this.m.cos(geometry.xz) * this.m.cos(geometry.zy));
-                        final int[] ox = geometry.p[i].ox;
+                        final int[] ox = geometry.planes[i].ox;
                         final int n3 = j;
                         ox[n3] += (int)(a2 * this.m.sin(geometry.xz) * this.m.cos(geometry.xy));
                     }
                 }
                 if (a2 != 0.0f) {
                     if (Math.abs(a2) >= 1.0f) {
-                        geometry.p[i].chip = 1;
-                        geometry.p[i].ctmag = a2;
+                        geometry.planes[i].chip = 1;
+                        geometry.planes[i].ctmag = a2;
                     }
-                    if (!geometry.p[i].nocol && !geometry.p[i].glass) {
-                        if (geometry.p[i].bfase > 20 && geometry.p[i].hsb[1] > 0.2) {
-                            geometry.p[i].hsb[1] = 0.2f;
+                    if (!geometry.planes[i].nocol && !geometry.planes[i].glass) {
+                        if (geometry.planes[i].bfase > 20 && geometry.planes[i].hsb[1] > 0.2) {
+                            geometry.planes[i].hsb[1] = 0.2f;
                         }
-                        if (geometry.p[i].bfase > 30) {
-                            if (geometry.p[i].hsb[2] < 0.5) {
-                                geometry.p[i].hsb[2] = 0.5f;
+                        if (geometry.planes[i].bfase > 30) {
+                            if (geometry.planes[i].hsb[2] < 0.5) {
+                                geometry.planes[i].hsb[2] = 0.5f;
                             }
-                            if (geometry.p[i].hsb[1] > 0.1) {
-                                geometry.p[i].hsb[1] = 0.1f;
+                            if (geometry.planes[i].hsb[1] > 0.1) {
+                                geometry.planes[i].hsb[1] = 0.1f;
                             }
                         }
-                        if (geometry.p[i].bfase > 40) {
-                            geometry.p[i].hsb[1] = 0.05f;
+                        if (geometry.planes[i].bfase > 40) {
+                            geometry.planes[i].hsb[1] = 0.05f;
                         }
-                        if (geometry.p[i].bfase > 50) {
-                            if (geometry.p[i].hsb[2] > 0.8) {
-                                geometry.p[i].hsb[2] = 0.8f;
+                        if (geometry.planes[i].bfase > 50) {
+                            if (geometry.planes[i].hsb[2] > 0.8) {
+                                geometry.planes[i].hsb[2] = 0.8f;
                             }
-                            geometry.p[i].hsb[0] = 0.075f;
-                            geometry.p[i].hsb[1] = 0.05f;
+                            geometry.planes[i].hsb[0] = 0.075f;
+                            geometry.planes[i].hsb[1] = 0.05f;
                         }
-                        if (geometry.p[i].bfase > 60) {
-                            geometry.p[i].hsb[0] = 0.05f;
+                        if (geometry.planes[i].bfase > 60) {
+                            geometry.planes[i].hsb[0] = 0.05f;
                         }
-                        final Plane plane = geometry.p[i];
+                        final Plane plane = geometry.planes[i];
                         plane.bfase += (int)Math.abs(a2);
-                        new Color(geometry.p[i].c[0], geometry.p[i].c[1], geometry.p[i].c[2]);
-                        final Color hsbColor = Color.getHSBColor(geometry.p[i].hsb[0], geometry.p[i].hsb[1], geometry.p[i].hsb[2]);
-                        geometry.p[i].c[0] = hsbColor.getRed();
-                        geometry.p[i].c[1] = hsbColor.getGreen();
-                        geometry.p[i].c[2] = hsbColor.getBlue();
+                        new Color(geometry.planes[i].c[0], geometry.planes[i].c[1], geometry.planes[i].c[2]);
+                        final Color hsbColor = Color.getHSBColor(geometry.planes[i].hsb[0], geometry.planes[i].hsb[1], geometry.planes[i].hsb[2]);
+                        geometry.planes[i].c[0] = hsbColor.getRed();
+                        geometry.planes[i].c[1] = hsbColor.getGreen();
+                        geometry.planes[i].c[2] = hsbColor.getBlue();
                     }
-                    if (geometry.p[i].glass) {
-                        final Plane plane2 = geometry.p[i];
+                    if (geometry.planes[i].glass) {
+                        final Plane plane2 = geometry.planes[i];
                         plane2.gr -= (int)Math.abs(a2 * 1.5);
                     }
                 }
@@ -510,16 +510,16 @@ public class Record
             this.cntdest[n] = 7;
         }
         if (n2 == 0 && this.dest[n] < -1) {
-            for (int i = 0; i < geometry.npl; ++i) {
-                if (geometry.p[i].wz == 0) {
-                    geometry.p[i].embos = 13;
+            for (int i = 0; i < geometry.numberOfPlanes; ++i) {
+                if (geometry.planes[i].wz == 0) {
+                    geometry.planes[i].embos = 13;
                 }
             }
         }
         if (this.cntdest[n] != 0) {
-            for (int j = 0; j < geometry.npl; ++j) {
-                if (geometry.p[j].wz == 0) {
-                    geometry.p[j].embos = 1;
+            for (int j = 0; j < geometry.numberOfPlanes; ++j) {
+                if (geometry.planes[j].wz == 0) {
+                    geometry.planes[j].embos = 1;
                 }
             }
             final int[] cntdest = this.cntdest;
@@ -747,16 +747,16 @@ public class Record
             if (a < -100.0f) {
                 a += 100.0f;
             }
-            for (int i = 0; i < geometry.npl; ++i) {
+            for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
-                for (int j = 0; j < geometry.p[i].n; ++j) {
-                    if (geometry.p[i].wz == 0 && this.py(geometry.keyx[n], geometry.p[i].ox[j], geometry.keyz[n], geometry.p[i].oz[j]) < madness.clrad[madness.cn]) {
+                for (int j = 0; j < geometry.planes[i].n; ++j) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.cn]) {
                         n2 = a / 20.0f * this.m.random();
                     }
                 }
                 if (n2 != 0.0f && Math.abs(n2) >= 1.0f) {
-                    geometry.p[i].chip = 1;
-                    geometry.p[i].ctmag = n2;
+                    geometry.planes[i].chip = 1;
+                    geometry.planes[i].ctmag = n2;
                 }
             }
         }
@@ -770,59 +770,59 @@ public class Record
             if (a < -100.0f) {
                 a += 100.0f;
             }
-            for (int i = 0; i < geometry.npl; ++i) {
+            for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float a2 = 0.0f;
-                for (int j = 0; j < geometry.p[i].n; ++j) {
-                    if (geometry.p[i].wz == 0 && this.py(geometry.keyx[n], geometry.p[i].ox[j], geometry.keyz[n], geometry.p[i].oz[j]) < madness.clrad[madness.cn]) {
+                for (int j = 0; j < geometry.planes[i].n; ++j) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.cn]) {
                         a2 = a / 20.0f * this.m.random();
-                        final int[] oz = geometry.p[i].oz;
+                        final int[] oz = geometry.planes[i].oz;
                         final int n2 = j;
                         oz[n2] -= (int)(a2 * this.m.sin(geometry.xz) * this.m.cos(geometry.zy));
-                        final int[] ox = geometry.p[i].ox;
+                        final int[] ox = geometry.planes[i].ox;
                         final int n3 = j;
                         ox[n3] += (int)(a2 * this.m.cos(geometry.xz) * this.m.cos(geometry.xy));
                     }
                 }
                 if (a2 != 0.0f) {
                     if (Math.abs(a2) >= 1.0f) {
-                        geometry.p[i].chip = 1;
-                        geometry.p[i].ctmag = a2;
+                        geometry.planes[i].chip = 1;
+                        geometry.planes[i].ctmag = a2;
                     }
-                    if (!geometry.p[i].nocol && !geometry.p[i].glass) {
-                        if (geometry.p[i].bfase > 20 && geometry.p[i].hsb[1] > 0.2) {
-                            geometry.p[i].hsb[1] = 0.2f;
+                    if (!geometry.planes[i].nocol && !geometry.planes[i].glass) {
+                        if (geometry.planes[i].bfase > 20 && geometry.planes[i].hsb[1] > 0.2) {
+                            geometry.planes[i].hsb[1] = 0.2f;
                         }
-                        if (geometry.p[i].bfase > 30) {
-                            if (geometry.p[i].hsb[2] < 0.5) {
-                                geometry.p[i].hsb[2] = 0.5f;
+                        if (geometry.planes[i].bfase > 30) {
+                            if (geometry.planes[i].hsb[2] < 0.5) {
+                                geometry.planes[i].hsb[2] = 0.5f;
                             }
-                            if (geometry.p[i].hsb[1] > 0.1) {
-                                geometry.p[i].hsb[1] = 0.1f;
+                            if (geometry.planes[i].hsb[1] > 0.1) {
+                                geometry.planes[i].hsb[1] = 0.1f;
                             }
                         }
-                        if (geometry.p[i].bfase > 40) {
-                            geometry.p[i].hsb[1] = 0.05f;
+                        if (geometry.planes[i].bfase > 40) {
+                            geometry.planes[i].hsb[1] = 0.05f;
                         }
-                        if (geometry.p[i].bfase > 50) {
-                            if (geometry.p[i].hsb[2] > 0.8) {
-                                geometry.p[i].hsb[2] = 0.8f;
+                        if (geometry.planes[i].bfase > 50) {
+                            if (geometry.planes[i].hsb[2] > 0.8) {
+                                geometry.planes[i].hsb[2] = 0.8f;
                             }
-                            geometry.p[i].hsb[0] = 0.075f;
-                            geometry.p[i].hsb[1] = 0.05f;
+                            geometry.planes[i].hsb[0] = 0.075f;
+                            geometry.planes[i].hsb[1] = 0.05f;
                         }
-                        if (geometry.p[i].bfase > 60) {
-                            geometry.p[i].hsb[0] = 0.05f;
+                        if (geometry.planes[i].bfase > 60) {
+                            geometry.planes[i].hsb[0] = 0.05f;
                         }
-                        final Plane plane = geometry.p[i];
+                        final Plane plane = geometry.planes[i];
                         plane.bfase += (int)Math.abs(a2);
-                        new Color(geometry.p[i].c[0], geometry.p[i].c[1], geometry.p[i].c[2]);
-                        final Color hsbColor = Color.getHSBColor(geometry.p[i].hsb[0], geometry.p[i].hsb[1], geometry.p[i].hsb[2]);
-                        geometry.p[i].c[0] = hsbColor.getRed();
-                        geometry.p[i].c[1] = hsbColor.getGreen();
-                        geometry.p[i].c[2] = hsbColor.getBlue();
+                        new Color(geometry.planes[i].c[0], geometry.planes[i].c[1], geometry.planes[i].c[2]);
+                        final Color hsbColor = Color.getHSBColor(geometry.planes[i].hsb[0], geometry.planes[i].hsb[1], geometry.planes[i].hsb[2]);
+                        geometry.planes[i].c[0] = hsbColor.getRed();
+                        geometry.planes[i].c[1] = hsbColor.getGreen();
+                        geometry.planes[i].c[2] = hsbColor.getBlue();
                     }
-                    if (geometry.p[i].glass) {
-                        final Plane plane2 = geometry.p[i];
+                    if (geometry.planes[i].glass) {
+                        final Plane plane2 = geometry.planes[i];
                         plane2.gr -= (int)Math.abs(a2 * 1.5);
                     }
                 }

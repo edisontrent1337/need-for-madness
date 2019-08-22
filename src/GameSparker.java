@@ -235,7 +235,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		this.gamer.start();
 	}
 
-	public void loadStage(final Geometry[] array, final Geometry[] array2, final Medium medium, final Trackers trackers, final CheckPoints checkPoints, final xtGraphics xtGraphics, final Madness[] array3, final Record record) {
+	public void loadStage(final Geometry[] array, final Geometry[] array2, final Medium medium, final Trackers trackers, final CheckPoints checkPoints, final GraphicsPanel GraphicsPanel, final Madness[] array3, final Record record) {
 		trackers.nt = 0;
 		this.nob = 5;
 		this.notb = 0;
@@ -260,7 +260,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				}
 				if (string.startsWith("sky")) {
 					medium.setSky(this.getInt("sky", string, 0), this.getInt("sky", string, 1), this.getInt("sky", string, 2));
-					xtGraphics.snap(checkPoints.stage);
+					GraphicsPanel.snap(checkPoints.stage);
 				}
 				if (string.startsWith("ground")) {
 					medium.setGround(this.getInt("ground", string, 0), this.getInt("ground", string, 1), this.getInt("ground", string, 2));
@@ -420,12 +420,12 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			}
 			dataInputStream.close();
 		} catch (Exception obj) {
-			xtGraphics.fase = 3;
+			GraphicsPanel.fase = 3;
 			System.out.println("Error in stage " + checkPoints.stage);
 			System.out.println("" + obj);
 			System.out.println("At line: " + string);
 		}
-		if (xtGraphics.fase == 2) {
+		if (GraphicsPanel.fase == 2) {
 			medium.trx = 0L;
 			medium.trz = 0L;
 			if (trackers.nt >= 4) {
@@ -442,18 +442,18 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			medium.hit = 60000;
 			medium.nrnd = 0;
 			medium.trk = true;
-			xtGraphics.fase = 1;
+			GraphicsPanel.fase = 1;
 			this.mouses = 0;
 		}
 		int n2 = 0;
 		do {
 			this.controls[n2].reset(checkPoints);
 		} while (++n2 < 5);
-		xtGraphics.resetstat(checkPoints.stage);
+		GraphicsPanel.resetstat(checkPoints.stage);
 		int n3 = 0;
 		do {
-			array[n3] = new Geometry(array2[xtGraphics.sc[n3]], xtGraphics.xstart[n3], 250 - array2[xtGraphics.sc[n3]].grat, xtGraphics.zstart[n3], 0);
-			array3[n3].reseto(xtGraphics.sc[n3], array[n3], checkPoints);
+			array[n3] = new Geometry(array2[GraphicsPanel.sc[n3]], GraphicsPanel.xstart[n3], 250 - array2[GraphicsPanel.sc[n3]].grat, GraphicsPanel.zstart[n3], 0);
+			array3[n3].reseto(GraphicsPanel.sc[n3], array[n3], checkPoints);
 		} while (++n3 < 5);
 		record.reset(array);
 	}
@@ -471,9 +471,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		}
 		final Trackers trackers = new Trackers();
 		final CheckPoints checkPoints = new CheckPoints();
-		xtGraphics xtGraphics = null;
+		GraphicsPanel GraphicsPanel = null;
 		try {
-			xtGraphics = new xtGraphics(medium, this.graphics, this, sunytyp);
+			GraphicsPanel = new GraphicsPanel(medium, this.graphics, this, sunytyp);
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (URISyntaxException e) {
@@ -482,19 +482,19 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		final Record record = new Record(medium);
 		final Geometry[] array = new Geometry[43];
 		this.loadBase(array, medium, trackers);
-		final xtGraphics xtGraphics2 = xtGraphics;
-		xtGraphics2.dnload += 29;
-		xtGraphics.loading(this.graphics, this);
+		final GraphicsPanel graphicsPanel2 = GraphicsPanel;
+		graphicsPanel2.dnload += 29;
+		GraphicsPanel.loading(this.graphics, this);
 		final Geometry[] geometries = new Geometry[210];
 		final Madness[] cars = new Madness[5];
 		int n2 = 0;
 		do {
-			cars[n2] = new Madness(medium, record, xtGraphics, n2);
+			cars[n2] = new Madness(medium, record, GraphicsPanel, n2);
 			this.controls[n2] = new Control(medium);
 		} while (++n2 < 5);
 		float n3 = 35.0f;
 		int n4 = 80;
-		xtGraphics.unlocked = 11;
+		GraphicsPanel.unlocked = 11;
 		// final int readcookie = this.readcookie("unlocked");
         /*if (readcookie >= 1 && readcookie <= 11) {
             xtGraphics.unlocked = readcookie;
@@ -525,45 +525,45 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		this.exwist = false;
 		while (true) {
 			final long time2 = new Date().getTime();
-			if (xtGraphics.fase == 111) {
+			if (GraphicsPanel.fase == 111) {
 				if (this.mouses == 1) {
 					n9 = 800;
 				}
 				if (n9 < 800) {
-					xtGraphics.clicknow(this.graphics);
+					GraphicsPanel.clicknow(this.graphics);
 					++n9;
 				} else {
 					n9 = 0;
-					xtGraphics.fase = 9;
+					GraphicsPanel.fase = 9;
 					this.mouses = 0;
 					this.lostfcs = false;
 				}
 			}
-			if (xtGraphics.fase == 9) {
+			if (GraphicsPanel.fase == 9) {
 				if (n9 < 150) {
-					xtGraphics.rad(this.graphics, n9);
+					GraphicsPanel.rad(this.graphics, n9);
 					++n9;
 				} else {
 					n9 = 0;
-					xtGraphics.fase = 10;
+					GraphicsPanel.fase = 10;
 					this.mouses = 0;
 					this.controls[0].falseo();
 				}
 			}
-			if (xtGraphics.fase == -9) {
+			if (GraphicsPanel.fase == -9) {
 				if (n9 < 5) {
 					this.graphics.setColor(new Color(255, 255, 255));
 					this.graphics.fillRect(0, 0, 550, 400);
 					++n9;
 				} else {
 					n9 = 0;
-					xtGraphics.fase = 7;
+					GraphicsPanel.fase = 7;
 					this.mouses = 0;
 				}
 			}
-			if (xtGraphics.fase == 8) {
-				xtGraphics.credits(this.graphics, this.controls[0]);
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+			if (GraphicsPanel.fase == 8) {
+				GraphicsPanel.credits(this.graphics, this.controls[0]);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
@@ -571,9 +571,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.mouses = 2;
 				}
 			}
-			if (xtGraphics.fase == 10) {
-				xtGraphics.maini(this.graphics, this.controls[0]);
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+			if (GraphicsPanel.fase == 10) {
+				GraphicsPanel.maini(this.graphics, this.controls[0]);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
@@ -581,9 +581,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.mouses = 2;
 				}
 			}
-			if (xtGraphics.fase == 11) {
-				xtGraphics.inst(this.graphics, this.controls[0]);
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+			if (GraphicsPanel.fase == 11) {
+				GraphicsPanel.inst(this.graphics, this.controls[0]);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
@@ -591,17 +591,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.mouses = 2;
 				}
 			}
-			if (xtGraphics.fase == -5) {
-				xtGraphics.finish(checkPoints, array, this.controls[0], this.graphics);
+			if (GraphicsPanel.fase == -5) {
+				GraphicsPanel.finish(checkPoints, array, this.controls[0], this.graphics);
 				if (n5 == 1) {
-					if (checkPoints.stage == xtGraphics.unlocked && xtGraphics.winner && xtGraphics.unlocked != 11) {
-						this.savecookie("unlocked", "" + (xtGraphics.unlocked + 1));
+					if (checkPoints.stage == GraphicsPanel.unlocked && GraphicsPanel.winner && GraphicsPanel.unlocked != 11) {
+						this.savecookie("unlocked", "" + (GraphicsPanel.unlocked + 1));
 					}
 					this.savecookie("gameprfact", "" + (int) n3);
-					this.savecookie("usercar", "" + xtGraphics.sc[0]);
+					this.savecookie("usercar", "" + GraphicsPanel.sc[0]);
 					n5 = 0;
 				}
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
@@ -609,9 +609,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.mouses = 2;
 				}
 			}
-			if (xtGraphics.fase == 7) {
-				xtGraphics.carselect(this.controls[0], array, cars[0], this.graphics);
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+			if (GraphicsPanel.fase == 7) {
+				GraphicsPanel.carselect(this.controls[0], array, cars[0], this.graphics);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
@@ -619,9 +619,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.mouses = 2;
 				}
 			}
-			if (xtGraphics.fase == 6) {
-				xtGraphics.musicomp(checkPoints.stage, this.graphics, this.controls[0]);
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+			if (GraphicsPanel.fase == 6) {
+				GraphicsPanel.musicomp(checkPoints.stage, this.graphics, this.controls[0]);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
@@ -629,16 +629,16 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.mouses = 2;
 				}
 			}
-			if (xtGraphics.fase == 5) {
-				xtGraphics.loadmusic(checkPoints.stage, n4, this.graphics);
+			if (GraphicsPanel.fase == 5) {
+				GraphicsPanel.loadmusic(checkPoints.stage, n4, this.graphics);
 				if (n5 == 0) {
-					this.savecookie("usercar", "" + xtGraphics.sc[0]);
+					this.savecookie("usercar", "" + GraphicsPanel.sc[0]);
 					n5 = 1;
 				}
 			}
-			if (xtGraphics.fase == 4) {
-				xtGraphics.cantgo(this.graphics, this.controls[0]);
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+			if (GraphicsPanel.fase == 4) {
+				GraphicsPanel.cantgo(this.graphics, this.controls[0]);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
@@ -646,9 +646,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.mouses = 2;
 				}
 			}
-			if (xtGraphics.fase == 3) {
-				xtGraphics.loadingfailed(checkPoints.stage, this.controls[0], this.graphics);
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+			if (GraphicsPanel.fase == 3) {
+				GraphicsPanel.loadingFailed(checkPoints.stage, this.controls[0], this.graphics);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
@@ -656,13 +656,13 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.mouses = 2;
 				}
 			}
-			if (xtGraphics.fase == 2) {
-				xtGraphics.loadingstage(checkPoints.stage, this.graphics);
-				this.loadStage(geometries, array, medium, trackers, checkPoints, xtGraphics, cars, record);
+			if (GraphicsPanel.fase == 2) {
+				GraphicsPanel.loadingStage(checkPoints.stage, this.graphics);
+				this.loadStage(geometries, array, medium, trackers, checkPoints, GraphicsPanel, cars, record);
 				this.controls[0].falseo();
 			}
-			if (xtGraphics.fase == 1) {
-				xtGraphics.trackbg(this.graphics);
+			if (GraphicsPanel.fase == 1) {
+				GraphicsPanel.trackbg(this.graphics);
 				medium.aroundTrackAtStart(checkPoints);
 				int n11 = 0;
 				final int[] array4 = new int[200];
@@ -700,16 +700,16 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						}
 					}
 				}
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
 				if (this.mouses == 1) {
 					this.mouses = 2;
 				}
-				xtGraphics.stageselect(this.graphics, checkPoints, this.controls[0]);
+				GraphicsPanel.stageselect(this.graphics, checkPoints, this.controls[0]);
 			}
-			if (xtGraphics.fase == 176) {
+			if (GraphicsPanel.fase == 176) {
 				medium.draw(this.graphics);
 				int n18 = 0;
 				final int[] array10 = new int[100];
@@ -748,20 +748,20 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					}
 				}
 				medium.follow(geometries[0], 0);
-				xtGraphics.framer(checkPoints.stage, this.graphics);
+				GraphicsPanel.framer(checkPoints.stage, this.graphics);
 				if (n4 != 0) {
 					--n4;
 				} else {
 					this.controls[0].enter = false;
 					this.controls[0].handb = false;
-					if (xtGraphics.loadedt[checkPoints.stage - 1]) {
-						xtGraphics.stracks[checkPoints.stage - 1].play();
+					if (GraphicsPanel.loadedt[checkPoints.stage - 1]) {
+						GraphicsPanel.stracks[checkPoints.stage - 1].play();
 					}
 					this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-					xtGraphics.fase = 6;
+					GraphicsPanel.fase = 6;
 				}
 			}
-			if (xtGraphics.fase == 0) {
+			if (GraphicsPanel.fase == 0) {
 				for (int i = 0; i < 5; i++) {
 					if (cars[i].newcar) {
 						final int xz = geometries[i].xz;
@@ -811,7 +811,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						}
 					}
 				}
-				if (xtGraphics.starcnt == 0) {
+				if (GraphicsPanel.starcnt == 0) {
 					int n41 = 0;
 					do {
 						int n42 = 0;
@@ -835,29 +835,29 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						this.controls[n45].preform(cars[n45], geometries[n45], checkPoints, trackers);
 					} while (++n45 < 5);
 				} else {
-					if (xtGraphics.starcnt == 90) {
+					if (GraphicsPanel.starcnt == 90) {
 						medium.adv = 1900;
 						medium.zy = 40;
 						medium.vxz = 70;
 						this.graphics.setColor(new Color(255, 255, 255));
 						this.graphics.fillRect(0, 0, 550, 400);
 					}
-					if (xtGraphics.starcnt != 0) {
-						--xtGraphics.starcnt;
+					if (GraphicsPanel.starcnt != 0) {
+						--GraphicsPanel.starcnt;
 					}
 				}
-				if (xtGraphics.starcnt < 35) {
+				if (GraphicsPanel.starcnt < 35) {
 					if (this.view == 0) {
 						medium.follow(geometries[0], cars[0].cxz);
-						xtGraphics.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
+						GraphicsPanel.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
 					}
 					if (this.view == 1) {
 						medium.circleAround(geometries[0], false);
-						xtGraphics.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
+						GraphicsPanel.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
 					}
 					if (this.view == 2) {
 						medium.watchFromStationaryPoint(geometries[0], cars[0].mxz);
-						xtGraphics.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
+						GraphicsPanel.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
 					}
 					if (this.mouses == 1) {
 						this.controls[0].enter = true;
@@ -866,24 +866,24 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				} else {
 					medium.circleAround(geometries[3], true);
 					if (this.controls[0].enter || this.controls[0].handb) {
-						xtGraphics.starcnt = 35;
+						GraphicsPanel.starcnt = 35;
 						this.controls[0].enter = false;
 						this.controls[0].handb = false;
 					}
-					if (xtGraphics.starcnt == 35) {
+					if (GraphicsPanel.starcnt == 35) {
 						this.mouses = 0;
 						medium.vert = false;
 						medium.adv = 900;
 						medium.vxz = 180;
 						checkPoints.checkstat(cars, geometries);
 						medium.follow(geometries[0], cars[0].cxz);
-						xtGraphics.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
+						GraphicsPanel.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
 						this.graphics.setColor(new Color(255, 255, 255));
 						this.graphics.fillRect(0, 0, 550, 400);
 					}
 				}
 			}
-			if (xtGraphics.fase == -1) {
+			if (GraphicsPanel.fase == -1) {
 				if (n8 == 0) {
 					int n46 = 0;
 					do {
@@ -954,31 +954,31 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				} while (++n58 < 5);
 				if (++n8 == 300) {
 					n8 = 0;
-					if (xtGraphics.loadedt[checkPoints.stage - 1]) {
-						xtGraphics.stracks[checkPoints.stage - 1].stop();
+					if (GraphicsPanel.loadedt[checkPoints.stage - 1]) {
+						GraphicsPanel.stracks[checkPoints.stage - 1].stop();
 					}
-					xtGraphics.fase = -6;
+					GraphicsPanel.fase = -6;
 				} else {
-					xtGraphics.replyn(this.graphics);
+					GraphicsPanel.replyn(this.graphics);
 				}
 				medium.circleAround(geometries[0], false);
 			}
-			if (xtGraphics.fase == -2) {
+			if (GraphicsPanel.fase == -2) {
 				if (record.hcaught) {
 					medium.vert = !(medium.random() > 0.45);
 					medium.adv = (int) (900.0f * medium.random());
 					medium.vxz = 180;
 					n8 = 0;
-					xtGraphics.fase = -3;
+					GraphicsPanel.fase = -3;
 					n9 = 0;
 					n10 = 0;
 				} else {
-					this.graphics.drawImage(xtGraphics.trackbg, 0, 0, null);
+					this.graphics.drawImage(GraphicsPanel.trackbg, 0, 0, null);
 					n8 = -2;
-					xtGraphics.fase = -4;
+					GraphicsPanel.fase = -4;
 				}
 			}
-			if (xtGraphics.fase == -3) {
+			if (GraphicsPanel.fase == -3) {
 				if (n8 == 0) {
 					int n59 = 0;
 					do {
@@ -1041,12 +1041,12 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.controls[0].enter = true;
 				}
 				if (this.controls[0].enter || this.controls[0].handb) {
-					xtGraphics.fase = -4;
+					GraphicsPanel.fase = -4;
 					this.controls[0].enter = false;
 					this.controls[0].handb = false;
 					n8 = -7;
 				} else {
-					xtGraphics.levelhigh(this.graphics, record.wasted, record.whenwasted);
+					GraphicsPanel.levelhigh(this.graphics, record.wasted, record.whenwasted);
 					if (n8 == 0 || n8 == 1 || n8 == 2) {
 						this.graphics.setColor(new Color(0, 0, 0));
 						this.graphics.fillRect(0, 0, 550, 400);
@@ -1086,43 +1086,43 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					}
 				}
 			}
-			if (xtGraphics.fase == -4) {
+			if (GraphicsPanel.fase == -4) {
 				if (n8 <= 0) {
-					this.graphics.drawImage(xtGraphics.mdness, 164, 330, null);
+					this.graphics.drawImage(GraphicsPanel.mdness, 164, 330, null);
 				}
 				if (n8 >= 0) {
-					xtGraphics.fleximage(this.offImage, this.graphics, n8);
+					GraphicsPanel.flexImage(this.offImage, this.graphics, n8);
 					if (n8 != 0) {
-						if (xtGraphics.winner) {
-							if (checkPoints.stage == xtGraphics.unlocked) {
-								this.graphics.drawImage(xtGraphics.congrd, 140, 30, null);
+						if (GraphicsPanel.winner) {
+							if (checkPoints.stage == GraphicsPanel.unlocked) {
+								this.graphics.drawImage(GraphicsPanel.congrd, 140, 30, null);
 								if (this.controls[0].enter || this.controls[0].handb) {
 									this.controls[0].enter = false;
 									this.controls[0].handb = false;
 								}
 							} else {
-								this.graphics.drawImage(xtGraphics.congrd, 140, 117, null);
+								this.graphics.drawImage(GraphicsPanel.congrd, 140, 117, null);
 							}
 						} else {
-							this.graphics.drawImage(xtGraphics.gameov, 190, 117, null);
+							this.graphics.drawImage(GraphicsPanel.gameov, 190, 117, null);
 						}
 					}
 				}
 				if (++n8 == 6) {
-					xtGraphics.fase = -5;
+					GraphicsPanel.fase = -5;
 				}
 			}
-			if (xtGraphics.fase == -6) {
-				xtGraphics.pauseimage(this.offImage, this.graphics);
-				xtGraphics.fase = -7;
+			if (GraphicsPanel.fase == -6) {
+				GraphicsPanel.pauseimage(this.offImage, this.graphics);
+				GraphicsPanel.fase = -7;
 				this.mouses = 0;
 			}
-			if (xtGraphics.fase == -7) {
-				xtGraphics.pausedgame(this.graphics, checkPoints.stage, this.controls[0], record);
+			if (GraphicsPanel.fase == -7) {
+				GraphicsPanel.pausedgame(this.graphics, checkPoints.stage, this.controls[0], record);
 				if (n8 != 0) {
 					n8 = 0;
 				}
-				xtGraphics.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
+				GraphicsPanel.ctachm(this.xm, this.ym, this.mouses, this.controls[0]);
 				if (this.mouses == 2) {
 					this.mouses = 0;
 				}
@@ -1130,39 +1130,39 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					this.mouses = 2;
 				}
 			}
-			if (xtGraphics.fase == -8) {
-				xtGraphics.cantreply(this.graphics);
+			if (GraphicsPanel.fase == -8) {
+				GraphicsPanel.cantreply(this.graphics);
 				if (++n8 == 150 || this.controls[0].enter || this.controls[0].handb || this.mouses == 1) {
-					this.graphics.drawImage(xtGraphics.fleximg, 0, 0, null);
-					this.graphics.drawImage(xtGraphics.paused, 156, 106, null);
-					xtGraphics.fase = -7;
+					this.graphics.drawImage(GraphicsPanel.fleximg, 0, 0, null);
+					this.graphics.drawImage(GraphicsPanel.paused, 156, 106, null);
+					GraphicsPanel.fase = -7;
 					this.mouses = 0;
 					this.controls[0].enter = false;
 					this.controls[0].handb = false;
 				}
 			}
-			if (this.lostfcs && xtGraphics.fase != 176 && xtGraphics.fase != 111) {
-				xtGraphics.nofocus(this.graphics);
-				if (xtGraphics.fase == 0) {
+			if (this.lostfcs && GraphicsPanel.fase != 176 && GraphicsPanel.fase != 111) {
+				GraphicsPanel.nofocus(this.graphics);
+				if (GraphicsPanel.fase == 0) {
 					this.controls[0].enter = true;
 				}
 				if (this.mouses == 1 || this.mouses == 2) {
 					this.lostfcs = false;
-					if (xtGraphics.fase == 10) {
-						xtGraphics.flipo = 0;
+					if (GraphicsPanel.fase == 10) {
+						GraphicsPanel.flipo = 0;
 					}
-					if (xtGraphics.fase == 11 && xtGraphics.flipo != 0) {
-						--xtGraphics.flipo;
+					if (GraphicsPanel.fase == 11 && GraphicsPanel.flipo != 0) {
+						--GraphicsPanel.flipo;
 					}
-					if (xtGraphics.fase == -7) {
-						this.graphics.drawImage(xtGraphics.fleximg, 0, 0, null);
+					if (GraphicsPanel.fase == -7) {
+						this.graphics.drawImage(GraphicsPanel.fleximg, 0, 0, null);
 					}
 				}
 			}
 			this.repaint();
-			xtGraphics.playsounds(cars[0], this.controls[0], checkPoints.stage);
+			GraphicsPanel.playsounds(cars[0], this.controls[0], checkPoints.stage);
 			final long time3 = new Date().getTime();
-			if (xtGraphics.fase == 0 || xtGraphics.fase == -1 || xtGraphics.fase == -3) {
+			if (GraphicsPanel.fase == 0 || GraphicsPanel.fase == -1 || GraphicsPanel.fase == -3) {
 				if (n6 == 0) {
 					a = n3;
 					n6 = 1;
@@ -1177,7 +1177,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 							a = 5.0f;
 						}
 					}
-					if (xtGraphics.starcnt == 0) {
+					if (GraphicsPanel.starcnt == 0) {
 						medium.adjustFade(a);
 					}
 					time = time3;
@@ -1191,7 +1191,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					n6 = 0;
 					n7 = 0;
 				}
-				if (n4 == 0 || xtGraphics.fase != 176) {
+				if (n4 == 0 || GraphicsPanel.fase != 176) {
 					if (n7 == 10) {
 						if (time3 - time < 400L) {
 							a += 3.5;
@@ -1233,7 +1233,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			}
 			if (this.exwist) {
 				this.graphics.dispose();
-				xtGraphics.stopallnow();
+				GraphicsPanel.stopallnow();
 				this.gamer.stop();
 				this.gamer = null;
 			}

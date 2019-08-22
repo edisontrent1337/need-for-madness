@@ -505,7 +505,7 @@ public class Control {
 						}
 						madness.nofocus = true;
 					}
-					if (checkPoints.stage != 11 && (madness.missedcp == 0 || this.forget || this.trfix == 4 || checkPoints.stage == 10) && this.trfix != 0) {
+					if (checkPoints.stage != 11 && (madness.missedCheckpoint == 0 || this.forget || this.trfix == 4 || checkPoints.stage == 10) && this.trfix != 0) {
 						if (this.trfix == 2) {
 							int py = -10;
 							int n17 = 0;

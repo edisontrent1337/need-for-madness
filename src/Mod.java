@@ -8,6 +8,19 @@ import java.util.zip.ZipInputStream;
 //
 
 public class Mod {
+
+	static {
+		voice_mk = FOURCC("M.K.");
+		voice_mk2 = FOURCC("M!K!");
+		voice_mk3 = FOURCC("M&K!");
+		voice_flt4 = FOURCC("FLT4");
+		voice_flt8 = FOURCC("FLT8");
+		voice_28ch = FOURCC("28CH");
+		voice_8chn = FOURCC("8CHN");
+		voice_6chn = FOURCC("6CHN");
+		voice_31_list = new int[]{Mod.voice_mk, Mod.voice_mk2, Mod.voice_mk3, Mod.voice_flt4, Mod.voice_flt8, Mod.voice_8chn, Mod.voice_6chn, Mod.voice_28ch};
+	}
+
 	String name;
 	int numtracks;
 	int track_shift;
@@ -26,6 +39,7 @@ public class Mod {
 	static final int voice_28ch;
 	static final int voice_8chn;
 	static final int voice_6chn;
+
 	static final int[] voice_31_list;
 
 	public int getNumPatterns() {
@@ -53,7 +67,7 @@ public class Mod {
 				off += read;
 				i -= read;
 			}
-			this.LoadMod(new ByteArrayInputStream(array));
+			this.loadMod(new ByteArrayInputStream(array));
 			in.close();
 			zipInputStream.close();
 		} catch (Exception obj) {
@@ -85,15 +99,15 @@ public class Mod {
 			this.song_repeat_patterns = this.song_length_patterns;
 		}
 		this.numpatterns = 0;
-		for (int i = 0; i < this.positions.length; ++i) {
-			if (this.positions[i] > this.numpatterns) {
-				this.numpatterns = this.positions[i];
+		for (byte position : this.positions) {
+			if (position > this.numpatterns) {
+				this.numpatterns = position;
 			}
 		}
 		++this.numpatterns;
 	}
 
-	public void LoadMod(final InputStream in) throws IOException {
+	public void loadMod(final InputStream in) throws IOException {
 		final DataInputStream dataInputStream = new DataInputStream(in);
 		int n = 15;
 		this.numtracks = 4;
@@ -157,18 +171,6 @@ public class Mod {
 			modInstrument.repeat_length = modInstrument.sample_length - modInstrument.repeat_point;
 		}
 		return modInstrument;
-	}
-
-	static {
-		voice_mk = FOURCC("M.K.");
-		voice_mk2 = FOURCC("M!K!");
-		voice_mk3 = FOURCC("M&K!");
-		voice_flt4 = FOURCC("FLT4");
-		voice_flt8 = FOURCC("FLT8");
-		voice_28ch = FOURCC("28CH");
-		voice_8chn = FOURCC("8CHN");
-		voice_6chn = FOURCC("6CHN");
-		voice_31_list = new int[]{Mod.voice_mk, Mod.voice_mk2, Mod.voice_mk3, Mod.voice_flt4, Mod.voice_flt8, Mod.voice_8chn, Mod.voice_6chn, Mod.voice_28ch};
 	}
 
 	static final int FOURCC(final String s) {
