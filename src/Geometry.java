@@ -517,14 +517,14 @@ public class Geometry {
 						}
 						if (b) {
 							for (int j = 0; j < this.npl; ++j) {
-								this.p[j].s(graphics, this.x - this.m.x, this.y - this.m.y, this.z - this.m.z, this.xz, this.xy, this.zy, 0);
+								this.p[j].drawShadow(graphics, this.x - this.m.x, this.y - this.m.y, this.z - this.m.z, this.xz, this.xy, this.zy, 0);
 							}
 						} else {
 							final float n4 = this.m.cy + (int) ((this.m.ground - this.m.cy) * this.m.cos(this.m.zy) - (n2 - this.m.cz) * this.m.sin(this.m.zy));
 							final float n5 = this.m.cz + (int) ((this.m.ground - this.m.cy) * this.m.sin(this.m.zy) + (n2 - this.m.cz) * this.m.cos(this.m.zy));
 							if (this.ys(n4 + this.maxR, n5) > 0 && this.ys(n4 - this.maxR, n5) < this.m.h) {
 								for (int k = 0; k < this.npl; ++k) {
-									this.p[k].s(graphics, this.x - this.m.x, this.y - this.m.y, this.z - this.m.z, this.xz, this.xy, this.zy, 1);
+									this.p[k].drawShadow(graphics, this.x - this.m.x, this.y - this.m.y, this.z - this.m.z, this.xz, this.xy, this.zy, 1);
 								}
 							}
 						}
@@ -534,7 +534,7 @@ public class Geometry {
 					}
 				} else {
 					for (int l = 0; l < this.npl; ++l) {
-						this.p[l].s(graphics, this.x - this.m.x, this.y - this.m.y, this.z - this.m.z, this.xz, this.xy, this.zy, 2);
+						this.p[l].drawShadow(graphics, this.x - this.m.x, this.y - this.m.y, this.z - this.m.z, this.xz, this.xy, this.zy, 2);
 					}
 				}
 			}
@@ -888,26 +888,14 @@ public class Geometry {
 				this.rot(array, array2, this.xs(n5, n8), this.ys(n7, n8), -22, 8);
 			}
 			int r2 = (int) (191.0f + 191.0f * (this.m.snap[0] / 200.0f));
-			if (r2 > 255) {
-				r2 = 255;
-			}
-			if (r2 < 0) {
-				r2 = 0;
-			}
+			r2 = Util.clamp(r2, 0, 255);
+
 			int g2 = (int) (232.0f + 232.0f * (this.m.snap[1] / 200.0f));
-			if (g2 > 255) {
-				g2 = 255;
-			}
-			if (g2 < 0) {
-				g2 = 0;
-			}
+			g2 = Util.clamp(g2, 0, 255);
+
 			int b2 = (int) (255.0f + 255.0f * (this.m.snap[2] / 200.0f));
-			if (b2 > 255) {
-				b2 = 255;
-			}
-			if (b2 < 0) {
-				b2 = 0;
-			}
+			b2 = Util.clamp(b2, 0, 255);
+
 			graphics.setColor(new Color(r2, g2, b2));
 			graphics.fillPolygon(array, array2, 8);
 			array[0] = this.xs((int) (n5 - abs - this.m.random() * (abs / 4)), n8);
@@ -926,27 +914,16 @@ public class Geometry {
 			array2[6] = this.ys((int) (n7 - abs2 - this.m.random() * (abs2 / 4)), n8);
 			array[7] = this.xs((int) (n5 - abs / 2.4 - this.m.random() * (abs / 9.6)), n8);
 			array2[7] = this.ys((int) (n7 - abs2 - this.m.random() * (abs2 / 4)), n8);
+
 			int r3 = (int) (213.0f + 213.0f * (this.m.snap[0] / 200.0f));
-			if (r3 > 255) {
-				r3 = 255;
-			}
-			if (r3 < 0) {
-				r3 = 0;
-			}
+			r3 = Util.clamp(r3, 0, 255);
+
 			int g3 = (int) (239.0f + 239.0f * (this.m.snap[1] / 200.0f));
-			if (g3 > 255) {
-				g3 = 255;
-			}
-			if (g3 < 0) {
-				g3 = 0;
-			}
+			g3 = Util.clamp(g3, 0, 255);
+
 			int b3 = (int) (255.0f + 255.0f * (this.m.snap[2] / 200.0f));
-			if (b3 > 255) {
-				b3 = 255;
-			}
-			if (b3 < 0) {
-				b3 = 0;
-			}
+			b3 = Util.clamp(b3, 0, 255);
+
 			graphics.setColor(new Color(r3, g3, b3));
 			graphics.fillPolygon(array, array2, 8);
 		}
@@ -974,8 +951,7 @@ public class Geometry {
 				this.elc[n] = 0;
 			} else {
 				final int[] elc = this.elc;
-				final int n6 = n;
-				++elc[n6];
+				++elc[n];
 			}
 			final int[] array = new int[8];
 			final int[] array2 = new int[8];
@@ -1035,19 +1011,11 @@ public class Geometry {
 			if (b) {
 				int n13 = 0;
 				int g = (int) (255.0f + 255.0f * (this.m.snap[1] / 250.0f));
-				if (g > 255) {
-					g = 255;
-				}
-				if (g < 0) {
-					g = 0;
-				}
+				g = Util.clamp(g, 0, 255);
+
 				int b2 = (int) (223.0f + 223.0f * (this.m.snap[2] / 250.0f));
-				if (b2 > 255) {
-					b2 = 255;
-				}
-				if (b2 < 0) {
-					b2 = 0;
-				}
+				b2 = Util.clamp(b2, 0, 255);
+
 				if (this.m.trk) {
 					n13 = 255;
 					g = 128;
@@ -1055,23 +1023,16 @@ public class Geometry {
 				}
 				graphics.setColor(new Color(n13, g, b2));
 				graphics.fillPolygon(array4, array5, 8);
+
 				if (array3[0] >= 4000) {
 					continue;
 				}
 				int g2 = (int) (223.0f + 223.0f * (this.m.snap[1] / 250.0f));
-				if (g2 > 255) {
-					g2 = 255;
-				}
-				if (g2 < 0) {
-					g2 = 0;
-				}
+				g2 = Util.clamp(g2, 0, 255);
+
 				int b3 = (int) (255.0f + 255.0f * (this.m.snap[2] / 250.0f));
-				if (b3 > 255) {
-					b3 = 255;
-				}
-				if (b3 < 0) {
-					b3 = 0;
-				}
+				b3 = Util.clamp(b3, 0, 255);
+
 				graphics.setColor(new Color(n13, g2, b3));
 				graphics.drawPolygon(array4, array5, 8);
 			}

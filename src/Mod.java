@@ -38,7 +38,7 @@ public class Mod {
 
 	Mod(final String s, final Applet applet) {
 		try {
-			//final DataInputStream in = new DataInputStream(new URL(applet.getCodeBase(), s).openStream());
+			//final DataInputStream in = new DataInputStream(new URL(applet.getCodeBase(), drawShadow).openStream());
 			//final ZipInputStream zipInputStream = new ZipInputStream(in);
 
 			URL resource = this.getClass().getResource(s);

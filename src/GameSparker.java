@@ -117,7 +117,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 
 	public String getString(final String s, final String s2, final int n) {
 		int n2 = 0;
-		String string = "";
+		StringBuilder string = new StringBuilder();
 		for (int i = s.length() + 1; i < s2.length(); ++i) {
 			final String string2 = "" + s2.charAt(i);
 			if (string2.equals(",") || string2.equals(")")) {
@@ -125,17 +125,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				++i;
 			}
 			if (n2 == n) {
-				string += s2.charAt(i);
+				string.append(s2.charAt(i));
 			}
 		}
-		return string;
+		return string.toString();
 	}
 
 	public int getInt(final String s, final String s2, final int n) {
 		return Integer.valueOf(getString(s, s2, n));
 /*		int n2 = 0;
 		String string = "";
-		for (int i = s.length() + 1; i < s2.length(); ++i) {
+		for (int i = drawShadow.length() + 1; i < s2.length(); ++i) {
 			final String string2 = "" + s2.charAt(i);
 			if (string2.equals(",") || string2.equals(")")) {
 				++n2;
@@ -152,8 +152,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
         int intValue = -1;
         try {
             final JSObject window = JSObject.getWindow(this);
-            window.eval("s=GetCookie('" + str + "');");
-            intValue = Integer.valueOf(String.valueOf(String.valueOf(window.getMember("s"))));
+            window.eval("drawShadow=GetCookie('" + str + "');");
+            intValue = Integer.valueOf(String.valueOf(String.valueOf(window.getMember("drawShadow"))));
         }
         catch (Exception ex) {}
         return intValue;
@@ -177,7 +177,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		addKeyListener(this);
 	}
 
-	public void loadbase(final Geometry[] array, final Medium medium, final Trackers trackers) {
+	public void loadBase(final Geometry[] array, final Medium medium, final Trackers trackers) {
 		final String[] array2 = {"2000tornados", "formula7", "canyenaro", "lescrab", "nimi", "maxrevenge", "leadoxide", "king", "radicalone", "drmonster", "road", "froad", "twister2", "twister1", "turn", "offroad", "bumproad", "offturn", "nroad", "nturn", "roblend", "noblend", "rnblend", "roadend", "offroadend", "hpground", "ramp30", "cramp35", "dramp15", "dhilo15", "slide10", "takeoff", "sramp22", "offbump", "offramp", "sofframp", "halfpipe", "spikes", "rail", "thewall", "checkpoint", "fixpoint", "offcheckpoint"};
 		try {
 			//final DataInputStream in = new DataInputStream(new URL(this.getCodeBase(), "graphics/models.radq").openStream());
@@ -228,27 +228,6 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		return 2;
 	}
 
-	public boolean keyUp(final Event event, final int n) {
-		if (!this.exwist) {
-			if (n == 1004) {
-				this.controls[0].up = false;
-			}
-			if (n == 1005) {
-				this.controls[0].down = false;
-			}
-			if (n == 1007) {
-				this.controls[0].right = false;
-			}
-			if (n == 1006) {
-				this.controls[0].left = false;
-			}
-			if (n == 32) {
-				this.controls[0].handb = false;
-			}
-		}
-		return false;
-	}
-
 	public void start() {
 		if (this.gamer == null) {
 			this.gamer = new Thread(this);
@@ -256,17 +235,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		this.gamer.start();
 	}
 
-	@Override
-	public boolean mouseDown(final Event event, final int xm, final int ym) {
-		if (!this.exwist && this.mouses == 0) {
-			this.xm = xm;
-			this.ym = ym;
-			this.mouses = 1;
-		}
-		return false;
-	}
-
-	public void loadstage(final Geometry[] array, final Geometry[] array2, final Medium medium, final Trackers trackers, final CheckPoints checkPoints, final xtGraphics xtGraphics, final Madness[] array3, final Record record) {
+	public void loadStage(final Geometry[] array, final Geometry[] array2, final Medium medium, final Trackers trackers, final CheckPoints checkPoints, final xtGraphics xtGraphics, final Madness[] array3, final Record record) {
 		trackers.nt = 0;
 		this.nob = 5;
 		this.notb = 0;
@@ -306,21 +275,21 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				if (string.startsWith("set")) {
 					final int getint = this.getInt("set", string, 0);
 					array[this.nob] = new Geometry(array2[getint], this.getInt("set", string, 1), (int) medium.ground - array2[getint].grat, this.getInt("set", string, 2), this.getInt("set", string, 3));
-					if (string.indexOf(")p") != -1) {
+					if (string.contains(")p")) {
 						checkPoints.x[checkPoints.n] = this.getInt("chk", string, 1);
 						checkPoints.z[checkPoints.n] = this.getInt("chk", string, 2);
 						checkPoints.y[checkPoints.n] = 0;
 						checkPoints.typ[checkPoints.n] = 0;
-						if (string.indexOf(")pt") != -1) {
+						if (string.contains(")pt")) {
 							checkPoints.typ[checkPoints.n] = -1;
 						}
-						if (string.indexOf(")pr") != -1) {
+						if (string.contains(")pr")) {
 							checkPoints.typ[checkPoints.n] = -2;
 						}
-						if (string.indexOf(")po") != -1) {
+						if (string.contains(")po")) {
 							checkPoints.typ[checkPoints.n] = -3;
 						}
-						if (string.indexOf(")ph") != -1) {
+						if (string.contains(")ph")) {
 							checkPoints.typ[checkPoints.n] = -4;
 						}
 						++checkPoints.n;
@@ -357,7 +326,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					} else {
 						checkPoints.roted[checkPoints.fn] = false;
 					}
-					if (string.indexOf(")s") != -1) {
+					if (string.contains(")drawShadow")) {
 						checkPoints.special[checkPoints.fn] = true;
 					} else {
 						checkPoints.special[checkPoints.fn] = false;
@@ -491,7 +460,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 
 	public void run() {
 		this.graphics.setColor(new Color(0, 0, 0));
-		this.graphics.fillRect(0, 0, 550, 400);
+		this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 		this.repaint();
 		// this.testlocation();
 		final Medium medium = new Medium();
@@ -512,7 +481,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		}
 		final Record record = new Record(medium);
 		final Geometry[] array = new Geometry[43];
-		this.loadbase(array, medium, trackers);
+		this.loadBase(array, medium, trackers);
 		final xtGraphics xtGraphics2 = xtGraphics;
 		xtGraphics2.dnload += 29;
 		xtGraphics.loading(this.graphics, this);
@@ -525,7 +494,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		} while (++n2 < 5);
 		float n3 = 35.0f;
 		int n4 = 80;
-		xtGraphics.unlocked = 10;
+		xtGraphics.unlocked = 11;
 		// final int readcookie = this.readcookie("unlocked");
         /*if (readcookie >= 1 && readcookie <= 11) {
             xtGraphics.unlocked = readcookie;
@@ -689,7 +658,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			}
 			if (xtGraphics.fase == 2) {
 				xtGraphics.loadingstage(checkPoints.stage, this.graphics);
-				this.loadstage(geometries, array, medium, trackers, checkPoints, xtGraphics, cars, record);
+				this.loadStage(geometries, array, medium, trackers, checkPoints, xtGraphics, cars, record);
 				this.controls[0].falseo();
 			}
 			if (xtGraphics.fase == 1) {
@@ -713,18 +682,14 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					for (int l = k + 1; l < n11; ++l) {
 						if (geometries[array4[k]].dist != geometries[array4[l]].dist) {
 							if (geometries[array4[k]].dist < geometries[array4[l]].dist) {
-								final int n12 = k;
-								++array5[n12];
+								++array5[k];
 							} else {
-								final int n13 = l;
-								++array5[n13];
+								++array5[l];
 							}
 						} else if (l > k) {
-							final int n14 = k;
-							++array5[n14];
+							++array5[k];
 						} else {
-							final int n15 = l;
-							++array5[n15];
+							++array5[l];
 						}
 					}
 				}
@@ -764,18 +729,14 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					for (int n22 = n21 + 1; n22 < n18; ++n22) {
 						if (geometries[array10[n21]].dist != geometries[array10[n22]].dist) {
 							if (geometries[array10[n21]].dist < geometries[array10[n22]].dist) {
-								final int n23 = n21;
-								++array11[n23];
+								++array11[n21];
 							} else {
-								final int n24 = n22;
-								++array11[n24];
+								++array11[n22];
 							}
 						} else if (n22 > n21) {
-							final int n25 = n21;
-							++array11[n25];
+							++array11[n21];
 						} else {
-							final int n26 = n22;
-							++array11[n26];
+							++array11[n22];
 						}
 					}
 				}
@@ -796,7 +757,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					if (xtGraphics.loadedt[checkPoints.stage - 1]) {
 						xtGraphics.stracks[checkPoints.stage - 1].play();
 					}
-					this.setCursor(new Cursor(0));
+					this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					xtGraphics.fase = 6;
 				}
 			}
@@ -832,22 +793,14 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					for (int n34 = n33 + 1; n34 < n30; ++n34) {
 						if (geometries[array16[n33]].dist != geometries[array16[n34]].dist) {
 							if (geometries[array16[n33]].dist < geometries[array16[n34]].dist) {
-								final int[] array18 = array17;
-								final int n35 = n33;
-								++array18[n35];
+								++array17[n33];
 							} else {
-								final int[] array19 = array17;
-								final int n36 = n34;
-								++array19[n36];
+								++array17[n34];
 							}
 						} else if (n34 > n33) {
-							final int[] array20 = array17;
-							final int n37 = n33;
-							++array20[n37];
+							++array17[n33];
 						} else {
-							final int[] array21 = array17;
-							final int n38 = n34;
-							++array21[n38];
+							++array17[n34];
 						}
 					}
 				}
@@ -957,18 +910,14 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					for (int n51 = n50 + 1; n51 < n47; ++n51) {
 						if (geometries[array22[n50]].dist != geometries[array22[n51]].dist) {
 							if (geometries[array22[n50]].dist < geometries[array22[n51]].dist) {
-								final int n52 = n50;
-								++array23[n52];
+								++array23[n50];
 							} else {
-								final int n53 = n51;
-								++array23[n53];
+								++array23[n51];
 							}
 						} else if (n51 > n50) {
-							final int n54 = n50;
-							++array23[n54];
+							++array23[n50];
 						} else {
-							final int n55 = n51;
-							++array23[n55];
+							++array23[n51];
 						}
 					}
 				}
@@ -1016,11 +965,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			}
 			if (xtGraphics.fase == -2) {
 				if (record.hcaught) {
-					if (medium.random() > 0.45) {
-						medium.vert = false;
-					} else {
-						medium.vert = true;
-					}
+					medium.vert = !(medium.random() > 0.45);
 					medium.adv = (int) (900.0f * medium.random());
 					medium.vxz = 180;
 					n8 = 0;
@@ -1059,22 +1004,14 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					for (int n64 = n63 + 1; n64 < n60; ++n64) {
 						if (geometries[array28[n63]].dist != geometries[array28[n64]].dist) {
 							if (geometries[array28[n63]].dist < geometries[array28[n64]].dist) {
-								final int[] array30 = array29;
-								final int n65 = n63;
-								++array30[n65];
+								++array29[n63];
 							} else {
-								final int[] array31 = array29;
-								final int n66 = n64;
-								++array31[n66];
+								++array29[n64];
 							}
 						} else if (n64 > n63) {
-							final int[] array32 = array29;
-							final int n67 = n63;
-							++array32[n67];
+							++array29[n63];
 						} else {
-							final int[] array33 = array29;
-							final int n68 = n64;
-							++array33[n68];
+							++array29[n64];
 						}
 					}
 				}
@@ -1215,8 +1152,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						xtGraphics.flipo = 0;
 					}
 					if (xtGraphics.fase == 11 && xtGraphics.flipo != 0) {
-						final xtGraphics xtGraphics4 = xtGraphics;
-						--xtGraphics4.flipo;
+						--xtGraphics.flipo;
 					}
 					if (xtGraphics.fase == -7) {
 						this.graphics.drawImage(xtGraphics.fleximg, 0, 0, null);

@@ -139,11 +139,9 @@ public class Madness
                         if (geometry.p[k].wz == 0 && this.py(geometry.keyx[n], geometry.p[k].ox[l], geometry.keyz[n], geometry.p[k].oz[l]) < this.clrad[this.cn]) {
                             ctmag = n2 / 20.0f * this.m.random();
                             final int[] oz = geometry.p[k].oz;
-                            final int n5 = l;
-                            oz[n5] += (int)(ctmag * this.m.sin(i));
+                            oz[l] += (int)(ctmag * this.m.sin(i));
                             final int[] ox = geometry.p[k].ox;
-                            final int n6 = l;
-                            ox[n6] -= (int)(ctmag * this.m.sin(j));
+                            ox[l] -= (int)(ctmag * this.m.sin(j));
                             this.hitmag += (int)Math.abs(ctmag);
                         }
                     }
@@ -203,8 +201,7 @@ public class Madness
                                 ctmag2 = n2 / 15.0f * this.m.random();
                                 if ((Math.abs(geometry.p[n9].oy[n10] - this.flipy[this.cn] - this.squash) < this.msquash[this.cn] * 3 || geometry.p[n9].oy[n10] < this.flipy[this.cn] + this.squash) && this.squash < this.msquash[this.cn]) {
                                     final int[] oy = geometry.p[n9].oy;
-                                    final int n11 = n10;
-                                    oy[n11] += (int)ctmag2;
+                                    oy[n10] += (int)ctmag2;
                                     n7 += (int)ctmag2;
                                     ++n8;
                                     this.hitmag += (int)Math.abs(ctmag2);
@@ -253,7 +250,7 @@ public class Madness
         this.comprad = new float[] { 0.5f, 0.4f, 0.8f, 0.5f, 0.5f, 0.5f, 0.5f, 1.5f, 0.5f, 0.8f };
         this.push = new int[] { 2, 2, 3, 3, 2, 2, 2, 4, 2, 2 };
         this.revpush = new int[] { 2, 3, 2, 2, 2, 2, 2, 1, 2, 1 };
-        this.lift = new int[] { 0, 30, 0, 20, 0, 30, 0, 0, 2000, 0 };
+        this.lift = new int[] { 0, 30, 0, 20, 0, 30, 0, 0, 35, 0 };
         this.revlift = new int[] { 0, 0, 15, 0, 0, 0, 0, 0, 0, 32 };
         this.powerloss = new int[] { 2500000, 2500000, 3500000, 2500000, 2500000, 2500000, 3200000, 4500000, 3000000, 5500000 };
         this.flipy = new int[] { -50, -26, -90, -41, -55, -53, -54, -85, -60, -127 };
@@ -352,11 +349,9 @@ public class Madness
                     if (geometry.p[i].wz == 0 && this.py(geometry.keyx[n], geometry.p[i].ox[j], geometry.keyz[n], geometry.p[i].oz[j]) < this.clrad[this.cn]) {
                         n2 = a / 20.0f * this.m.random();
                         final int[] oz = geometry.p[i].oz;
-                        final int n3 = j;
-                        oz[n3] += (int)(n2 * this.m.cos(geometry.xz) * this.m.cos(geometry.zy));
+                        oz[j] += (int)(n2 * this.m.cos(geometry.xz) * this.m.cos(geometry.zy));
                         final int[] ox = geometry.p[i].ox;
-                        final int n4 = j;
-                        ox[n4] += (int)(n2 * this.m.sin(geometry.xz) * this.m.cos(geometry.xy));
+                        ox[j] += (int)(n2 * this.m.sin(geometry.xz) * this.m.cos(geometry.xy));
                         this.hitmag += (int)Math.abs(n2);
                     }
                 }
@@ -453,19 +448,9 @@ public class Madness
         if (this.rpy((float) geometry.x, (float) geometry2.x, (float) geometry.y, (float) geometry2.y, (float) geometry.z, (float) geometry2.z) < (geometry.maxR * geometry.maxR + geometry2.maxR * geometry2.maxR) * 1.5) {
             if (!this.caught[madness.im] && (this.speed != 0.0f || madness.speed != 0.0f)) {
                 if (Math.abs(this.power * this.speed * this.moment[this.cn]) != Math.abs(madness.power * madness.speed * madness.moment[madness.cn])) {
-                    if (Math.abs(this.power * this.speed * this.moment[this.cn]) > Math.abs(madness.power * madness.speed * madness.moment[madness.cn])) {
-                        this.dominate[madness.im] = true;
-                    }
-                    else {
-                        this.dominate[madness.im] = false;
-                    }
+                    this.dominate[madness.im] = Math.abs(this.power * this.speed * this.moment[this.cn]) > Math.abs(madness.power * madness.speed * madness.moment[madness.cn]);
                 }
-                else if (this.moment[this.cn] > madness.moment[madness.cn]) {
-                    this.dominate[madness.im] = true;
-                }
-                else {
-                    this.dominate[madness.im] = false;
-                }
+                else this.dominate[madness.im] = this.moment[this.cn] > madness.moment[madness.cn];
                 this.caught[madness.im] = true;
             }
         }
@@ -495,8 +480,7 @@ public class Madness
                                 n6 = -300.0f;
                             }
                             final float[] scx = madness.scx;
-                            final int n7 = n4;
-                            scx[n7] += n6;
+                            scx[n4] += n6;
                             if (this.im == 0) {
                                 madness.colidim = true;
                             }
@@ -505,8 +489,7 @@ public class Madness
                                 madness.colidim = false;
                             }
                             final float[] scx2 = this.scx;
-                            final int n8 = n3;
-                            scx2[n8] -= n5;
+                            scx2[n3] -= n5;
                             this.regx(n3, -n5 * madness.moment[this.cn], geometry);
                             final float[] scy = this.scy;
                             final int n9 = n3;
@@ -535,8 +518,7 @@ public class Madness
                                 n11 = -300.0f;
                             }
                             final float[] scz = madness.scz;
-                            final int n12 = n4;
-                            scz[n12] += n11;
+                            scz[n4] += n11;
                             if (this.im == 0) {
                                 madness.colidim = true;
                             }
@@ -545,12 +527,10 @@ public class Madness
                                 madness.colidim = false;
                             }
                             final float[] scz2 = this.scz;
-                            final int n13 = n3;
-                            scz2[n13] -= n10;
+                            scz2[n3] -= n10;
                             this.regz(n3, -n10 * madness.moment[this.cn], geometry);
                             final float[] scy2 = this.scy;
-                            final int n14 = n3;
-                            scy2[n14] -= this.revlift[this.cn];
+                            scy2[n3] -= this.revlift[this.cn];
                             if (this.im == 0) {
                                 madness.colidim = true;
                             }
@@ -566,8 +546,7 @@ public class Madness
                             this.lastcolido = 70;
                         }
                         final float[] scy3 = madness.scy;
-                        final int n15 = n4;
-                        scy3[n15] -= this.lift[this.cn];
+                        scy3[n4] -= this.lift[this.cn];
                     }
                 } while (++n4 < 4);
             } while (++n3 < 4);
@@ -677,11 +656,9 @@ public class Madness
                     if (geometry.p[i].wz == 0 && this.py(geometry.keyx[n], geometry.p[i].ox[j], geometry.keyz[n], geometry.p[i].oz[j]) < this.clrad[this.cn]) {
                         n2 = a / 20.0f * this.m.random();
                         final int[] oz = geometry.p[i].oz;
-                        final int n3 = j;
-                        oz[n3] -= (int)(n2 * this.m.sin(geometry.xz) * this.m.cos(geometry.zy));
+                        oz[j] -= (int)(n2 * this.m.sin(geometry.xz) * this.m.cos(geometry.zy));
                         final int[] ox = geometry.p[i].ox;
-                        final int n4 = j;
-                        ox[n4] += (int)(n2 * this.m.cos(geometry.xz) * this.m.cos(geometry.xy));
+                        ox[j] += (int)(n2 * this.m.cos(geometry.xz) * this.m.cos(geometry.xy));
                         this.hitmag += (int)Math.abs(n2);
                     }
                 }
@@ -740,13 +717,19 @@ public class Madness
         boolean b2 = false;
         this.capsized = false;
         int i;
-        for (i = Math.abs(this.pzy); i > 270; i -= 360) {}
+        i = Math.abs(this.pzy);
+        while (i > 270) {
+            i -= 360;
+        }
         if (Math.abs(i) > 90) {
             zyinv = true;
         }
         int n3 = 0;
         int j;
-        for (j = Math.abs(this.pxy); j > 270; j -= 360) {}
+        j = Math.abs(this.pxy);
+        while (j > 270) {
+            j -= 360;
+        }
         if (Math.abs(j) > 90) {
             n3 = 1;
             n2 = -1;
@@ -1710,7 +1693,10 @@ public class Madness
         }
         if (b2) {
             int abs;
-            for (abs = Math.abs(geometry.xz + 45); abs > 180; abs -= 360) {}
+            abs = Math.abs(geometry.xz + 45);
+            while (abs > 180) {
+                abs -= 360;
+            }
             if (Math.abs(abs) > 90) {
                 this.pmlt = 1;
             }
@@ -1718,7 +1704,10 @@ public class Madness
                 this.pmlt = -1;
             }
             int abs2;
-            for (abs2 = Math.abs(geometry.xz - 45); abs2 > 180; abs2 -= 360) {}
+            abs2 = Math.abs(geometry.xz - 45);
+            while (abs2 > 180) {
+                abs2 -= 360;
+            }
             if (Math.abs(abs2) > 90) {
                 this.nmlt = 1;
             }
