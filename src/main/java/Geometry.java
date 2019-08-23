@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.DataInputStream;
 import java.io.ByteArrayInputStream;
 import java.awt.Color;

@@ -1,6 +1,6 @@
-// 
+package main.java;//
 // Decompiled by Procyon v0.5.36
-// 
+//
 
 class ModTrackInfo
 {
@@ -36,7 +36,7 @@ class ModTrackInfo
     int finetune_rate;
     int period_low_limit;
     int period_high_limit;
-    
+
     ModTrackInfo() {
         this.oldperiod = 1;
         this.arp = new int[3];

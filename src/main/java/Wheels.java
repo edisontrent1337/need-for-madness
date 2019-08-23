@@ -1,17 +1,17 @@
-// 
+package main.java;//
 // Decompiled by Procyon v0.5.36
-// 
+//
 
 public class Wheels
 {
     int ground;
     int mast;
-    
+
     public Wheels() {
         this.ground = 0;
         this.mast = 0;
     }
-    
+
     public void make(final Medium medium, final Trackers trackers, final Plane[] array, int n, final int a, final int n2, final int n3, final int n4, final int n5, final int n6) {
         final int[] array2 = new int[8];
         final int[] array3 = new int[8];

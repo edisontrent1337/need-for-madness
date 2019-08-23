@@ -1,3 +1,5 @@
+package main.java;
+
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.*;
@@ -10,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -106,11 +109,11 @@ public class GraphicsPanel extends Panel {
 	AudioClip[][] engs;
 	boolean[] pengs;
 	int[][] enginsignature;
-	AudioClip[] air;
+	AudioClip[] airSoundEffects;
 	boolean aird;
 	boolean grrd;
-	AudioClip[] crash;
-	AudioClip[] lowcrash;
+	AudioClip[] crashSoundEffects;
+	AudioClip[] lowCrashSoundEffects;
 	AudioClip tires;
 	AudioClip checkpoint;
 	AudioClip carfixed;
@@ -122,14 +125,14 @@ public class GraphicsPanel extends Panel {
 	AudioClip wastd;
 	AudioClip firewasted;
 	boolean pwastd;
-	AudioClip[] skid;
-	AudioClip[] dustskid;
+	AudioClip[] skidSoundEffects;
+	AudioClip[] dustSkidSoundEffects;
 	boolean isSoundMuted;
 	RadicalMod stages;
 	RadicalMod cars;
-	RadicalMod[] stracks;
-	boolean[] loadedt;
-	boolean mutem;
+	RadicalMod[] soundTracks;
+	boolean[] loadedSoundTracks;
+	boolean isMusicMuted;
 	boolean arrace;
 	int ana;
 	int cntan;
@@ -144,7 +147,7 @@ public class GraphicsPanel extends Panel {
 	int wasted;
 	int laps;
 	int[] dested;
-	String[] names;
+	String[] carNames;
 	int dmcnt;
 	boolean dmflk;
 	int pwcnt;
@@ -174,7 +177,7 @@ public class GraphicsPanel extends Panel {
 	int skflg;
 	int dskflg;
 
-	ResourceLoader resourceLoader;
+	private ResourceLoader resourceLoader;
 
 	public GraphicsPanel(final Medium medium, final Graphics graphics, final Applet app, final int n) throws MalformedURLException, URISyntaxException {
 		this.fase = 7;
@@ -213,26 +216,35 @@ public class GraphicsPanel extends Panel {
 		this.gocnt = 0;
 		this.engs = new AudioClip[2][5];
 		this.pengs = new boolean[5];
-		final int[][] enginsignature = {{0, 0, 1, 1, 0}, {0, 1, 1, 0, 1}, new int[5], {0, 1, 1, 1, 1}, {0, 0, 0, 1, 0}, {0, 1, 1, 1, 1}, {0, 1, 0, 1, 0}, null, null, null};
-		final int n2 = 7;
+		final int[][] engineSignature = {
+				{0, 0, 1, 1, 0},
+				{0, 1, 1, 0, 1},
+				new int[5],
+				{0, 1, 1, 1, 1},
+				{0, 0, 0, 1, 0},
+				{0, 1, 1, 1, 1},
+				{0, 1, 0, 1, 0},
+				null,
+				null,
+				null};
 		final int[] array = new int[5];
 		array[0] = 1;
-		enginsignature[n2] = array;
-		enginsignature[8] = new int[]{0, 1, 1, 1, 1};
-		enginsignature[9] = new int[]{1, 1, 1, 1, 1};
-		this.enginsignature = enginsignature;
-		this.air = new AudioClip[6];
+		engineSignature[7] = array;
+		engineSignature[8] = new int[]{0, 1, 1, 1, 1};
+		engineSignature[9] = new int[]{1, 1, 1, 1, 1};
+		this.enginsignature = engineSignature;
+		this.airSoundEffects = new AudioClip[6];
 		this.aird = false;
 		this.grrd = false;
-		this.crash = new AudioClip[3];
-		this.lowcrash = new AudioClip[3];
+		this.crashSoundEffects = new AudioClip[3];
+		this.lowCrashSoundEffects = new AudioClip[3];
 		this.pwastd = false;
-		this.skid = new AudioClip[2];
-		this.dustskid = new AudioClip[2];
+		this.skidSoundEffects = new AudioClip[2];
+		this.dustSkidSoundEffects = new AudioClip[2];
 		this.isSoundMuted = false;
-		this.stracks = new RadicalMod[11];
-		this.loadedt = new boolean[11];
-		this.mutem = false;
+		this.soundTracks = new RadicalMod[11];
+		this.loadedSoundTracks = new boolean[11];
+		this.isMusicMuted = false;
 		this.arrace = false;
 		this.ana = 0;
 		this.cntan = 0;
@@ -247,7 +259,7 @@ public class GraphicsPanel extends Panel {
 		this.wasted = 0;
 		this.laps = 0;
 		this.dested = new int[5];
-		this.names = new String[]{"Tornado Shark", "Formula 7", "Wow Caninaro", "La vite Crab", "Nimi", "MAX Revenge", "Lead Oxide", "EL KING", "Radical One", "DR Monstaa"};
+		this.carNames = new String[]{"Tornado Shark", "Formula 7", "Wow Caninaro", "La vite Crab", "Nimi", "MAX Revenge", "Lead Oxide", "EL KING", "Radical One", "DR Monstaa"};
 		this.dmcnt = 0;
 		this.dmflk = false;
 		this.pwcnt = 0;
@@ -281,17 +293,17 @@ public class GraphicsPanel extends Panel {
 		final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
 		final MediaTracker mediaTracker = new MediaTracker(this.app);
 
-		mediaTracker.addImage(this.hello = this.app.getImage(this.app.getCodeBase(), "hello.gif"), 0);
+		mediaTracker.addImage(this.hello = this.app.getImage(this.app.getCodeBase(), "main/java/hello.gif"), 0);
 		try {
 			mediaTracker.waitForID(0);
 		} catch (Exception ex) {
 		}
-		mediaTracker.addImage(this.sign = this.app.getImage(this.app.getCodeBase(), "sign.gif"), 0);
+		mediaTracker.addImage(this.sign = this.app.getImage(this.app.getCodeBase(), "main/java/sign.gif"), 0);
 		try {
 			mediaTracker.waitForID(0);
 		} catch (Exception ex2) {
 		}
-		mediaTracker.addImage(this.loadbar = this.app.getImage(this.app.getCodeBase(), "loadbar.gif"), 0);
+		mediaTracker.addImage(this.loadbar = this.app.getImage(this.app.getCodeBase(), "main/java/loadbar.gif"), 0);
 		try {
 			mediaTracker.waitForID(0);
 		} catch (Exception ex3) {
@@ -308,6 +320,7 @@ public class GraphicsPanel extends Panel {
 		this.dnload += 44;
 		this.loading(graphics, this.app);
 		this.resourceLoader.loadTextures();
+		Map<String, Image> images = resourceLoader.getImages();
 		//this.loadpak3(mediaTracker, defaultToolkit);
 		this.dnload += 47;
 		this.loading(graphics, this.app);
@@ -316,36 +329,39 @@ public class GraphicsPanel extends Panel {
 		this.loading(graphics, this.app);
 		this.next[1] = this.pressed(this.next[0]);
 		this.back[1] = this.pressed(this.back[0]);
-		this.next[2] = this.bressed(this.next[0]);
-		this.back[2] = this.bressed(this.back[0]);
+		this.next[2] = this.getButtonPressedImage(this.next[0]);
+		this.back[2] = this.getButtonPressedImage(this.back[0]);
 		this.contin1[1] = this.pressed(this.contin1[0]);
-		this.contin2[1] = this.bressed(this.contin2[0]);
+		this.contin2[1] = this.getButtonPressedImage(this.contin2[0]);
 		this.contin1[1] = this.pressed(this.contin1[0]);
-		this.contin2[1] = this.bressed(this.contin2[0]);
+		this.contin2[1] = this.getButtonPressedImage(this.contin2[0]);
 		this.star[2] = this.pressed(this.ostar[1]);
+
+		// FIXME Move the sound loading logic to ResourceLoader
+
 		String str = "default/";
 		if (n == 2) {
 			str = "newsun/";
 		}
 		int n3 = 0;
 		do {
-			this.engs[0][n3] = this.getSound("resources/sounds/" + str + "a" + n3 + ".au");
+			this.engs[0][n3] = this.getSound("../../resources/sounds/" + str + "a" + n3 + ".au");
 			this.dnload += 2;
 			this.loading(graphics, this.app);
-			this.engs[1][n3] = this.getSound("resources/sounds/" + str + "b" + n3 + ".au");
+			this.engs[1][n3] = this.getSound("../../resources/sounds/" + str + "b" + n3 + ".au");
 			this.dnload += 3;
 			this.loading(graphics, this.app);
 			this.pengs[n3] = false;
 		} while (++n3 < 5);
 		int i = 0;
 		do {
-			this.air[i] = this.getSound("resources/sounds/" + str + "air" + i + ".au");
+			this.airSoundEffects[i] = this.getSound("../../resources/sounds/" + str + "air" + i + ".au");
 			this.dnload += 2;
 			this.loading(graphics, this.app);
 		} while (++i < 6);
 		int n4 = 0;
 		do {
-			this.crash[n4] = this.getSound("resources/sounds/" + str + "crash" + (n4 + 1) + ".au");
+			this.crashSoundEffects[n4] = this.getSound("../../resources/sounds/" + str + "crash" + (n4 + 1) + ".au");
 			if (n == 2) {
 				this.dnload += 12;
 				this.loading(graphics, this.app);
@@ -356,7 +372,7 @@ public class GraphicsPanel extends Panel {
 		} while (++n4 < 3);
 		int n5 = 0;
 		do {
-			this.lowcrash[n5] = this.getSound("resources/sounds/" + str + "lowcrash" + (n5 + 1) + ".au");
+			this.lowCrashSoundEffects[n5] = this.getSound("../../resources/sounds/" + str + "lowcrash" + (n5 + 1) + ".au");
 			if (n == 2) {
 				this.dnload += 8;
 				this.loading(graphics, this.app);
@@ -365,7 +381,7 @@ public class GraphicsPanel extends Panel {
 				this.loading(graphics, this.app);
 			}
 		} while (++n5 < 3);
-		this.tires = this.getSound("resources/sounds/" + str + "tires.au");
+		this.tires = this.getSound("../../resources/sounds/" + str + "tires.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -373,7 +389,7 @@ public class GraphicsPanel extends Panel {
 			this.dnload += 4;
 			this.loading(graphics, this.app);
 		}
-		this.checkpoint = this.getSound("resources/sounds/" + str + "checkpoint.au");
+		this.checkpoint = this.getSound("../../resources/sounds/" + str + "checkpoint.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -381,7 +397,7 @@ public class GraphicsPanel extends Panel {
 			this.dnload += 7;
 			this.loading(graphics, this.app);
 		}
-		this.carfixed = this.getSound("resources/sounds/" + str + "carfixed.au");
+		this.carfixed = this.getSound("../../resources/sounds/" + str + "carfixed.au");
 		if (n == 2) {
 			this.dnload += 16;
 			this.loading(graphics, this.app);
@@ -389,7 +405,7 @@ public class GraphicsPanel extends Panel {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
 		}
-		this.powerup = this.getSound("resources/sounds/" + str + "powerup.au");
+		this.powerup = this.getSound("../../resources/sounds/" + str + "powerup.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -397,7 +413,7 @@ public class GraphicsPanel extends Panel {
 			this.dnload += 9;
 			this.loading(graphics, this.app);
 		}
-		this.three = this.getSound("resources/sounds/" + str + "three.au");
+		this.three = this.getSound("../../resources/sounds/" + str + "three.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -405,7 +421,7 @@ public class GraphicsPanel extends Panel {
 			this.dnload += 4;
 			this.loading(graphics, this.app);
 		}
-		this.two = this.getSound("resources/sounds/" + str + "two.au");
+		this.two = this.getSound("../../resources/sounds/" + str + "two.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -413,7 +429,7 @@ public class GraphicsPanel extends Panel {
 			this.dnload += 3;
 			this.loading(graphics, this.app);
 		}
-		this.one = this.getSound("resources/sounds/" + str + "one.au");
+		this.one = this.getSound("../../resources/sounds/" + str + "one.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -421,7 +437,7 @@ public class GraphicsPanel extends Panel {
 			this.dnload += 4;
 			this.loading(graphics, this.app);
 		}
-		this.go = this.getSound("resources/sounds/" + str + "go.au");
+		this.go = this.getSound("../../resources/sounds/" + str + "go.au");
 		if (n == 2) {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
@@ -431,7 +447,7 @@ public class GraphicsPanel extends Panel {
 		}
 		int n6 = 0;
 		do {
-			this.skid[n6] = this.getSound("resources/sounds/" + str + "skid" + (n6 + 1) + ".au");
+			this.skidSoundEffects[n6] = this.getSound("../../resources/sounds/" + str + "skid" + (n6 + 1) + ".au");
 			if (n == 2) {
 				this.dnload += 9;
 				this.loading(graphics, this.app);
@@ -442,7 +458,7 @@ public class GraphicsPanel extends Panel {
 		} while (++n6 < 2);
 		int n7 = 0;
 		do {
-			this.dustskid[n7] = this.getSound("resources/sounds/" + str + "dustskid" + (n7 + 1) + ".au");
+			this.dustSkidSoundEffects[n7] = this.getSound("../../resources/sounds/" + str + "dustskid" + (n7 + 1) + ".au");
 			if (n == 2) {
 				this.dnload += 11;
 				this.loading(graphics, this.app);
@@ -451,10 +467,10 @@ public class GraphicsPanel extends Panel {
 				this.loading(graphics, this.app);
 			}
 		} while (++n7 < 2);
-		this.wastd = this.getSound("resources/sounds/" + str + "wasted.au");
+		this.wastd = this.getSound("../../resources/sounds/" + str + "wasted.au");
 		this.dnload += 5;
 		this.loading(graphics, this.app);
-		this.firewasted = this.getSound("resources/sounds/" + str + "firewasted.au");
+		this.firewasted = this.getSound("../../resources/sounds/" + str + "firewasted.au");
 		if (n == 2) {
 			this.dnload += 13;
 			this.loading(graphics, this.app);
@@ -462,15 +478,15 @@ public class GraphicsPanel extends Panel {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
 		}
-		this.cars = new RadicalMod("resources/music/cars.zipo", 500, 7900, 125, this.app);
+		this.cars = new RadicalMod("../../resources/music/cars.zipo", 500, 7900, 125, this.app);
 		this.dnload += 26;
 		this.loading(graphics, this.app);
-		this.stages = new RadicalMod("resources/music/stages.zipo", 200, 9000, 145, this.app);
+		this.stages = new RadicalMod("../../resources/music/stages.zipo", 200, 9000, 145, this.app);
 		this.dnload += 22;
 		this.loading(graphics, this.app);
 		int n8 = 0;
 		do {
-			this.loadedt[n8] = false;
+			this.loadedSoundTracks[n8] = false;
 		} while (++n8 < 10);
 	}
 
@@ -717,10 +733,10 @@ public class GraphicsPanel extends Panel {
 			}
 			n8 = (int) (90 + n12 + Math.atan((checkPoints.opz[n9] - checkPoints.opz[0]) / (double) (checkPoints.opx[n9] - checkPoints.opx[0])) / 0.017453292519943295);
 			this.drawCharacters(graphics, 13, "[                              ]", 76, 67, 240, 0);
-			this.drawCharacters(graphics, 13, this.names[this.sc[n9]], 0, 0, 0, 0);
+			this.drawCharacters(graphics, 13, this.carNames[this.sc[n9]], 0, 0, 0, 0);
 		}
 		int i;
-		i = n8 + (int)this.medium.xz;
+		i = n8 + (int) this.medium.xz;
 		while (i < 0) {
 			i += 360;
 		}
@@ -984,11 +1000,11 @@ public class GraphicsPanel extends Panel {
 						this.sparkeng(-1);
 						if (b3) {
 							if (this.stopcnt <= 0) {
-								this.air[5].loop();
+								this.airSoundEffects[5].loop();
 								this.stopcnt = 10;
 							}
 						} else if (this.stopcnt <= -2) {
-							this.air[2 + (int) (this.medium.random() * 3.0f)].loop();
+							this.airSoundEffects[2 + (int) (this.medium.random() * 3.0f)].loop();
 							this.stopcnt = 7;
 						}
 					}
@@ -1000,13 +1016,13 @@ public class GraphicsPanel extends Panel {
 			} else {
 				this.pwait = 15;
 				if (!madness.mtouch && !this.grrd && this.medium.random() > 0.4) {
-					this.air[(int) (this.medium.random() * 4.0f)].loop();
+					this.airSoundEffects[(int) (this.medium.random() * 4.0f)].loop();
 					this.stopcnt = 5;
 					this.grrd = true;
 				}
 				if (!madness.wtouch && !this.aird) {
 					this.stopairs();
-					this.air[(int) (this.medium.random() * 4.0f)].loop();
+					this.airSoundEffects[(int) (this.medium.random() * 4.0f)].loop();
 					this.stopcnt = 10;
 					this.aird = true;
 				}
@@ -1052,14 +1068,14 @@ public class GraphicsPanel extends Panel {
 			if (this.isSoundMuted != control.sound_muted) {
 				this.isSoundMuted = control.sound_muted;
 			}
-			if (control.music_muted != this.mutem) {
-				this.mutem = control.music_muted;
-				if (this.mutem) {
-					if (this.loadedt[n - 1]) {
-						this.stracks[n - 1].stop();
+			if (control.music_muted != this.isMusicMuted) {
+				this.isMusicMuted = control.music_muted;
+				if (this.isMusicMuted) {
+					if (this.loadedSoundTracks[n - 1]) {
+						this.soundTracks[n - 1].stop();
 					}
-				} else if (this.loadedt[n - 1]) {
-					this.stracks[n - 1].resume();
+				} else if (this.loadedSoundTracks[n - 1]) {
+					this.soundTracks[n - 1].resume();
 				}
 			}
 		}
@@ -1082,13 +1098,13 @@ public class GraphicsPanel extends Panel {
 			if (n == 0) {
 				if (Math.abs(a) > 25.0f && Math.abs(a) < 170.0f) {
 					if (!this.isSoundMuted) {
-						this.lowcrash[this.crshturn].play();
+						this.lowCrashSoundEffects[this.crshturn].play();
 					}
 					this.bfcrash = 2;
 				}
 				if (Math.abs(a) > 170.0f) {
 					if (!this.isSoundMuted) {
-						this.crash[this.crshturn].play();
+						this.crashSoundEffects[this.crshturn].play();
 					}
 					this.bfcrash = 2;
 				}
@@ -1109,13 +1125,13 @@ public class GraphicsPanel extends Panel {
 			if (n == -1) {
 				if (Math.abs(a) > 25.0f && Math.abs(a) < 170.0f) {
 					if (!this.isSoundMuted) {
-						this.lowcrash[2].play();
+						this.lowCrashSoundEffects[2].play();
 					}
 					this.bfcrash = 2;
 				}
 				if (Math.abs(a) > 170.0f) {
 					if (!this.isSoundMuted) {
-						this.crash[2].play();
+						this.crashSoundEffects[2].play();
 					}
 					this.bfcrash = 2;
 				}
@@ -1133,7 +1149,7 @@ public class GraphicsPanel extends Panel {
 		if (n2 < 50) {
 			n2 = 50;
 		}
-		return (int)((n2 - this.medium.focusPoint) * (this.medium.centerY - n) / n2 + n);
+		return (int) ((n2 - this.medium.focusPoint) * (this.medium.centerY - n) / n2 + n);
 	}
 
 	public void replyn(final Graphics graphics) {
@@ -1172,7 +1188,7 @@ public class GraphicsPanel extends Panel {
 
 	public void loadpak1(final MediaTracker mediaTracker, final Toolkit toolkit) {
 		try {
-			String path = "resources/graphics/images1.zipo";
+			String path = "../../resources/graphics/images1.zipo";
 			final ZipInputStream zipInputStream = getInputStream(path);
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
 				int i = (int) zipEntry.getSize();
@@ -1341,75 +1357,75 @@ public class GraphicsPanel extends Panel {
 		}
 		this.app.setCursor(new Cursor(3));
 		this.app.repaint();
-		if (n == 1 && !this.loadedt[0]) {
-			this.stracks[0] = new RadicalMod("resources/music/stage1.zipo", 350, 8400, 135, this.app);
-			if (this.stracks[0].stream != null) {
-				this.loadedt[0] = true;
+		if (n == 1 && !this.loadedSoundTracks[0]) {
+			this.soundTracks[0] = new RadicalMod("../../resources/music/stage1.zipo", 350, 8400, 135, this.app);
+			if (this.soundTracks[0].stream != null) {
+				this.loadedSoundTracks[0] = true;
 			}
 		}
-		if (n == 2 && !this.loadedt[1]) {
-			this.stracks[1] = new RadicalMod("resources/music/stage2.zipo", 370, 9000, 145, this.app);
-			if (this.stracks[1].stream != null) {
-				this.loadedt[1] = true;
+		if (n == 2 && !this.loadedSoundTracks[1]) {
+			this.soundTracks[1] = new RadicalMod("../../resources/music/stage2.zipo", 370, 9000, 145, this.app);
+			if (this.soundTracks[1].stream != null) {
+				this.loadedSoundTracks[1] = true;
 			}
 		}
-		if (n == 3 && !this.loadedt[2]) {
-			this.stracks[2] = new RadicalMod("resources/music/stage3.zipo", 350, 8500, 145, this.app);
-			if (this.stracks[2].stream != null) {
-				this.loadedt[2] = true;
+		if (n == 3 && !this.loadedSoundTracks[2]) {
+			this.soundTracks[2] = new RadicalMod("../../resources/music/stage3.zipo", 350, 8500, 145, this.app);
+			if (this.soundTracks[2].stream != null) {
+				this.loadedSoundTracks[2] = true;
 			}
 		}
-		if (n == 4 && !this.loadedt[3]) {
-			this.stracks[3] = new RadicalMod("resources/music/stage4.zipo", 300, 7500, 125, this.app);
-			if (this.stracks[3].stream != null) {
-				this.loadedt[3] = true;
+		if (n == 4 && !this.loadedSoundTracks[3]) {
+			this.soundTracks[3] = new RadicalMod("../../resources/music/stage4.zipo", 300, 7500, 125, this.app);
+			if (this.soundTracks[3].stream != null) {
+				this.loadedSoundTracks[3] = true;
 			}
 		}
-		if (n == 5 && !this.loadedt[4]) {
-			this.stracks[4] = new RadicalMod("resources/music/stage5.zipo", 250, 7900, 125, this.app);
-			if (this.stracks[4].stream != null) {
-				this.loadedt[4] = true;
+		if (n == 5 && !this.loadedSoundTracks[4]) {
+			this.soundTracks[4] = new RadicalMod("../../resources/music/stage5.zipo", 250, 7900, 125, this.app);
+			if (this.soundTracks[4].stream != null) {
+				this.loadedSoundTracks[4] = true;
 			}
 		}
-		if (n == 6 && !this.loadedt[5]) {
-			this.stracks[5] = new RadicalMod("resources/music/stage6.zipo", 760, 7900, 125, this.app);
-			if (this.stracks[5].stream != null) {
-				this.loadedt[5] = true;
+		if (n == 6 && !this.loadedSoundTracks[5]) {
+			this.soundTracks[5] = new RadicalMod("../../resources/music/stage6.zipo", 760, 7900, 125, this.app);
+			if (this.soundTracks[5].stream != null) {
+				this.loadedSoundTracks[5] = true;
 			}
 		}
-		if (n == 7 && !this.loadedt[6]) {
-			this.stracks[6] = new RadicalMod("resources/music/stage7.zipo", 300, 7500, 125, this.app);
-			if (this.stracks[6].stream != null) {
-				this.loadedt[6] = true;
+		if (n == 7 && !this.loadedSoundTracks[6]) {
+			this.soundTracks[6] = new RadicalMod("../../resources/music/stage7.zipo", 300, 7500, 125, this.app);
+			if (this.soundTracks[6].stream != null) {
+				this.loadedSoundTracks[6] = true;
 			}
 		}
-		if (n == 8 && !this.loadedt[7]) {
-			this.stracks[7] = new RadicalMod("resources/music/stage8.zipo", 400, 7900, 125, this.app);
-			if (this.stracks[7].stream != null) {
-				this.loadedt[7] = true;
+		if (n == 8 && !this.loadedSoundTracks[7]) {
+			this.soundTracks[7] = new RadicalMod("../../resources/music/stage8.zipo", 400, 7900, 125, this.app);
+			if (this.soundTracks[7].stream != null) {
+				this.loadedSoundTracks[7] = true;
 			}
 		}
-		if (n == 9 && !this.loadedt[8]) {
-			this.stracks[8] = new RadicalMod("resources/music/stage9.zipo", 300, 7900, 125, this.app);
-			if (this.stracks[8].stream != null) {
-				this.loadedt[8] = true;
+		if (n == 9 && !this.loadedSoundTracks[8]) {
+			this.soundTracks[8] = new RadicalMod("../../resources/music/stage9.zipo", 300, 7900, 125, this.app);
+			if (this.soundTracks[8].stream != null) {
+				this.loadedSoundTracks[8] = true;
 			}
 		}
-		if (n == 10 && !this.loadedt[9]) {
-			this.stracks[9] = new RadicalMod("resources/music/stage10.zipo", 550, 8100, 145, this.app);
-			if (this.stracks[9].stream != null) {
-				this.loadedt[9] = true;
+		if (n == 10 && !this.loadedSoundTracks[9]) {
+			this.soundTracks[9] = new RadicalMod("../../resources/music/stage10.zipo", 550, 8100, 145, this.app);
+			if (this.soundTracks[9].stream != null) {
+				this.loadedSoundTracks[9] = true;
 			}
 		}
-		if (n == 11 && !this.loadedt[10]) {
-			this.stracks[10] = new RadicalMod("resources/music/stage11.zipo", 550, 9000, 145, this.app);
-			if (this.stracks[10].stream != null) {
-				this.loadedt[10] = true;
+		if (n == 11 && !this.loadedSoundTracks[10]) {
+			this.soundTracks[10] = new RadicalMod("../../resources/music/stage11.zipo", 550, 9000, 145, this.app);
+			if (this.soundTracks[10].stream != null) {
+				this.loadedSoundTracks[10] = true;
 			}
 		}
 		if (n2 == 0) {
-			if (this.loadedt[n - 1]) {
-				this.stracks[n - 1].play();
+			if (this.loadedSoundTracks[n - 1]) {
+				this.soundTracks[n - 1].play();
 			}
 			this.app.setCursor(new Cursor(0));
 			this.fase = 6;
@@ -1417,7 +1433,7 @@ public class GraphicsPanel extends Panel {
 			this.fase = 176;
 		}
 		this.pcontin = 0;
-		this.mutem = false;
+		this.isMusicMuted = false;
 		this.isSoundMuted = false;
 	}
 
@@ -1484,15 +1500,15 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.paused, 156, 106, null);
 		if (control.enter || control.handb) {
 			if (this.opselect == 0) {
-				if (this.loadedt[n - 1] && !this.mutem) {
-					this.stracks[n - 1].resume();
+				if (this.loadedSoundTracks[n - 1] && !this.isMusicMuted) {
+					this.soundTracks[n - 1].resume();
 				}
 				this.fase = 0;
 			}
 			if (this.opselect == 1) {
 				if (record.caught >= 300) {
-					if (this.loadedt[n - 1] && !this.mutem) {
-						this.stracks[n - 1].resume();
+					if (this.loadedSoundTracks[n - 1] && !this.isMusicMuted) {
+						this.soundTracks[n - 1].resume();
 					}
 					this.fase = -1;
 				} else {
@@ -1632,10 +1648,10 @@ public class GraphicsPanel extends Panel {
 						}
 						graphics.drawImage(this.youlost, 211, 70, null);
 						if (this.aflk) {
-							this.drawCharacters(graphics, 120, "" + this.names[this.sc[n2]] + " finished first, race over!", 0, 0, 0, 0);
+							this.drawCharacters(graphics, 120, "" + this.carNames[this.sc[n2]] + " finished first, race over!", 0, 0, 0, 0);
 							this.aflk = false;
 						} else {
-							this.drawCharacters(graphics, 120, "" + this.names[this.sc[n2]] + " finished first, race over!", 0, 128, 255, 0);
+							this.drawCharacters(graphics, 120, "" + this.carNames[this.sc[n2]] + " finished first, race over!", 0, 128, 255, 0);
 							this.aflk = true;
 						}
 						this.winner = false;
@@ -1657,8 +1673,8 @@ public class GraphicsPanel extends Panel {
 				this.holdcnt = 0;
 			}
 			if (control.enter) {
-				if (this.loadedt[checkPoints.stage - 1]) {
-					this.stracks[checkPoints.stage - 1].stop();
+				if (this.loadedSoundTracks[checkPoints.stage - 1]) {
+					this.soundTracks[checkPoints.stage - 1].stop();
 				}
 				this.fase = -6;
 				control.enter = false;
@@ -2045,14 +2061,14 @@ public class GraphicsPanel extends Panel {
 					this.dested[n7] = checkPoints.dested[n7];
 					if (this.dested[n7] == 1) {
 						this.wasay = true;
-						this.say = "" + this.names[this.sc[n7]] + " has been wasted!";
+						this.say = "" + this.carNames[this.sc[n7]] + " has been wasted!";
 						this.tcnt = -15;
 					}
 					if (this.dested[n7] != 2) {
 						continue;
 					}
 					this.wasay = true;
-					this.say = "You wasted " + this.names[this.sc[n7]] + "!";
+					this.say = "You wasted " + this.carNames[this.sc[n7]] + "!";
 					this.tcnt = -15;
 				}
 			} while (++n7 < 5);
@@ -2146,9 +2162,9 @@ public class GraphicsPanel extends Panel {
 						}
 						graphics.drawRect(197, 167, 155, 105);
 						if (this.aflk) {
-							this.drawCharacters(graphics, 300, "" + this.names[n] + " has been unlocked!", 144, 167, 255, 3);
+							this.drawCharacters(graphics, 300, "" + this.carNames[n] + " has been unlocked!", 144, 167, 255, 3);
 						} else {
-							this.drawCharacters(graphics, 300, "" + this.names[n] + " has been unlocked!", 208, 240, 255, 3);
+							this.drawCharacters(graphics, 300, "" + this.carNames[n] + " has been unlocked!", 208, 240, 255, 3);
 						}
 					}
 					graphics.setFont(new Font("SansSerif", 1, 11));
@@ -2222,8 +2238,8 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.contin2[this.pcontin], 230, 350 - this.pin, null);
 		if (control.enter || control.handb) {
 			this.fase = 10;
-			if (this.loadedt[checkPoints.stage - 1]) {
-				this.stracks[checkPoints.stage - 1].stop();
+			if (this.loadedSoundTracks[checkPoints.stage - 1]) {
+				this.soundTracks[checkPoints.stage - 1].stop();
 			}
 			if (checkPoints.stage == this.unlocked && this.winner && this.unlocked != 11) {
 				++checkPoints.stage;
@@ -2563,7 +2579,7 @@ public class GraphicsPanel extends Panel {
 	public void loadpak2(final MediaTracker mediaTracker, final Toolkit toolkit) {
 		try {
 
-			String path = "resources/graphics/images2.zipo";
+			String path = "../../resources/graphics/images2.zipo";
 			final ZipInputStream zipInputStream = getInputStream(path);
 
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
@@ -2745,7 +2761,7 @@ public class GraphicsPanel extends Panel {
 		}
 	}
 
-	private Image bressed(final Image img) {
+	private Image getButtonPressedImage(final Image img) {
 		final int height = img.getHeight(this.ob);
 		final int width = img.getWidth(this.ob);
 		final int[] array = new int[width * height];
@@ -2773,7 +2789,7 @@ public class GraphicsPanel extends Panel {
 		graphics.setColor(new Color(128, 167, 255));
 		graphics.drawRoundRect(125, 315, 300, 80, 30, 70);
 		graphics.drawImage(this.loadbar, 156, 340, this);
-		graphics.setFont(new Font("SansSerif", 1, 11));
+		graphics.setFont(new Font("SansSerif", Font.PLAIN, 11));
 		this.ftm = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 333, "Loading game, please wait.", 0, 0, 0, 3);
 		graphics.setColor(new Color(255, 255, 255));
@@ -3006,7 +3022,7 @@ public class GraphicsPanel extends Panel {
 		if (this.bfcrash == 0 && this.bfskid == 0 && n2 > 150.0f) {
 			if (n == 0) {
 				if (!this.isSoundMuted) {
-					this.skid[this.skflg].play();
+					this.skidSoundEffects[this.skflg].play();
 				}
 				if (this.skflg == 0) {
 					this.skflg = 1;
@@ -3015,7 +3031,7 @@ public class GraphicsPanel extends Panel {
 				}
 			} else {
 				if (!this.isSoundMuted) {
-					this.dustskid[this.dskflg].play();
+					this.dustSkidSoundEffects[this.dskflg].play();
 				}
 				if (this.dskflg == 0) {
 					this.dskflg = 1;
@@ -3031,7 +3047,7 @@ public class GraphicsPanel extends Panel {
 		if (n2 < 50) {
 			n2 = 50;
 		}
-		return (int)((n2 - this.medium.focusPoint) * (this.medium.centerX - n) / n2 + n);
+		return (int) ((n2 - this.medium.focusPoint) * (this.medium.centerX - n) / n2 + n);
 	}
 
 	public void cantreply(final Graphics graphics) {
@@ -3042,10 +3058,12 @@ public class GraphicsPanel extends Panel {
 		this.drawCharacters(graphics, 187, "Sorry not enough replay data to play available, please try again later.", 255, 255, 255, 1);
 	}
 
+	@Deprecated
+	// FIXME: REMOVE THIS.
 	public void loadpak3(final MediaTracker mediaTracker, final Toolkit toolkit) {
 		try {
 
-			String path = "resources/graphics/images3.zipo";
+			String path = "../../resources/graphics/images3.zipo";
 			final ZipInputStream zipInputStream = getInputStream(path);
 
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
@@ -3101,8 +3119,8 @@ public class GraphicsPanel extends Panel {
 	public void stopallnow() {
 		int n = 0;
 		do {
-			if (this.loadedt[n]) {
-				this.stracks[n].outwithit();
+			if (this.loadedSoundTracks[n]) {
+				this.soundTracks[n].outwithit();
 			}
 		} while (++n < 11);
 		int n2 = 0;
@@ -3112,7 +3130,7 @@ public class GraphicsPanel extends Panel {
 		} while (++n2 < 5);
 		int n3 = 0;
 		do {
-			this.air[n3].stop();
+			this.airSoundEffects[n3].stop();
 		} while (++n3 < 6);
 		this.wastd.stop();
 		this.cars.outwithit();
@@ -3124,7 +3142,7 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.carsbg, 0, 0, null);
 		graphics.drawImage(this.selectcar, (Config.SCREEN_WIDTH - this.selectcar.getWidth(null)) / 2, 190, null);
 		this.medium.crs = true;
-		this.medium.positionX = -Config.SCREEN_WIDTH/2;
+		this.medium.positionX = -Config.SCREEN_WIDTH / 2;
 		this.medium.positionY = -Config.SCREEN_HEIGHT + 150;
 		this.medium.positionZ = -50;
 		this.medium.xz = 0;
@@ -3136,10 +3154,10 @@ public class GraphicsPanel extends Panel {
 			graphics.setFont(new Font("SansSerif", 1, 26));
 			this.ftm = graphics.getFontMetrics();
 			if (this.aflk) {
-				this.drawCharacters(graphics, 250, this.names[this.sc[0]], 130, 130, 255, 3);
+				this.drawCharacters(graphics, 250, this.carNames[this.sc[0]], 130, 130, 255, 3);
 				this.aflk = false;
 			} else {
-				this.drawCharacters(graphics, 250, this.names[this.sc[0]], 130, 215, 255, 3);
+				this.drawCharacters(graphics, 250, this.carNames[this.sc[0]], 130, 215, 255, 3);
 				this.aflk = true;
 			}
 			geometry.z = 950;
@@ -3427,7 +3445,7 @@ public class GraphicsPanel extends Panel {
 	public void stopairs() {
 		int n = 0;
 		do {
-			this.air[n].stop();
+			this.airSoundEffects[n].stop();
 		} while (++n < 6);
 	}
 
@@ -3517,7 +3535,7 @@ public class GraphicsPanel extends Panel {
 
 		URL resource = this.getClass().getResource(name);
 		audioClip = Applet.newAudioClip(resource);
-		if (name.startsWith("resources/sounds/default")) {
+		if (name.startsWith("../../resources/sounds/default")) {
 			audioClip.play();
 			//Thread.yield();
 			audioClip.stop();
@@ -3527,7 +3545,7 @@ public class GraphicsPanel extends Panel {
 
 	public void loadpak4(final MediaTracker mediaTracker, final Toolkit toolkit) {
 		try {
-			String path = "resources/graphics/images4.zipo";
+			String path = "../../resources/graphics/images4.zipo";
 			final ZipInputStream zipInputStream = getInputStream(path);
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
 				int i = (int) zipEntry.getSize();

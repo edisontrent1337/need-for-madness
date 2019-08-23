@@ -1,3 +1,5 @@
+package main.java;
+
 class Config {
 
 	static final int SCREEN_WIDTH = 1280;

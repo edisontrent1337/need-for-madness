@@ -1,6 +1,6 @@
+package main.java;
+
 import java.applet.Applet;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 
 import sun.audio.AudioPlayer;
 

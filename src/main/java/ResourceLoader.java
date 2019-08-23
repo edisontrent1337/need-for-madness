@@ -1,3 +1,5 @@
+package main.java;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -6,16 +8,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import java.util.List;
 
 public class ResourceLoader {
 
-	private static final String GRAPHICS_PATH = "resources/graphics";
+	private static final String GRAPHICS_PATH = "../../resources/graphics";
 
 	private MediaTracker mediaTracker;
 	private Toolkit defaultToolKit = Toolkit.getDefaultToolkit();
@@ -57,6 +59,7 @@ public class ResourceLoader {
 
 	/**
 	 * Loads an image that is located on the given path and adds it to the textureMap.
+	 *
 	 * @param path path
 	 */
 	private void loadImage(Path path) {
@@ -64,9 +67,9 @@ public class ResourceLoader {
 		try {
 			image = ImageIO.read(path.toFile());
 			String pathName = path.getFileName().toString();
-			if (pathName.contains("\\.")) {
-				String resourceName = pathName.split("\\.")[0].toUpperCase();
-				System.out.println(resourceName);
+			if (pathName.contains(".")) {
+				String resourceName = pathName.split("\\.")[0].toUpperCase().replace("-", "_");
+				System.out.println("Loaded " + resourceName);
 				images.put(resourceName, image);
 			} else {
 				System.err.println("The file " + pathName + " has no extension and was therefore skipped.");
@@ -78,7 +81,7 @@ public class ResourceLoader {
 
 	void loadTextures() {
 		try {
-			String path = "resources/graphics/images.zipo";
+			String path = "../../resources/graphics/images.zipo";
 			ZipInputStream zipInputStream = Util.getInputStream(path, this.getClass());
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
 				int i = (int) zipEntry.getSize();

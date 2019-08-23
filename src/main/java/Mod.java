@@ -1,3 +1,5 @@
+package main.java;
+
 import java.applet.Applet;
 import java.io.*;
 import java.net.URL;

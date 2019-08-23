@@ -1,3 +1,4 @@
+package main.java;
 
 import java.applet.Applet;
 import java.awt.*;
@@ -183,7 +184,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			//final DataInputStream in = new DataInputStream(new URL(this.getCodeBase(), "graphics/models.radq").openStream());
 			//final ZipInputStream zipInputStream = new ZipInputStream(in);
 
-			URL resource = this.getClass().getResource("resources/graphics/models.zipo");
+			URL resource = this.getClass().getResource("../../resources/graphics/models.zipo");
 			File file = new File(resource.toURI());
 			final FileInputStream in = new FileInputStream(file);
 			final ZipInputStream zipInputStream = new ZipInputStream(in);
@@ -248,7 +249,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		this.view = 0;
 		String string = "";
 		try {
-			URL resource = this.getClass().getResource("resources/stages/" + checkPoints.stage + ".txt");
+			URL resource = this.getClass().getResource("../../resources/stages/" + checkPoints.stage + ".txt");
 			File file = new File(resource.toURI());
 			final DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
 
@@ -749,8 +750,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				} else {
 					this.controls[0].enter = false;
 					this.controls[0].handb = false;
-					if (graphicsPanel.loadedt[checkPoints.stage - 1]) {
-						graphicsPanel.stracks[checkPoints.stage - 1].play();
+					if (graphicsPanel.loadedSoundTracks[checkPoints.stage - 1]) {
+						graphicsPanel.soundTracks[checkPoints.stage - 1].play();
 					}
 					this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					graphicsPanel.fase = 6;
@@ -949,8 +950,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				} while (++n58 < 5);
 				if (++n8 == 300) {
 					n8 = 0;
-					if (graphicsPanel.loadedt[checkPoints.stage - 1]) {
-						graphicsPanel.stracks[checkPoints.stage - 1].stop();
+					if (graphicsPanel.loadedSoundTracks[checkPoints.stage - 1]) {
+						graphicsPanel.soundTracks[checkPoints.stage - 1].stop();
 					}
 					graphicsPanel.fase = -6;
 				} else {
