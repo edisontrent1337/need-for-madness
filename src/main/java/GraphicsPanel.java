@@ -319,6 +319,7 @@ public class GraphicsPanel extends Panel {
 		//this.loadpak2(mediaTracker, defaultToolkit);
 		this.dnload += 44;
 		this.loading(graphics, this.app);
+		this.resourceLoader.loadResources();
 		this.resourceLoader.loadTextures();
 		Map<String, Image> images = resourceLoader.getImages();
 		//this.loadpak3(mediaTracker, defaultToolkit);
@@ -1184,54 +1185,6 @@ public class GraphicsPanel extends Panel {
 		File file = new File(resource.toURI());
 		final FileInputStream in = new FileInputStream(file);
 		return new ZipInputStream(in);
-	}
-
-	public void loadpak1(final MediaTracker mediaTracker, final Toolkit toolkit) {
-		try {
-			String path = "../../resources/graphics/images1.zipo";
-			final ZipInputStream zipInputStream = getInputStream(path);
-			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
-				int i = (int) zipEntry.getSize();
-				final String name = zipEntry.getName();
-				final byte[] b = new byte[i];
-				int off = 0;
-				while (i > 0) {
-					final int read = zipInputStream.read(b, off, i);
-					off += read;
-					i -= read;
-				}
-				if (name.equals("cars.gif")) {
-					this.carsbg = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("1.gif")) {
-					this.orank[0] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("gameh.gif")) {
-					this.ogameh = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("gameov.gif")) {
-					this.gameov = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("lap.gif")) {
-					this.olap = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("paused.gif")) {
-					this.paused = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("select.gif")) {
-					this.select = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("yourwasted.gif")) {
-					this.oyourwasted = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("youwastedem.gif")) {
-					this.oyouwastedem = this.loadimage(b, mediaTracker, toolkit);
-				}
-			}
-			zipInputStream.close();
-		} catch (Exception obj) {
-			System.out.println("Error Loading Images Pak 1: " + obj);
-		}
 	}
 
 	public void nofocus(final Graphics graphics) {

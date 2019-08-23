@@ -139,7 +139,10 @@ public class ResourceLoader {
 					graphicsPanel.bt = this.loadImage(bytes, mediaTracker, defaultToolKit);
 				}
 				if (name.equals("cars.gif")) {
-					graphicsPanel.carsbg = this.loadImage(bytes, mediaTracker, defaultToolKit);
+					// FIXME This is an example of how the new API might be used in the future.
+					// FIXME Of course, you should NOT do the assignment here as graphicsPanel has to be removed from
+					// FIXME this class altogether.
+					graphicsPanel.carsbg = this.getImage("CARS");
 				}
 				if (name.equals("congrad.gif")) {
 					graphicsPanel.congrd = this.loadImage(bytes, mediaTracker, defaultToolKit);
