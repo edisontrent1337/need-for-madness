@@ -1,7 +1,6 @@
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,84 +18,59 @@ public class ResourceLoader {
 	private static final String GRAPHICS_PATH = "resources/graphics";
 
 	private MediaTracker mediaTracker;
-	Toolkit defaultToolKit = Toolkit.getDefaultToolkit();
-	GraphicsPanel graphicsPanel;
+	private Toolkit defaultToolKit = Toolkit.getDefaultToolkit();
+	private GraphicsPanel graphicsPanel;
+	private Map<String, Image> images = new HashMap<>();
 
-/*    Image[] ocntdn = new Image[4];
-    Image[] orank = new Image[5];
-    Image[] back = new Image[3];
-    Image bb;
-    Image bgmain;
-    Image bl, br, bt;
-    Image carsbg;
-    Image congrd;
-    Image[] contin1 = new Image[2];
-    Image[] contin2 = new Image[2];
-    Image odmg;
-    Image ogameh;
-    Image gameov;
-    Image inst1, inst2, inst3;
-    Image olap;
-    Image oloadingmusic;
-    Image omdness;
-    Image maini;
-    Image[] next = new Image[3];
-    Image nfmcom;
-    Image opti;
-    Image paused;
-    Image pgate;
-    Image opos, opwr;
-    Image radicalplay;
-    Image rpro;
-    Image select;
-    Image selectcar;
-    Image trackbg;
-    Image[] ostar = new Image[2];
-    Image statb;
-    Image owas;
-    Image oyoulost;
-    Image oyourwasted;
-    Image oyouwastedem;
-    Image oyouwon;*/
-
-
-	private Map<String, Image> textureMap = new HashMap<>();
-
+	// FIXME: Remove reference to graphics panel
 	ResourceLoader(Component app, GraphicsPanel graphicsPanel) {
 		this.mediaTracker = new MediaTracker(app);
 		this.graphicsPanel = graphicsPanel;
 	}
 
-
-	Image getImage(String textureName) {
-
-		if (!textureMap.containsKey(textureName)) {
-			System.err.println("Error: The image by the name " + textureName + " was not found.");
+	Image getImage(String imageName) {
+		if (!images.containsKey(imageName)) {
+			System.err.println("Error: The image by the name " + imageName + " was not found.");
+			return null;
 		}
+		return images.get(imageName);
+	}
 
-		return textureMap.get(textureName);
+	public Map<String, Image> getImages() {
+		return images;
 	}
 
 	void loadResources() {
 		Path graphicsDirectory = Paths.get(ResourceLoader.class.getResource(GRAPHICS_PATH).getPath());
-		try (Stream<Path> walk = Files.walk(graphicsDirectory)) {
-			List<Path> result = walk.filter(Files::isRegularFile).collect(Collectors.toList());
-			result.forEach(System.out::println);
-			for (Path p : result) {
-				loadTexture(p);
+		try (Stream<Path> fileStream = Files.walk(graphicsDirectory)) {
+			List<Path> imageFilePaths = fileStream
+					.filter(Files::isRegularFile)
+					.collect(Collectors.toList());
+			imageFilePaths.forEach(System.out::println);
+			for (Path path : imageFilePaths) {
+				loadImage(path);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	void loadTexture(Path path) {
-		BufferedImage img;
+	/**
+	 * Loads an image that is located on the given path and adds it to the textureMap.
+	 * @param path path
+	 */
+	private void loadImage(Path path) {
+		BufferedImage image;
 		try {
-			img = ImageIO.read(path.toFile());
-			String resourceName = path.getFileName().toString().split("\\.")[0].toUpperCase();
-			System.out.println(resourceName);
-			textureMap.put(resourceName, img);
+			image = ImageIO.read(path.toFile());
+			String pathName = path.getFileName().toString();
+			if (pathName.contains("\\.")) {
+				String resourceName = pathName.split("\\.")[0].toUpperCase();
+				System.out.println(resourceName);
+				images.put(resourceName, image);
+			} else {
+				System.err.println("The file " + pathName + " has no extension and was therefore skipped.");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -278,8 +252,6 @@ public class ResourceLoader {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
-
 		return image;
 	}
 
