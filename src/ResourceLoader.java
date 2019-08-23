@@ -62,31 +62,18 @@ public class ResourceLoader {
 
 	private Map<String, Image> textureMap = new HashMap<>();
 
-	enum Textures {
-		COUNTDOWN_ZERO("0c.gif"),
-		COUNTDOWN_ONE("1c.gif"),
-		COUNTDOWN_TWO("2c.gif"),
-		COUNTDOWN_THREE("3c.gif"),
-		FIRST_PLACE("1.gif"),
-		SECOND_PLACE("2.gif"),
-		THIRD_PLACE("3.gif"),
-		FOURTH_PLACE("4.gif"),
-		FIFTH_PLACE("5.gif");
-
-		private String path;
-
-		Textures(String path) {
-			this.path = path;
-		}
-
-	}
-
 	ResourceLoader(Component app, GraphicsPanel graphicsPanel) {
 		this.mediaTracker = new MediaTracker(app);
 		this.graphicsPanel = graphicsPanel;
 	}
 
-	Image getTexture(String textureName) {
+
+	Image getImage(String textureName) {
+
+		if (!textureMap.containsKey(textureName)) {
+			System.err.println("Error: The image by the name " + textureName + " was not found.");
+		}
+
 		return textureMap.get(textureName);
 	}
 
@@ -104,15 +91,15 @@ public class ResourceLoader {
 	}
 
 	void loadTexture(Path path) {
-			BufferedImage img;
-			try {
-				img = ImageIO.read(path.toFile());
-				String resourceName = path.getFileName().toString().split("\\.")[0].toUpperCase();
-				System.out.println(resourceName);
-				textureMap.put(resourceName, img);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		BufferedImage img;
+		try {
+			img = ImageIO.read(path.toFile());
+			String resourceName = path.getFileName().toString().split("\\.")[0].toUpperCase();
+			System.out.println(resourceName);
+			textureMap.put(resourceName, img);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	void loadTextures() {
