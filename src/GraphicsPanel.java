@@ -174,6 +174,306 @@ public class GraphicsPanel extends Panel {
 	int skflg;
 	int dskflg;
 
+	ResourceLoader resourceLoader;
+
+	public GraphicsPanel(final Medium medium, final Graphics graphics, final Applet app, final int n) throws MalformedURLException, URISyntaxException {
+		this.fase = 7;
+		this.oldfase = 0;
+		this.starcnt = 0;
+		this.unlocked = 1;
+		this.lockcnt = 0;
+		this.opselect = 1;
+		this.shaded = false;
+		this.flipo = 0;
+		this.nextc = false;
+		this.gatey = 0;
+		this.looped = 1;
+		this.sc = new int[5];
+		this.xstart = new int[]{0, -350, 350, 0, 0};
+		this.zstart = new int[]{-100, 500, 500, 500, 1100};
+		this.proba = new float[]{0.3f, 0.8f, 0.5f, 0.3f, 0.8f, 0.0f, 0.2f, 0.4f, 0.0f, 0.0f};
+		this.dishandle = new float[]{0.65f, 0.6f, 0.55f, 0.77f, 0.7f, 0.9f, 0.7f, 0.4f, 1.0f, 0.85f};
+		this.holdcnt = 0;
+		this.winner = false;
+		this.flexpix = new int[Config.SCREEN_PIXELS];
+		this.next = new Image[3];
+		this.back = new Image[3];
+		this.contin1 = new Image[2];
+		this.contin2 = new Image[2];
+		this.ostar = new Image[2];
+		this.star = new Image[3];
+		this.pcontin = 0;
+		this.pnext = 0;
+		this.pback = 0;
+		this.pstar = 0;
+		this.orank = new Image[5];
+		this.rank = new Image[5];
+		this.ocntdn = new Image[4];
+		this.cntdn = new Image[4];
+		this.gocnt = 0;
+		this.engs = new AudioClip[2][5];
+		this.pengs = new boolean[5];
+		final int[][] enginsignature = {{0, 0, 1, 1, 0}, {0, 1, 1, 0, 1}, new int[5], {0, 1, 1, 1, 1}, {0, 0, 0, 1, 0}, {0, 1, 1, 1, 1}, {0, 1, 0, 1, 0}, null, null, null};
+		final int n2 = 7;
+		final int[] array = new int[5];
+		array[0] = 1;
+		enginsignature[n2] = array;
+		enginsignature[8] = new int[]{0, 1, 1, 1, 1};
+		enginsignature[9] = new int[]{1, 1, 1, 1, 1};
+		this.enginsignature = enginsignature;
+		this.air = new AudioClip[6];
+		this.aird = false;
+		this.grrd = false;
+		this.crash = new AudioClip[3];
+		this.lowcrash = new AudioClip[3];
+		this.pwastd = false;
+		this.skid = new AudioClip[2];
+		this.dustskid = new AudioClip[2];
+		this.isSoundMuted = false;
+		this.stracks = new RadicalMod[11];
+		this.loadedt = new boolean[11];
+		this.mutem = false;
+		this.arrace = false;
+		this.ana = 0;
+		this.cntan = 0;
+		this.cntovn = 0;
+		this.flk = false;
+		this.tcnt = 30;
+		this.tflk = false;
+		this.say = "";
+		this.wasay = false;
+		this.clear = 0;
+		this.posit = 0;
+		this.wasted = 0;
+		this.laps = 0;
+		this.dested = new int[5];
+		this.names = new String[]{"Tornado Shark", "Formula 7", "Wow Caninaro", "La vite Crab", "Nimi", "MAX Revenge", "Lead Oxide", "EL KING", "Radical One", "DR Monstaa"};
+		this.dmcnt = 0;
+		this.dmflk = false;
+		this.pwcnt = 0;
+		this.pwflk = false;
+		this.adj = new String[][]{{"Cool", "Alright", "Nice"}, {"Wicked", "Amazing", "Super"}, {"Awesome", "Ripping", "Radical"}, {"What the...?", "Your a super star!!!!", "Who are you again...?"}, {"surf style", "off the lip", "bounce back"}};
+		this.exlm = new String[]{"!", "!!", "!!!"};
+		this.loop = "";
+		this.spin = "";
+		this.asay = "";
+		this.auscnt = 45;
+		this.aflk = false;
+		this.hipno = new int[]{0, 2, 2, 2, 2, 0, 2, 50, 2, 2, 6};
+		this.sndsize = new int[]{39, 128, 23, 58, 106, 140, 81, 135, 38, 141, 80};
+		this.kbload = 0;
+		this.dnload = 0;
+		this.pin = 60;
+		this.pwait = 7;
+		this.stopcnt = 0;
+		this.cntwis = 0;
+		this.crshturn = 0;
+		this.bfcrash = 0;
+		this.bfskid = 0;
+		this.crashup = false;
+		this.skflg = 0;
+		this.dskflg = 0;
+
+		this.medium = medium;
+		this.app = app;
+		this.resourceLoader = new ResourceLoader(this.app, this);
+
+		final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
+		final MediaTracker mediaTracker = new MediaTracker(this.app);
+
+		mediaTracker.addImage(this.hello = this.app.getImage(this.app.getCodeBase(), "hello.gif"), 0);
+		try {
+			mediaTracker.waitForID(0);
+		} catch (Exception ex) {
+		}
+		mediaTracker.addImage(this.sign = this.app.getImage(this.app.getCodeBase(), "sign.gif"), 0);
+		try {
+			mediaTracker.waitForID(0);
+		} catch (Exception ex2) {
+		}
+		mediaTracker.addImage(this.loadbar = this.app.getImage(this.app.getCodeBase(), "loadbar.gif"), 0);
+		try {
+			mediaTracker.waitForID(0);
+		} catch (Exception ex3) {
+		}
+		this.kbload = 416;
+		if (n == 2) {
+			this.kbload = 514;
+		}
+		this.loading(graphics, this.app);
+		//this.loadpak1(mediaTracker, defaultToolkit);
+		this.dnload += 47;
+		this.loading(graphics, this.app);
+		//this.loadpak2(mediaTracker, defaultToolkit);
+		this.dnload += 44;
+		this.loading(graphics, this.app);
+		this.resourceLoader.loadTextures();
+		//this.loadpak3(mediaTracker, defaultToolkit);
+		this.dnload += 47;
+		this.loading(graphics, this.app);
+		//this.loadpak4(mediaTracker, defaultToolkit);
+		this.dnload += 44;
+		this.loading(graphics, this.app);
+		this.next[1] = this.pressed(this.next[0]);
+		this.back[1] = this.pressed(this.back[0]);
+		this.next[2] = this.bressed(this.next[0]);
+		this.back[2] = this.bressed(this.back[0]);
+		this.contin1[1] = this.pressed(this.contin1[0]);
+		this.contin2[1] = this.bressed(this.contin2[0]);
+		this.contin1[1] = this.pressed(this.contin1[0]);
+		this.contin2[1] = this.bressed(this.contin2[0]);
+		this.star[2] = this.pressed(this.ostar[1]);
+		String str = "default/";
+		if (n == 2) {
+			str = "newsun/";
+		}
+		int n3 = 0;
+		do {
+			this.engs[0][n3] = this.getSound("resources/sounds/" + str + "a" + n3 + ".au");
+			this.dnload += 2;
+			this.loading(graphics, this.app);
+			this.engs[1][n3] = this.getSound("resources/sounds/" + str + "b" + n3 + ".au");
+			this.dnload += 3;
+			this.loading(graphics, this.app);
+			this.pengs[n3] = false;
+		} while (++n3 < 5);
+		int i = 0;
+		do {
+			this.air[i] = this.getSound("resources/sounds/" + str + "air" + i + ".au");
+			this.dnload += 2;
+			this.loading(graphics, this.app);
+		} while (++i < 6);
+		int n4 = 0;
+		do {
+			this.crash[n4] = this.getSound("resources/sounds/" + str + "crash" + (n4 + 1) + ".au");
+			if (n == 2) {
+				this.dnload += 12;
+				this.loading(graphics, this.app);
+			} else {
+				this.dnload += 7;
+				this.loading(graphics, this.app);
+			}
+		} while (++n4 < 3);
+		int n5 = 0;
+		do {
+			this.lowcrash[n5] = this.getSound("resources/sounds/" + str + "lowcrash" + (n5 + 1) + ".au");
+			if (n == 2) {
+				this.dnload += 8;
+				this.loading(graphics, this.app);
+			} else {
+				this.dnload += 3;
+				this.loading(graphics, this.app);
+			}
+		} while (++n5 < 3);
+		this.tires = this.getSound("resources/sounds/" + str + "tires.au");
+		if (n == 2) {
+			this.dnload += 12;
+			this.loading(graphics, this.app);
+		} else {
+			this.dnload += 4;
+			this.loading(graphics, this.app);
+		}
+		this.checkpoint = this.getSound("resources/sounds/" + str + "checkpoint.au");
+		if (n == 2) {
+			this.dnload += 12;
+			this.loading(graphics, this.app);
+		} else {
+			this.dnload += 7;
+			this.loading(graphics, this.app);
+		}
+		this.carfixed = this.getSound("resources/sounds/" + str + "carfixed.au");
+		if (n == 2) {
+			this.dnload += 16;
+			this.loading(graphics, this.app);
+		} else {
+			this.dnload += 12;
+			this.loading(graphics, this.app);
+		}
+		this.powerup = this.getSound("resources/sounds/" + str + "powerup.au");
+		if (n == 2) {
+			this.dnload += 12;
+			this.loading(graphics, this.app);
+		} else {
+			this.dnload += 9;
+			this.loading(graphics, this.app);
+		}
+		this.three = this.getSound("resources/sounds/" + str + "three.au");
+		if (n == 2) {
+			this.dnload += 12;
+			this.loading(graphics, this.app);
+		} else {
+			this.dnload += 4;
+			this.loading(graphics, this.app);
+		}
+		this.two = this.getSound("resources/sounds/" + str + "two.au");
+		if (n == 2) {
+			this.dnload += 12;
+			this.loading(graphics, this.app);
+		} else {
+			this.dnload += 3;
+			this.loading(graphics, this.app);
+		}
+		this.one = this.getSound("resources/sounds/" + str + "one.au");
+		if (n == 2) {
+			this.dnload += 12;
+			this.loading(graphics, this.app);
+		} else {
+			this.dnload += 4;
+			this.loading(graphics, this.app);
+		}
+		this.go = this.getSound("resources/sounds/" + str + "go.au");
+		if (n == 2) {
+			this.dnload += 12;
+			this.loading(graphics, this.app);
+		} else {
+			this.dnload += 4;
+			this.loading(graphics, this.app);
+		}
+		int n6 = 0;
+		do {
+			this.skid[n6] = this.getSound("resources/sounds/" + str + "skid" + (n6 + 1) + ".au");
+			if (n == 2) {
+				this.dnload += 9;
+				this.loading(graphics, this.app);
+			} else {
+				this.dnload += 6;
+				this.loading(graphics, this.app);
+			}
+		} while (++n6 < 2);
+		int n7 = 0;
+		do {
+			this.dustskid[n7] = this.getSound("resources/sounds/" + str + "dustskid" + (n7 + 1) + ".au");
+			if (n == 2) {
+				this.dnload += 11;
+				this.loading(graphics, this.app);
+			} else {
+				this.dnload += 7;
+				this.loading(graphics, this.app);
+			}
+		} while (++n7 < 2);
+		this.wastd = this.getSound("resources/sounds/" + str + "wasted.au");
+		this.dnload += 5;
+		this.loading(graphics, this.app);
+		this.firewasted = this.getSound("resources/sounds/" + str + "firewasted.au");
+		if (n == 2) {
+			this.dnload += 13;
+			this.loading(graphics, this.app);
+		} else {
+			this.dnload += 12;
+			this.loading(graphics, this.app);
+		}
+		this.cars = new RadicalMod("resources/music/cars.zipo", 500, 7900, 125, this.app);
+		this.dnload += 26;
+		this.loading(graphics, this.app);
+		this.stages = new RadicalMod("resources/music/stages.zipo", 200, 9000, 145, this.app);
+		this.dnload += 22;
+		this.loading(graphics, this.app);
+		int n8 = 0;
+		do {
+			this.loadedt[n8] = false;
+		} while (++n8 < 10);
+	}
+
 	public void framer(final int n, final Graphics graphics) {
 		int r = (int) (230.0f - 230.0f * (this.medium.snap[0] / (float) (100 * this.hipno[n - 1])));
 		if (r > 255) {
@@ -2482,299 +2782,6 @@ public class GraphicsPanel extends Panel {
 		graphics.setColor(new Color(32, 64, 128));
 		graphics.fillRect(162, 346, 26 + (int) (this.dnload / (float) this.kbload * 200.0f), 10);
 		applet.repaint();
-	}
-
-	public GraphicsPanel(final Medium medium, final Graphics graphics, final Applet app, final int n) throws MalformedURLException, URISyntaxException {
-		this.fase = 7;
-		this.oldfase = 0;
-		this.starcnt = 0;
-		this.unlocked = 1;
-		this.lockcnt = 0;
-		this.opselect = 1;
-		this.shaded = false;
-		this.flipo = 0;
-		this.nextc = false;
-		this.gatey = 0;
-		this.looped = 1;
-		this.sc = new int[5];
-		this.xstart = new int[]{0, -350, 350, 0, 0};
-		this.zstart = new int[]{-100, 500, 500, 500, 1100};
-		this.proba = new float[]{0.3f, 0.8f, 0.5f, 0.3f, 0.8f, 0.0f, 0.2f, 0.4f, 0.0f, 0.0f};
-		this.dishandle = new float[]{0.65f, 0.6f, 0.55f, 0.77f, 0.7f, 0.9f, 0.7f, 0.4f, 1.0f, 0.85f};
-		this.holdcnt = 0;
-		this.winner = false;
-		this.flexpix = new int[Config.SCREEN_PIXELS];
-		this.next = new Image[3];
-		this.back = new Image[3];
-		this.contin1 = new Image[2];
-		this.contin2 = new Image[2];
-		this.ostar = new Image[2];
-		this.star = new Image[3];
-		this.pcontin = 0;
-		this.pnext = 0;
-		this.pback = 0;
-		this.pstar = 0;
-		this.orank = new Image[5];
-		this.rank = new Image[5];
-		this.ocntdn = new Image[4];
-		this.cntdn = new Image[4];
-		this.gocnt = 0;
-		this.engs = new AudioClip[2][5];
-		this.pengs = new boolean[5];
-		final int[][] enginsignature = {{0, 0, 1, 1, 0}, {0, 1, 1, 0, 1}, new int[5], {0, 1, 1, 1, 1}, {0, 0, 0, 1, 0}, {0, 1, 1, 1, 1}, {0, 1, 0, 1, 0}, null, null, null};
-		final int n2 = 7;
-		final int[] array = new int[5];
-		array[0] = 1;
-		enginsignature[n2] = array;
-		enginsignature[8] = new int[]{0, 1, 1, 1, 1};
-		enginsignature[9] = new int[]{1, 1, 1, 1, 1};
-		this.enginsignature = enginsignature;
-		this.air = new AudioClip[6];
-		this.aird = false;
-		this.grrd = false;
-		this.crash = new AudioClip[3];
-		this.lowcrash = new AudioClip[3];
-		this.pwastd = false;
-		this.skid = new AudioClip[2];
-		this.dustskid = new AudioClip[2];
-		this.isSoundMuted = false;
-		this.stracks = new RadicalMod[11];
-		this.loadedt = new boolean[11];
-		this.mutem = false;
-		this.arrace = false;
-		this.ana = 0;
-		this.cntan = 0;
-		this.cntovn = 0;
-		this.flk = false;
-		this.tcnt = 30;
-		this.tflk = false;
-		this.say = "";
-		this.wasay = false;
-		this.clear = 0;
-		this.posit = 0;
-		this.wasted = 0;
-		this.laps = 0;
-		this.dested = new int[5];
-		this.names = new String[]{"Tornado Shark", "Formula 7", "Wow Caninaro", "La vite Crab", "Nimi", "MAX Revenge", "Lead Oxide", "EL KING", "Radical One", "DR Monstaa"};
-		this.dmcnt = 0;
-		this.dmflk = false;
-		this.pwcnt = 0;
-		this.pwflk = false;
-		this.adj = new String[][]{{"Cool", "Alright", "Nice"}, {"Wicked", "Amazing", "Super"}, {"Awesome", "Ripping", "Radical"}, {"What the...?", "Your a super star!!!!", "Who are you again...?"}, {"surf style", "off the lip", "bounce back"}};
-		this.exlm = new String[]{"!", "!!", "!!!"};
-		this.loop = "";
-		this.spin = "";
-		this.asay = "";
-		this.auscnt = 45;
-		this.aflk = false;
-		this.hipno = new int[]{0, 2, 2, 2, 2, 0, 2, 50, 2, 2, 6};
-		this.sndsize = new int[]{39, 128, 23, 58, 106, 140, 81, 135, 38, 141, 80};
-		this.kbload = 0;
-		this.dnload = 0;
-		this.pin = 60;
-		this.pwait = 7;
-		this.stopcnt = 0;
-		this.cntwis = 0;
-		this.crshturn = 0;
-		this.bfcrash = 0;
-		this.bfskid = 0;
-		this.crashup = false;
-		this.skflg = 0;
-		this.dskflg = 0;
-		this.medium = medium;
-		this.app = app;
-		final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
-		final MediaTracker mediaTracker = new MediaTracker(this.app);
-		mediaTracker.addImage(this.hello = this.app.getImage(this.app.getCodeBase(), "hello.gif"), 0);
-		try {
-			mediaTracker.waitForID(0);
-		} catch (Exception ex) {
-		}
-		mediaTracker.addImage(this.sign = this.app.getImage(this.app.getCodeBase(), "sign.gif"), 0);
-		try {
-			mediaTracker.waitForID(0);
-		} catch (Exception ex2) {
-		}
-		mediaTracker.addImage(this.loadbar = this.app.getImage(this.app.getCodeBase(), "loadbar.gif"), 0);
-		try {
-			mediaTracker.waitForID(0);
-		} catch (Exception ex3) {
-		}
-		this.kbload = 416;
-		if (n == 2) {
-			this.kbload = 514;
-		}
-		this.loading(graphics, this.app);
-		this.loadpak1(mediaTracker, defaultToolkit);
-		this.dnload += 47;
-		this.loading(graphics, this.app);
-		this.loadpak2(mediaTracker, defaultToolkit);
-		this.dnload += 44;
-		this.loading(graphics, this.app);
-		this.loadpak3(mediaTracker, defaultToolkit);
-		this.dnload += 47;
-		this.loading(graphics, this.app);
-		this.loadpak4(mediaTracker, defaultToolkit);
-		this.dnload += 44;
-		this.loading(graphics, this.app);
-		this.next[1] = this.pressed(this.next[0]);
-		this.back[1] = this.pressed(this.back[0]);
-		this.next[2] = this.bressed(this.next[0]);
-		this.back[2] = this.bressed(this.back[0]);
-		this.contin1[1] = this.pressed(this.contin1[0]);
-		this.contin2[1] = this.bressed(this.contin2[0]);
-		this.contin1[1] = this.pressed(this.contin1[0]);
-		this.contin2[1] = this.bressed(this.contin2[0]);
-		this.star[2] = this.pressed(this.ostar[1]);
-		String str = "default/";
-		if (n == 2) {
-			str = "newsun/";
-		}
-		int n3 = 0;
-		do {
-			this.engs[0][n3] = this.getSound("resources/sounds/" + str + "a" + n3 + ".au");
-			this.dnload += 2;
-			this.loading(graphics, this.app);
-			this.engs[1][n3] = this.getSound("resources/sounds/" + str + "b" + n3 + ".au");
-			this.dnload += 3;
-			this.loading(graphics, this.app);
-			this.pengs[n3] = false;
-		} while (++n3 < 5);
-		int i = 0;
-		do {
-			this.air[i] = this.getSound("resources/sounds/" + str + "air" + i + ".au");
-			this.dnload += 2;
-			this.loading(graphics, this.app);
-		} while (++i < 6);
-		int n4 = 0;
-		do {
-			this.crash[n4] = this.getSound("resources/sounds/" + str + "crash" + (n4 + 1) + ".au");
-			if (n == 2) {
-				this.dnload += 12;
-				this.loading(graphics, this.app);
-			} else {
-				this.dnload += 7;
-				this.loading(graphics, this.app);
-			}
-		} while (++n4 < 3);
-		int n5 = 0;
-		do {
-			this.lowcrash[n5] = this.getSound("resources/sounds/" + str + "lowcrash" + (n5 + 1) + ".au");
-			if (n == 2) {
-				this.dnload += 8;
-				this.loading(graphics, this.app);
-			} else {
-				this.dnload += 3;
-				this.loading(graphics, this.app);
-			}
-		} while (++n5 < 3);
-		this.tires = this.getSound("resources/sounds/" + str + "tires.au");
-		if (n == 2) {
-			this.dnload += 12;
-			this.loading(graphics, this.app);
-		} else {
-			this.dnload += 4;
-			this.loading(graphics, this.app);
-		}
-		this.checkpoint = this.getSound("resources/sounds/" + str + "checkpoint.au");
-		if (n == 2) {
-			this.dnload += 12;
-			this.loading(graphics, this.app);
-		} else {
-			this.dnload += 7;
-			this.loading(graphics, this.app);
-		}
-		this.carfixed = this.getSound("resources/sounds/" + str + "carfixed.au");
-		if (n == 2) {
-			this.dnload += 16;
-			this.loading(graphics, this.app);
-		} else {
-			this.dnload += 12;
-			this.loading(graphics, this.app);
-		}
-		this.powerup = this.getSound("resources/sounds/" + str + "powerup.au");
-		if (n == 2) {
-			this.dnload += 12;
-			this.loading(graphics, this.app);
-		} else {
-			this.dnload += 9;
-			this.loading(graphics, this.app);
-		}
-		this.three = this.getSound("resources/sounds/" + str + "three.au");
-		if (n == 2) {
-			this.dnload += 12;
-			this.loading(graphics, this.app);
-		} else {
-			this.dnload += 4;
-			this.loading(graphics, this.app);
-		}
-		this.two = this.getSound("resources/sounds/" + str + "two.au");
-		if (n == 2) {
-			this.dnload += 12;
-			this.loading(graphics, this.app);
-		} else {
-			this.dnload += 3;
-			this.loading(graphics, this.app);
-		}
-		this.one = this.getSound("resources/sounds/" + str + "one.au");
-		if (n == 2) {
-			this.dnload += 12;
-			this.loading(graphics, this.app);
-		} else {
-			this.dnload += 4;
-			this.loading(graphics, this.app);
-		}
-		this.go = this.getSound("resources/sounds/" + str + "go.au");
-		if (n == 2) {
-			this.dnload += 12;
-			this.loading(graphics, this.app);
-		} else {
-			this.dnload += 4;
-			this.loading(graphics, this.app);
-		}
-		int n6 = 0;
-		do {
-			this.skid[n6] = this.getSound("resources/sounds/" + str + "skid" + (n6 + 1) + ".au");
-			if (n == 2) {
-				this.dnload += 9;
-				this.loading(graphics, this.app);
-			} else {
-				this.dnload += 6;
-				this.loading(graphics, this.app);
-			}
-		} while (++n6 < 2);
-		int n7 = 0;
-		do {
-			this.dustskid[n7] = this.getSound("resources/sounds/" + str + "dustskid" + (n7 + 1) + ".au");
-			if (n == 2) {
-				this.dnload += 11;
-				this.loading(graphics, this.app);
-			} else {
-				this.dnload += 7;
-				this.loading(graphics, this.app);
-			}
-		} while (++n7 < 2);
-		this.wastd = this.getSound("resources/sounds/" + str + "wasted.au");
-		this.dnload += 5;
-		this.loading(graphics, this.app);
-		this.firewasted = this.getSound("resources/sounds/" + str + "firewasted.au");
-		if (n == 2) {
-			this.dnload += 13;
-			this.loading(graphics, this.app);
-		} else {
-			this.dnload += 12;
-			this.loading(graphics, this.app);
-		}
-		this.cars = new RadicalMod("resources/music/cars.zipo", 500, 7900, 125, this.app);
-		this.dnload += 26;
-		this.loading(graphics, this.app);
-		this.stages = new RadicalMod("resources/music/stages.zipo", 200, 9000, 145, this.app);
-		this.dnload += 22;
-		this.loading(graphics, this.app);
-		int n8 = 0;
-		do {
-			this.loadedt[n8] = false;
-		} while (++n8 < 10);
 	}
 
 	public void maini(final Graphics graphics, final Control control) {

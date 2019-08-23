@@ -33,6 +33,19 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 	int notb;
 	int view;
 
+	public GameSparker() {
+		this.controls = new Control[5];
+		this.mouses = 0;
+		this.xm = 0;
+		this.ym = 0;
+		this.lostfcs = false;
+		this.exwist = true;
+		this.nob = 0;
+		this.notb = 0;
+		this.view = 0;
+		addMouseListener(this);
+		addKeyListener(this);
+	}
 
    /* public void testlocation() {
         try {
@@ -132,7 +145,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 	}
 
 	public int getInt(final String s, final String s2, final int n) {
-		return Integer.valueOf(getString(s, s2, n));
+		return Integer.parseInt(getString(s, s2, n));
 /*		int n2 = 0;
 		String string = "";
 		for (int i = drawShadow.length() + 1; i < s2.length(); ++i) {
@@ -161,20 +174,6 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 
 	public void paint(final Graphics graphics) {
 		graphics.drawImage(this.offImage, 0, 0, this);
-	}
-
-	public GameSparker() {
-		this.controls = new Control[5];
-		this.mouses = 0;
-		this.xm = 0;
-		this.ym = 0;
-		this.lostfcs = false;
-		this.exwist = true;
-		this.nob = 0;
-		this.notb = 0;
-		this.view = 0;
-		addMouseListener(this);
-		addKeyListener(this);
 	}
 
 	public void loadBase(final Geometry[] array, final Medium medium, final Trackers trackers) {
@@ -326,11 +325,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					} else {
 						checkPoints.roted[checkPoints.fn] = false;
 					}
-					if (string.contains(")drawShadow")) {
-						checkPoints.special[checkPoints.fn] = true;
-					} else {
-						checkPoints.special[checkPoints.fn] = false;
-					}
+					checkPoints.special[checkPoints.fn] = string.contains(")drawShadow");
 					++checkPoints.fn;
 					++this.nob;
 					this.notb = this.nob;
