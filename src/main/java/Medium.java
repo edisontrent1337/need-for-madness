@@ -34,7 +34,7 @@ public class Medium {
 	int[] spz;
 	int[] sprad;
 	boolean td;
-	int vxz;
+	int circleAmount;
 	int adv;
 	boolean vert;
 	int trns;
@@ -79,7 +79,7 @@ public class Medium {
 		this.spz = new int[5];
 		this.sprad = new int[5];
 		this.td = false;
-		this.vxz = 180;
+		this.circleAmount = 180;
 		this.adv = 500;
 		this.vert = false;
 		this.trns = 1;
@@ -159,18 +159,8 @@ public class Medium {
 
 	void draw(final Graphics graphics) {
 		this.nsp = 0;
-		if (this.zy > 90) {
-			this.zy = 90;
-		}
-		if (this.zy < -90) {
-			this.zy = -90;
-		}
-		if (this.xz > 360) {
-			this.xz -= 360;
-		}
-		if (this.xz < 0) {
-			this.xz += 360;
-		}
+		this.zy = Util.clamp(this.zy, -90, 90);
+		this.xz = this.xz % 360;
 		if (this.positionY > 0) {
 			this.positionY = 0;
 		}
@@ -180,7 +170,7 @@ public class Medium {
 		int r = this.cgrnd[0];
 		int g = this.cgrnd[1];
 		int b = this.cgrnd[2];
-		int h = this.height;
+		int height = this.height;
 		int n = 0;
 		do {
 			float n2 = this.fade[n];
@@ -194,12 +184,12 @@ public class Medium {
 				array2[0] = 0;
 			}
 			array[1] = 0;
-			array2[1] = h;
+			array2[1] = height;
 			array[2] = this.width;
-			array2[2] = h;
+			array2[2] = height;
 			array[3] = this.width;
 			array2[3] = array2[0];
-			h = array2[0];
+			height = array2[0];
 			if (n > 0) {
 				r = (r * 3 + this.cfade[0]) / 4;
 				g = (g * 3 + this.cfade[1]) / 4;
@@ -210,23 +200,21 @@ public class Medium {
 				graphics.fillPolygon(array, array2, 4);
 			}
 		} while (++n < 8);
-		int n3 = this.skyColor[0];
-		int n4 = this.skyColor[1];
-		int n5 = this.skyColor[2];
 		int n6 = 0;
 		if (this.flex == 2) {
-			array[0] = 200;
+			array[0] = 0;
 			array2[0] = 45;
-			array[1] = 200;
+			array[1] = 0;
 			array2[1] = 0;
-			array[2] = 350;
+			array[2] = Config.SCREEN_WIDTH;
 			array2[2] = 0;
-			array[3] = 350;
+			array[3] = Config.SCREEN_WIDTH;
 			array2[3] = 45;
-			graphics.setColor(new Color(n3, n4, n5));
+			graphics.setColor(new Color(skyColor[0], skyColor[1], skyColor[2]));
 			graphics.fillPolygon(array, array2, 4);
 			n6 = 45;
 		}
+		//System.out.println("flex:" + this.flex);
 		int n7 = 0;
 		do {
 			int n8 = this.fade[n7];
@@ -246,27 +234,30 @@ public class Medium {
 			array[3] = this.width;
 			array2[3] = array2[0];
 			n6 = array2[0];
+			int skyRed = this.skyColor[0];
+			int skyGreen = this.skyColor[1];
+			int skyBlue = this.skyColor[2];
 			if (n7 > 0) {
-				n3 = (n3 * 3 + this.cfade[0]) / 4;
-				n4 = (n4 * 3 + this.cfade[1]) / 4;
-				n5 = (n5 * 3 + this.cfade[2]) / 4;
+				skyRed = (skyRed * 3 + this.cfade[0]) / 4;
+				skyGreen = (skyGreen * 3 + this.cfade[1]) / 4;
+				skyBlue = (skyBlue * 3 + this.cfade[2]) / 4;
 			}
-			if (array2[0] > 0 && array2[1] < this.height) {
-				graphics.setColor(new Color(n3, n4, n5));
+			//if (array2[0] > 0 && array2[1] < this.height) {
+				graphics.setColor(new Color(skyRed, skyGreen, skyBlue));
 				graphics.fillPolygon(array, array2, 4);
-			}
+			//}
 		} while (++n7 < 8);
 		array2[array[0] = 0] = n6;
 		array[1] = 0;
-		array2[1] = h;
+		array2[1] = height;
 		array[2] = this.width;
-		array2[2] = h;
+		array2[2] = height;
 		array[3] = this.width;
 		array2[3] = n6;
-		if (array2[0] < this.height && array2[1] > 0) {
+		//if (array2[0] < this.height && array2[1] > 0) {
 			graphics.setColor(new Color(this.cfade[0], this.cfade[1], this.cfade[2]));
 			graphics.fillPolygon(array, array2, 4);
-		}
+		//}
 	}
 
 	void watchFromStationaryPoint(final Geometry geometry, final float n) {
@@ -307,21 +298,17 @@ public class Medium {
 		this.snap[2] = n3;
 	}
 
-	void circleAround(final Geometry geometry, final boolean b) {
+	void circleAroundCar(final Geometry geometry, final boolean isStartAnimation) {
 
-		if (this.zy > 90) {
-			this.zy = 90;
-		}
-		if (this.zy < -90) {
-			this.zy = -90;
-		}
-
-		this.xz = xz % 360;
+		zy = Util.clamp(zy, -90, 90);
+		xz = xz % 360;
 
 		if (this.flex != 0) {
 			this.flex = 0;
 		}
-		if (!b) {
+		if (isStartAnimation) {
+			this.adv -= 20;
+		} else {
 			if (!this.vert) {
 				this.adv += 2;
 			} else {
@@ -330,26 +317,23 @@ public class Medium {
 			if (this.adv > 900) {
 				this.vert = true;
 			}
-			if (this.adv < -500) {
+			if (this.adv < 350) {
 				this.vert = false;
 			}
-		} else {
-			this.adv -= 20;
 		}
 		int n = 500 + this.adv;
-		if (n < 1000) {
-			n = 1000;
-		}
+		n = Math.max(n, 1500);
+		System.out.println(n);
 		this.positionY = geometry.y - this.adv;
 		if (this.positionY > 10) {
 			this.vert = false;
 		}
-		this.positionX = geometry.x + (int) ((geometry.x - n - geometry.x) * this.cos(this.vxz));
-		this.positionZ = geometry.z + (int) ((geometry.x - n - geometry.x) * this.sin(this.vxz));
-		if (!b) {
-			this.vxz += 2;
+		this.positionX = geometry.x + (int) ((geometry.x - n - geometry.x) * this.cos(this.circleAmount));
+		this.positionZ = geometry.z + (int) ((geometry.x - n - geometry.x) * this.sin(this.circleAmount));
+		if (isStartAnimation) {
+			this.circleAmount += 4;
 		} else {
-			this.vxz += 4;
+			this.circleAmount += 3;
 		}
 		int n2 = 0;
 		int y = this.positionY;
@@ -360,40 +344,25 @@ public class Medium {
 			n2 = -180;
 		}
 		int n3 = (int) (90 + n2 - Math.atan((int) Math.sqrt((geometry.z - this.positionZ + this.centerZ) * (geometry.z - this.positionZ + this.centerZ) + (geometry.x - this.positionX - this.centerX) * (geometry.x - this.positionX - this.centerX)) / (double) (geometry.y - y - this.centerY)) / 0.017453292519943295);
-		this.xz = -this.vxz + 90;
-		if (b) {
+		this.xz = -this.circleAmount + 90;
+		if (isStartAnimation) {
 			n3 -= 15;
 		}
 		this.zy += (n3 - this.zy) / 10;
 		if (this.trns != 5) {
 			this.trns = 5;
 		}
-		//System.out.println("hit:" + this.hit + ", vxz:" + this.vxz + ", zy:" + this.zy + ", xz:" + this.xz);
+		//System.out.println("hit:" + this.hit + ", circleAmount:" + this.circleAmount + ", zy:" + this.zy + ", xz:" + this.xz);
 
 	}
 
-	void setGround(final int n, final int n2, final int n3) {
-		this.cgrnd[0] = (int) (n + n * (this.snap[0] / 100.0f));
-		if (this.cgrnd[0] > 255) {
-			this.cgrnd[0] = 255;
-		}
-		if (this.cgrnd[0] < 0) {
-			this.cgrnd[0] = 0;
-		}
-		this.cgrnd[1] = (int) (n2 + n2 * (this.snap[1] / 100.0f));
-		if (this.cgrnd[1] > 255) {
-			this.cgrnd[1] = 255;
-		}
-		if (this.cgrnd[1] < 0) {
-			this.cgrnd[1] = 0;
-		}
-		this.cgrnd[2] = (int) (n3 + n3 * (this.snap[2] / 100.0f));
-		if (this.cgrnd[2] > 255) {
-			this.cgrnd[2] = 255;
-		}
-		if (this.cgrnd[2] < 0) {
-			this.cgrnd[2] = 0;
-		}
+	void setGround(final int red, final int green, final int blue) {
+		this.cgrnd[0] = (int) (red + red * (this.snap[0] / 100.0f));
+		this.cgrnd[1] = (int) (green + green * (this.snap[1] / 100.0f));
+		this.cgrnd[2] = (int) (blue + blue * (this.snap[2] / 100.0f));
+		cgrnd[0] = Util.clamp(cgrnd[0], 0, 255);
+		cgrnd[1] = Util.clamp(cgrnd[1], 0, 255);
+		cgrnd[2] = Util.clamp(cgrnd[2], 0, 255);
 	}
 
 	void adjustFade(final float n) {
@@ -424,13 +393,13 @@ public class Medium {
 		}
 	}
 
-	void aroundTrackAtStart(final CheckPoints checkPoints) {
+	void circleAroundStage(final CheckPoints checkPoints) {
 		if (this.flex != 0) {
 			this.flex = 0;
 		}
 		this.positionY = -this.hit;
-		this.positionX = (int) this.centerX + (int) this.trx + (int) (12000.0f * this.cos(this.vxz));
-		this.positionZ = (int) this.trz + (int) (12000.0f * this.sin(this.vxz));
+		this.positionX = (int) this.centerX + (int) this.trx + (int) (12000.0f * this.cos(this.circleAmount));
+		this.positionZ = (int) this.trz + (int) (12000.0f * this.sin(this.circleAmount));
 		this.hit -= 3000;
 		if (this.hit < 5000) {
 			this.hit = 5000;
@@ -447,11 +416,11 @@ public class Medium {
 				++this.ptcnt;
 			}
 		}
-		this.vxz += 2;
-		if (this.vxz > 360) {
-			this.vxz -= 360;
+		this.circleAmount += 2;
+		if (this.circleAmount > 360) {
+			this.circleAmount -= 360;
 		}
-		this.xz = -this.vxz - 90;
+		this.xz = -this.circleAmount - 90;
 		int n = 0;
 		if (-this.positionY - this.centerY < 0) {
 			n = -180;
@@ -470,26 +439,11 @@ public class Medium {
 
 	void setSky(final int n, final int n2, final int n3) {
 		this.skyColor[0] = (int) (n + n * (this.snap[0] / 100.0f));
-		if (this.skyColor[0] > 255) {
-			this.skyColor[0] = 255;
-		}
-		if (this.skyColor[0] < 0) {
-			this.skyColor[0] = 0;
-		}
 		this.skyColor[1] = (int) (n2 + n2 * (this.snap[1] / 100.0f));
-		if (this.skyColor[1] > 255) {
-			this.skyColor[1] = 255;
-		}
-		if (this.skyColor[1] < 0) {
-			this.skyColor[1] = 0;
-		}
 		this.skyColor[2] = (int) (n3 + n3 * (this.snap[2] / 100.0f));
-		if (this.skyColor[2] > 255) {
-			this.skyColor[2] = 255;
-		}
-		if (this.skyColor[2] < 0) {
-			this.skyColor[2] = 0;
-		}
+		skyColor[0] = Util.clamp(skyColor[0], 0, 255);
+		skyColor[1] = Util.clamp(skyColor[1], 0, 255);
+		skyColor[2] = Util.clamp(skyColor[2], 0, 255);
 	}
 
 	void fadeFrom(final int n) {

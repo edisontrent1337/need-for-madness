@@ -569,12 +569,12 @@ public class Geometry {
 						}
 					}
 				}
-				for (int n15 = 0; n15 < this.numberOfPlanes; ++n15) {
-					for (int n16 = 0; n16 < this.numberOfPlanes; ++n16) {
-						if (array[n16] == n15) {
-							this.planes[n16].d(graphics, this.x - this.medium.positionX, this.y - this.medium.positionY, this.z - this.medium.positionZ, this.xz, this.xy, this.zy, this.wxz, this.wzy, this.noline);
-							if (this.planes[n16].master != 0 && this.stg[this.planes[n16].master - 1] != 0) {
-								this.pdust(this.planes[n16].master - 1, graphics, 1);
+				for (int i = 0; i < this.numberOfPlanes; ++i) {
+					for (int j = 0; j < this.numberOfPlanes; ++j) {
+						if (array[j] == i) {
+							this.planes[j].draw(graphics, this.x - this.medium.positionX, this.y - this.medium.positionY, this.z - this.medium.positionZ, this.xz, this.xy, this.zy, this.wxz, this.wzy, this.noline);
+							if (this.planes[j].master != 0 && this.stg[this.planes[j].master - 1] != 0) {
+								this.pdust(this.planes[j].master - 1, graphics, 1);
 							}
 						}
 					}
@@ -589,8 +589,7 @@ public class Geometry {
 					if (this.stg[n17] == 4) {
 						this.stg[n17] = 0;
 					} else {
-						final int[] stg = this.stg;
-						++stg[n17];
+						this.stg[n17]++;
 					}
 				}
 			} while (++n17 < 4);

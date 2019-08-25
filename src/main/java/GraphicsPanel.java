@@ -692,7 +692,7 @@ public class GraphicsPanel extends Panel {
 		};
 
 		final int xPosition = Config.SCREEN_WIDTH / 2;
-		final int yPosition = 1020;
+		final int yPosition = 700 + (Config.SCREEN_HEIGHT - 400);
 
 		xCoordinates[0] = xPosition;
 		yCoordinates[0] = yPosition + 110;
@@ -748,19 +748,10 @@ public class GraphicsPanel extends Panel {
 			i -= 360;
 		}
 		if (!shouldPointAtCars) {
-			if (i > 130) {
-				i = 130;
-			}
-			if (i < -130) {
-				i = -130;
-			}
+			i = Util.clamp(i, -130, 130);
 		} else {
-			if (i > 100) {
-				i = 100;
-			}
-			if (i < -100) {
-				i = -100;
-			}
+			i = Util.clamp(i, -100, 100);
+
 		}
 		if (Math.abs(this.ana - i) < 180) {
 			if (Math.abs(this.ana - i) < 10) {
@@ -1542,6 +1533,7 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public void stat(final Madness madness, final CheckPoints checkPoints, final Control control, final boolean b, final Graphics graphics) {
+		this.medium.flex = 1;
 		int n = 0;
 		if (this.wasted == 4) {
 			if (this.medium.flex != 2) {
@@ -2572,7 +2564,7 @@ public class GraphicsPanel extends Panel {
 		graphics.setColor(new Color(r2, g2, b3));
 		graphics.fillPolygon(xCoordinates, yCoordinates, 4);
 
-		if (this.medium.flex == 2 && power != 98.0f) {
+		if (/*this.medium.flex == 2 && */power != 98.0f) {
 			xCoordinates[0] = (int) (422.0f + power);
 			yCoordinates[0] = 31;
 			xCoordinates[1] = (int) (422.0f + power);

@@ -711,6 +711,7 @@ public class Madness
     }
 
     public void drive(final Control control, final Geometry geometry, final Trackers trackers, final CheckPoints checkPoints) {
+        //System.out.println(this.loop);
         int n = 1;
         int n2 = 1;
         boolean zyinv = false;

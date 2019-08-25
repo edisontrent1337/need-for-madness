@@ -215,19 +215,11 @@ public class Control {
 					if (checkPoints.stage == 11) {
 						this.trickprf = -1.0f;
 					}
-					if (this.m.random() > madness.power / 100.0f) {
-						this.usebounce = true;
-					} else {
-						this.usebounce = false;
-					}
+					this.usebounce = this.m.random() > madness.power / 100.0f;
 					if (checkPoints.stage == 9) {
 						this.usebounce = false;
 					}
-					if (this.m.random() > madness.currentDamage / (float) madness.maxDamage[madness.cn]) {
-						this.perfection = false;
-					} else {
-						this.perfection = true;
-					}
+					this.perfection = !(this.m.random() > madness.currentDamage / (float) madness.maxDamage[madness.cn]);
 					if (100.0f * madness.currentDamage / madness.maxDamage[madness.cn] > 60.0f) {
 						this.perfection = true;
 					}
@@ -287,7 +279,9 @@ public class Control {
 									n5 = 180;
 								}
 								int j;
-								for (j = (int) (90 + n5 + Math.atan((checkPoints.opz[acr] - geometry.z) / (double) (checkPoints.opx[acr] - geometry.x)) / 0.017453292519943295); j < 0; j += 360) {
+								j = (int) (90 + n5 + Math.atan((checkPoints.opz[acr] - geometry.z) / (double) (checkPoints.opx[acr] - geometry.x)) / 0.017453292519943295);
+								while (j < 0) {
+									j += 360;
 								}
 								while (j > 180) {
 									j -= 360;
@@ -519,11 +513,7 @@ public class Control {
 								n17 = 1;
 							}
 							point = this.fpnt[n17];
-							if (checkPoints.special[n17]) {
-								this.forget = true;
-							} else {
-								this.forget = false;
-							}
+							this.forget = checkPoints.special[n17];
 						}
 						for (int n19 = 0; n19 < checkPoints.fn; ++n19) {
 							if (this.py(geometry.x / 100, checkPoints.x[this.fpnt[n19]] / 100, geometry.z / 100, checkPoints.z[this.fpnt[n19]] / 100) < 2000) {
@@ -810,7 +800,9 @@ public class Control {
 					}
 					if (this.udbare) {
 						int a;
-						for (a = madness.pzy + 90; a < 0; a += 360) {
+						a = madness.pzy + 90;
+						while (a < 0) {
+							a += 360;
 						}
 						while (a > 180) {
 							a -= 360;
@@ -960,22 +952,12 @@ public class Control {
 		}
 		for (int k = 0; k < checkPoints.fn; ++k) {
 			final int[] fpnt = this.fpnt;
-			final int n = k;
-			fpnt[n] -= 4;
+			fpnt[k] -= 4;
 			if (this.fpnt[k] < 0) {
-				final int[] fpnt2 = this.fpnt;
-				final int n2 = k;
-				fpnt2[n2] += checkPoints.nsp;
+				this.fpnt[k] += checkPoints.nsp;
 			}
 		}
-		this.left = false;
-		this.right = false;
-		this.up = false;
-		this.down = false;
-		this.handb = false;
-		this.arrace = false;
-		this.music_muted = false;
-		this.sound_muted = false;
+		this.falseo();
 	}
 
 	public Control(final Medium m) {

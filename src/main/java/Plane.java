@@ -201,7 +201,7 @@ public class Plane {
 		this.deltaf /= 3.0f;
 	}
 
-	public void d(final Graphics graphics, final int n, final int n2, final int n3, final int cxz, final int n4, final int n5, final int n6, final int n7, boolean b) {
+	public void draw(final Graphics graphics, final int n, final int n2, final int n3, final int cxz, final int n4, final int n5, final int n6, final int n7, boolean b) {
 		final int[] array = new int[this.n];
 		final int[] array2 = new int[this.n];
 		final int[] array3 = new int[this.n];

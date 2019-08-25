@@ -9,9 +9,18 @@ import java.util.zip.ZipInputStream;
 
 class Util {
 
+	static double clamp(double value, double min, double max) {
+		return Math.max(Math.min(value, max), min);
+	}
+
 	static int clamp(int value, int min, int max) {
 		return Math.max(Math.min(value, max), min);
 	}
+
+	static float clamp(float value, float min, float max) {
+		return Math.max(Math.min(value, max), min);
+	}
+
 	static ZipInputStream getInputStream(String path, Class callingClass) throws URISyntaxException, FileNotFoundException {
 		URL resource = callingClass.getResource(path);
 		File file = new File(resource.toURI());

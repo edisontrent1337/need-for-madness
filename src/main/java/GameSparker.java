@@ -9,8 +9,6 @@ import java.awt.event.MouseListener;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Date;
 import java.util.zip.ZipEntry;
@@ -402,7 +400,6 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		this.graphics.setColor(new Color(0, 0, 0));
 		this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 		this.repaint();
-		// this.testlocation();
 		int n = 5;
 		final int sunytyp = this.sunytyp();
 		if (sunytyp != 0) {
@@ -573,7 +570,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			}
 			if (graphicsPanel.fase == 1) {
 				graphicsPanel.trackbg(this.graphics);
-				medium.aroundTrackAtStart(checkPoints);
+				medium.circleAroundStage(checkPoints);
 				int n11 = 0;
 				final int[] array4 = new int[200];
 				for (int i = 5; i < this.notb; ++i) {
@@ -746,7 +743,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					if (graphicsPanel.starcnt == 90) {
 						medium.adv = 1900;
 						medium.zy = 40;
-						medium.vxz = 70;
+						medium.circleAmount = 70;
 						this.graphics.setColor(new Color(255, 255, 255));
 						this.graphics.fillRect(0, 0, 550, 400);
 					}
@@ -760,7 +757,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						graphicsPanel.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
 					}
 					if (this.view == 1) {
-						medium.circleAround(geometries[0], false);
+						medium.circleAroundCar(geometries[0], false);
 						graphicsPanel.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
 					}
 					if (this.view == 2) {
@@ -772,7 +769,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						this.mouses = 0;
 					}
 				} else {
-					medium.circleAround(geometries[3], true);
+					medium.circleAroundCar(geometries[3], true);
 					if (this.controls[0].enter || this.controls[0].handb) {
 						graphicsPanel.starcnt = 35;
 						this.controls[0].enter = false;
@@ -782,7 +779,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						this.mouses = 0;
 						medium.vert = false;
 						medium.adv = 900;
-						medium.vxz = 180;
+						medium.circleAmount = 180;
 						checkPoints.checkstat(cars, geometries);
 						medium.follow(geometries[0], cars[0].cxz);
 						graphicsPanel.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
@@ -869,13 +866,13 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				} else {
 					graphicsPanel.replyn(this.graphics);
 				}
-				medium.circleAround(geometries[0], false);
+				medium.circleAroundCar(geometries[0], false);
 			}
 			if (graphicsPanel.fase == -2) {
 				if (record.hcaught) {
 					medium.vert = !(medium.random() > 0.45);
 					medium.adv = (int) (900.0f * medium.random());
-					medium.vxz = 180;
+					medium.circleAmount = 180;
 					n8 = 0;
 					graphicsPanel.fase = -3;
 					n9 = 0;
@@ -965,9 +962,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 							this.graphics.fillRect(0, 0, 550, 400);
 						}
 						if (n9 >= 10) {
-							medium.circleAround(geometries[record.wasted], false);
+							medium.circleAroundCar(geometries[record.wasted], false);
 						} else {
-							medium.circleAround(geometries[0], false);
+							medium.circleAroundCar(geometries[0], false);
 						}
 						if (n8 > record.whenwasted && n9 != 20) {
 							++n9;
@@ -985,7 +982,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						if (n8 > record.whenwasted && n9 != 67) {
 							++n9;
 						}
-						medium.circleAround(geometries[0], false);
+						medium.circleAroundCar(geometries[0], false);
 						if ((n9 == 0 || n9 == 67) && ++n8 == 300) {
 							n8 = 0;
 							n9 = 0;
@@ -1150,11 +1147,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				frametime = n;
 			}
 			try {
-				Thread.sleep((long) (frametime));
+				Thread.sleep((long) (1000/23));
 			} catch (InterruptedException ex) {
 			}
 			//this.graphics.drawString("FPS:" + String.valueOf(1000 / frametime), 100, 100);
-			//System.out.println(xtGraphics.fase);
+			//System.out.println(frametime);
 		}
 	}
 
