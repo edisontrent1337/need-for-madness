@@ -4,6 +4,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,8 +44,10 @@ public class ResourceLoader {
 		return images;
 	}
 
-	void loadResources() {
-		Path graphicsDirectory = Paths.get(ResourceLoader.class.getResource(GRAPHICS_PATH).getPath());
+	void loadResources() throws URISyntaxException {
+		URI uri = ResourceLoader.class.getResource(GRAPHICS_PATH).toURI();
+		String graphicsDirectoryPath = Paths.get(uri).toString();
+		Path graphicsDirectory = Paths.get(graphicsDirectoryPath);
 		try (Stream<Path> fileStream = Files.walk(graphicsDirectory)) {
 			List<Path> imageFilePaths = fileStream
 					.filter(Files::isRegularFile)
@@ -246,6 +250,7 @@ public class ResourceLoader {
 			}
 			zipInputStream.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Error Loading Images");
 		}
 	}

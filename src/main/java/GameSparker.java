@@ -1252,7 +1252,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 			this.graphics = this.offImage.getGraphics();
 		}
 		ResourceLoader resourceLoader = new ResourceLoader(this, this.graphicsPanel);
-		resourceLoader.loadResources();
+		try {
+			resourceLoader.loadResources();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 
 	}
 
