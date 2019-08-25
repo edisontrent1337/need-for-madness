@@ -223,12 +223,12 @@ public class Control {
 					if (checkPoints.stage == 9) {
 						this.usebounce = false;
 					}
-					if (this.m.random() > madness.hitmag / (float) madness.maxmag[madness.cn]) {
+					if (this.m.random() > madness.currentDamage / (float) madness.maxDamage[madness.cn]) {
 						this.perfection = false;
 					} else {
 						this.perfection = true;
 					}
-					if (100.0f * madness.hitmag / madness.maxmag[madness.cn] > 60.0f) {
+					if (100.0f * madness.currentDamage / madness.maxDamage[madness.cn] > 60.0f) {
 						this.perfection = true;
 					}
 					if (checkPoints.stage == 6 || checkPoints.stage == 8 || checkPoints.stage == 9 || checkPoints.stage == 10 || checkPoints.stage == 11) {
@@ -376,10 +376,10 @@ public class Control {
 					}
 					if (this.trfix != 3) {
 						this.trfix = 0;
-						if (100.0f * madness.hitmag / madness.maxmag[madness.cn] > 50.0f) {
+						if (100.0f * madness.currentDamage / madness.maxDamage[madness.cn] > 50.0f) {
 							this.trfix = 1;
 						}
-						if (!b2 && 100.0f * madness.hitmag / madness.maxmag[madness.cn] > 80.0f) {
+						if (!b2 && 100.0f * madness.currentDamage / madness.maxDamage[madness.cn] > 80.0f) {
 							this.trfix = 2;
 						}
 					} else {

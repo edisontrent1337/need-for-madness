@@ -9,11 +9,10 @@ import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 //
@@ -178,8 +177,13 @@ public class GraphicsPanel extends Panel {
 	int dskflg;
 
 	private ResourceLoader resourceLoader;
+	private Map<String, Image> images = new HashMap<>();
 
-	public GraphicsPanel(final Medium medium, final Graphics graphics, final Applet app, final int n) throws MalformedURLException, URISyntaxException {
+	public void setImages(Map<String, Image> images) {
+		this.images = images;
+	}
+
+	public GraphicsPanel(final Medium medium, final Graphics graphics, final Applet app, final int n) {
 		this.fase = 7;
 		this.oldfase = 0;
 		this.starcnt = 0;
@@ -313,19 +317,18 @@ public class GraphicsPanel extends Panel {
 			this.kbload = 514;
 		}
 		this.loading(graphics, this.app);
-		//this.loadpak1(mediaTracker, defaultToolkit);
+
 		this.dnload += 47;
 		this.loading(graphics, this.app);
-		//this.loadpak2(mediaTracker, defaultToolkit);
+
 		this.dnload += 44;
 		this.loading(graphics, this.app);
-		this.resourceLoader.loadResources();
+		this.resourceLoader.loadResources(this);
 		this.resourceLoader.loadTextures();
-		Map<String, Image> images = resourceLoader.getImages();
-		//this.loadpak3(mediaTracker, defaultToolkit);
+
 		this.dnload += 47;
 		this.loading(graphics, this.app);
-		//this.loadpak4(mediaTracker, defaultToolkit);
+
 		this.dnload += 44;
 		this.loading(graphics, this.app);
 		this.next[1] = this.pressed(this.next[0]);
@@ -1174,7 +1177,7 @@ public class GraphicsPanel extends Panel {
 		}
 		for (int i = 0; i < width * height; ++i) {
 			if (array[i] != array[width * height - 1]) {
-				array[i] = -16777216;
+				array[i] = 16777215;
 			}
 		}
 		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
@@ -1716,7 +1719,7 @@ public class GraphicsPanel extends Panel {
 					this.laps = madness.nlaps;
 				}
 			}
-			this.drawstat(graphics, madness.maxmag[madness.cn], madness.hitmag, madness.newcar, madness.power);
+			this.drawStat(graphics, madness.maxDamage[madness.cn], madness.currentDamage, madness.newcar, madness.power);
 		}
 		if (n == 0) {
 			if (this.starcnt != 0) {
@@ -2313,63 +2316,34 @@ public class GraphicsPanel extends Panel {
 		} while (++n2 < 5);
 	}
 
-	public void drawCharacters(final Graphics graphics, final int n, final String str, int r, int g, int b, final int n2) {
+	public void drawCharacters(final Graphics graphics, final int yPosition, final String str, int r, int g, int b, final int n2) {
 		if (n2 != 3 && n2 != 4) {
 			r += (int) (r * (this.medium.snap[0] / 100.0f));
-			if (r > 255) {
-				r = 255;
-			}
-			if (r < 0) {
-				r = 0;
-			}
+			r = Util.clamp(r, 0, 255);
 			g += (int) (g * (this.medium.snap[1] / 100.0f));
-			if (g > 255) {
-				g = 255;
-			}
-			if (g < 0) {
-				g = 0;
-			}
+			g = Util.clamp(g, 0, 255);
 			b += (int) (b * (this.medium.snap[2] / 100.0f));
-			if (b > 255) {
-				b = 255;
-			}
-			if (b < 0) {
-				b = 0;
-			}
+			b = Util.clamp(b, 0, 255);
 		}
 		if (n2 == 4) {
 			r -= (int) (r * (this.medium.snap[0] / 100.0f));
-			if (r > 255) {
-				r = 255;
-			}
-			if (r < 0) {
-				r = 0;
-			}
+			r = Util.clamp(r, 0, 255);
 			g -= (int) (g * (this.medium.snap[1] / 100.0f));
-			if (g > 255) {
-				g = 255;
-			}
-			if (g < 0) {
-				g = 0;
-			}
+			g = Util.clamp(g, 0, 255);
 			b -= (int) (b * (this.medium.snap[2] / 100.0f));
-			if (b > 255) {
-				b = 255;
-			}
-			if (b < 0) {
-				b = 0;
-			}
+			b = Util.clamp(b, 0, 255);
+
 		}
 		if (n2 == 1) {
 			graphics.setColor(new Color(0, 0, 0));
-			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, n + 1);
+			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, yPosition + 1);
 		}
 		if (n2 == 2) {
 			graphics.setColor(new Color((r + this.medium.skyColor[0] * 2) / 3, (g + this.medium.skyColor[1] * 2) / 3, (b + this.medium.skyColor[2] * 2) / 3));
-			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, n + 1);
+			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, yPosition + 1);
 		}
 		graphics.setColor(new Color(r, g, b));
-		graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2, n);
+		graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2, yPosition);
 	}
 
 	public int py(final int n, final int n2, final int n3, final int n4) {
@@ -2470,29 +2444,14 @@ public class GraphicsPanel extends Panel {
 			if (array[i] != -4144960 && array[i] != array[width * height - 1]) {
 				final Color color = new Color(array[i]);
 				int r = (int) (color.getRed() + color.getRed() * (this.medium.snap[0] / 100.0f));
-				if (r > 225) {
-					r = 225;
-				}
-				if (r < 0) {
-					r = 0;
-				}
+				r = Util.clamp(r, 0 ,255);
 				int g = (int) (color.getGreen() + color.getGreen() * (this.medium.snap[1] / 100.0f));
-				if (g > 225) {
-					g = 225;
-				}
-				if (g < 0) {
-					g = 0;
-				}
+				g = Util.clamp(g, 0 ,255);
 				int b = (int) (color.getBlue() + color.getBlue() * (this.medium.snap[2] / 100.0f));
-				if (b > 225) {
-					b = 225;
-				}
-				if (b < 0) {
-					b = 0;
-				}
-				array[i] = new Color(r, g, b).getRGB();
+				b = Util.clamp(b, 0 ,255);
+				array[i] = new Color(r, g, b, 255).getRGB();
 			} else if (array[i] == -4144960) {
-				array[i] = new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]).getRGB();
+				array[i] = new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2], 0).getRGB();
 			}
 		}
 		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
@@ -2529,99 +2488,40 @@ public class GraphicsPanel extends Panel {
 		this.sortcars(n);
 	}
 
-	public void loadpak2(final MediaTracker mediaTracker, final Toolkit toolkit) {
-		try {
-
-			String path = "../../resources/graphics/images2.zipo";
-			final ZipInputStream zipInputStream = getInputStream(path);
-
-			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
-				int i = (int) zipEntry.getSize();
-				final String name = zipEntry.getName();
-				final byte[] b = new byte[i];
-				int off = 0;
-				while (i > 0) {
-					final int read = zipInputStream.read(b, off, i);
-					off += read;
-					i -= read;
-				}
-				if (name.equals("1c.gif")) {
-					this.ocntdn[1] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("2c.gif")) {
-					this.ocntdn[2] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("3c.gif")) {
-					this.ocntdn[3] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("2.gif")) {
-					this.orank[1] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("3.gif")) {
-					this.orank[2] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("4.gif")) {
-					this.orank[3] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("5.gif")) {
-					this.orank[4] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("bgmain.jpg")) {
-					this.bgmain = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("br.gif")) {
-					this.br = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("loadingmusic.gif")) {
-					this.oloadingmusic = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("main.gif")) {
-					this.maini = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("radicalplay.gif")) {
-					this.radicalplay = this.loadimage(b, mediaTracker, toolkit);
-				}
-			}
-			zipInputStream.close();
-		} catch (Exception obj) {
-			System.out.println("Error Reading Images Pak 2: " + obj);
-		}
-	}
-
-	public void drawstat(final Graphics graphics, final int n, int n2, final boolean b, final float n3) {
-		final int[] array = new int[4];
-		final int[] array2 = new int[4];
-		if (b) {
-			array[0] = 423;
-			array2[0] = 11;
-			array[1] = 423;
-			array2[1] = 19;
-			array[2] = 520;
-			array2[2] = 19;
-			array[3] = 520;
-			array2[3] = 11;
+	public void drawStat(final Graphics graphics, final int maxDamage, int currentDamage, final boolean newCar, final float power) {
+		final int[] xCoordinates = new int[4];
+		final int[] yCoordinates = new int[4];
+		if (newCar) {
+			xCoordinates[0] = 423;
+			yCoordinates[0] = 11;
+			xCoordinates[1] = 423;
+			yCoordinates[1] = 19;
+			xCoordinates[2] = 520;
+			yCoordinates[2] = 19;
+			xCoordinates[3] = 520;
+			yCoordinates[3] = 11;
 			graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
-			graphics.fillPolygon(array, array2, 4);
+			graphics.fillPolygon(xCoordinates, yCoordinates, 4);
 		}
-		if (n2 > n) {
-			n2 = n;
-		}
-		final int n4 = (int) (98.0f * (n2 / (float) n));
-		array[0] = 422;
-		array2[0] = 11;
-		array[1] = 422;
-		array2[1] = 20;
-		array[2] = 422 + n4;
-		array2[2] = 20;
-		array[3] = 422 + n4;
-		array2[3] = 11;
+
+		currentDamage = Math.min(currentDamage, maxDamage);
+
+		final int damageBarWidth = (int) (98.0f * (currentDamage / (float) maxDamage));
+		xCoordinates[0] = 422;
+		yCoordinates[0] = 11;
+		xCoordinates[1] = 422;
+		yCoordinates[1] = 20;
+		xCoordinates[2] = 422 + damageBarWidth;
+		yCoordinates[2] = 20;
+		xCoordinates[3] = 422 + damageBarWidth;
+		yCoordinates[3] = 11;
 		final int n5 = 244;
 		int n6 = 244;
 		final int n7 = 11;
-		if (n4 > 33) {
-			n6 = (int) (244.0f - 233.0f * ((n4 - 33) / 65.0f));
+		if (damageBarWidth > 33) {
+			n6 = (int) (244.0f - 233.0f * ((damageBarWidth - 33) / 65.0f));
 		}
-		if (n4 > 70) {
+		if (damageBarWidth > 70) {
 			if (this.dmcnt < 10) {
 				if (this.dmflk) {
 					n6 = 170;
@@ -2631,46 +2531,32 @@ public class GraphicsPanel extends Panel {
 				}
 			}
 			++this.dmcnt;
-			if (this.dmcnt > 167.0 - n4 * 1.5) {
+			if (this.dmcnt > 167.0 - damageBarWidth * 1.5) {
 				this.dmcnt = 0;
 			}
 		}
 		int r = (int) (n5 + n5 * (this.medium.snap[0] / 100.0f));
-		if (r > 255) {
-			r = 255;
-		}
-		if (r < 0) {
-			r = 0;
-		}
+		r = Util.clamp(r, 0, 255);
 		int g = (int) (n6 + n6 * (this.medium.snap[1] / 100.0f));
-		if (g > 255) {
-			g = 255;
-		}
-		if (g < 0) {
-			g = 0;
-		}
+		g = Util.clamp(g, 0, 255);
 		int b2 = (int) (n7 + n7 * (this.medium.snap[2] / 100.0f));
-		if (b2 > 255) {
-			b2 = 255;
-		}
-		if (b2 < 0) {
-			b2 = 0;
-		}
+		b2 = Util.clamp(b2, 0, 255);
 		graphics.setColor(new Color(r, g, b2));
-		graphics.fillPolygon(array, array2, 4);
-		array[0] = 422;
-		array2[0] = 31;
-		array[1] = 422;
-		array2[1] = 40;
-		array[2] = (int) (422.0f + n3);
-		array2[2] = 40;
-		array[3] = (int) (422.0f + n3);
-		array2[3] = 31;
+		graphics.fillPolygon(xCoordinates, yCoordinates, 4);
+
+		xCoordinates[0] = 422;
+		yCoordinates[0] = 31;
+		xCoordinates[1] = 422;
+		yCoordinates[1] = 40;
+		xCoordinates[2] = (int) (422.0f + power);
+		yCoordinates[2] = 40;
+		xCoordinates[3] = (int) (422.0f + power);
+		yCoordinates[3] = 31;
 		int n8 = 128;
-		if (n3 == 98.0f) {
+		if (power == 98.0f) {
 			n8 = 64;
 		}
-		int n9 = (int) (190.0 + n3 * 0.37);
+		int n9 = (int) (190.0 + power * 0.37);
 		int n10 = 244;
 		if (this.auscnt < 45 && this.aflk) {
 			n8 = 128;
@@ -2678,39 +2564,25 @@ public class GraphicsPanel extends Panel {
 			n10 = 244;
 		}
 		int r2 = (int) (n8 + n8 * (this.medium.snap[0] / 100.0f));
-		if (r2 > 255) {
-			r2 = 255;
-		}
-		if (r2 < 0) {
-			r2 = 0;
-		}
+		r2 = Util.clamp(r2, 0, 255);
 		int g2 = (int) (n9 + n9 * (this.medium.snap[1] / 100.0f));
-		if (g2 > 255) {
-			g2 = 255;
-		}
-		if (g2 < 0) {
-			g2 = 0;
-		}
+		g2 = Util.clamp(g2, 0, 255);
 		int b3 = (int) (n10 + n10 * (this.medium.snap[2] / 100.0f));
-		if (b3 > 255) {
-			b3 = 255;
-		}
-		if (b3 < 0) {
-			b3 = 0;
-		}
+		b3 = Util.clamp(b3, 0, 255);
 		graphics.setColor(new Color(r2, g2, b3));
-		graphics.fillPolygon(array, array2, 4);
-		if (this.medium.flex == 2 && n3 != 98.0f) {
-			array[0] = (int) (422.0f + n3);
-			array2[0] = 31;
-			array[1] = (int) (422.0f + n3);
-			array2[1] = 39;
-			array[2] = 520;
-			array2[2] = 39;
-			array[3] = 520;
-			array2[3] = 31;
+		graphics.fillPolygon(xCoordinates, yCoordinates, 4);
+
+		if (this.medium.flex == 2 && power != 98.0f) {
+			xCoordinates[0] = (int) (422.0f + power);
+			yCoordinates[0] = 31;
+			xCoordinates[1] = (int) (422.0f + power);
+			yCoordinates[1] = 39;
+			xCoordinates[2] = 520;
+			yCoordinates[2] = 39;
+			xCoordinates[3] = 520;
+			yCoordinates[3] = 31;
 			graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
-			graphics.fillPolygon(array, array2, 4);
+			graphics.fillPolygon(xCoordinates, yCoordinates, 4);
 		}
 	}
 
@@ -2852,26 +2724,11 @@ public class GraphicsPanel extends Panel {
 
 	public void musicomp(final int n, final Graphics graphics, final Control control) {
 		int r = (int) (230.0f - 230.0f * (this.medium.snap[0] / (float) (100 * this.hipno[n - 1])));
-		if (r > 255) {
-			r = 255;
-		}
-		if (r < 0) {
-			r = 0;
-		}
+		r = Util.clamp(r, 0, 255);
 		int g = (int) (230.0f - 230.0f * (this.medium.snap[1] / (float) (100 * this.hipno[n - 1])));
-		if (g > 255) {
-			g = 255;
-		}
-		if (g < 0) {
-			g = 0;
-		}
+		g = Util.clamp(g, 0, 255);
 		int b = (int) (230.0f - 230.0f * (this.medium.snap[2] / (float) (100 * this.hipno[n - 1])));
-		if (b > 255) {
-			b = 255;
-		}
-		if (b < 0) {
-			b = 0;
-		}
+		b = Util.clamp(b, 0, 255);
 		if (this.hipno[n - 1] == 0) {
 			r = 255;
 			g = 230;
@@ -3009,64 +2866,6 @@ public class GraphicsPanel extends Panel {
 		graphics.setColor(new Color(0, 89, 223));
 		graphics.drawRoundRect(75, 171, 400, 23, 7, 20);
 		this.drawCharacters(graphics, 187, "Sorry not enough replay data to play available, please try again later.", 255, 255, 255, 1);
-	}
-
-	@Deprecated
-	// FIXME: REMOVE THIS.
-	public void loadpak3(final MediaTracker mediaTracker, final Toolkit toolkit) {
-		try {
-
-			String path = "../../resources/graphics/images3.zipo";
-			final ZipInputStream zipInputStream = getInputStream(path);
-
-			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
-				int i = (int) zipEntry.getSize();
-				final String name = zipEntry.getName();
-				final byte[] b = new byte[i];
-				int off = 0;
-				while (i > 0) {
-					final int read = zipInputStream.read(b, off, i);
-					off += read;
-					i -= read;
-				}
-				if (name.equals("back.gif")) {
-					this.back[0] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("continue1.gif")) {
-					this.contin1[0] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("continue2.gif")) {
-					this.contin2[0] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("inst3.gif")) {
-					this.inst3 = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("next.gif")) {
-					this.next[0] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("pgate.gif")) {
-					this.pgate = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("rpro.gif")) {
-					this.rpro = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("selectcar.gif")) {
-					this.selectcar = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("stages.jpg")) {
-					this.trackbg = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("youlost.gif")) {
-					this.oyoulost = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("youwon.gif")) {
-					this.oyouwon = this.loadimage(b, mediaTracker, toolkit);
-				}
-			}
-			zipInputStream.close();
-		} catch (Exception obj) {
-			System.out.println("Error Reading Images Pak 3: " + obj);
-		}
 	}
 
 	public void stopallnow() {
@@ -3482,10 +3281,9 @@ public class GraphicsPanel extends Panel {
 		}
 	}
 
-	private AudioClip getSound(final String name) throws MalformedURLException, URISyntaxException {
+	private AudioClip getSound(final String name) {
 		//
-		AudioClip audioClip = this.app.getAudioClip(this.app.getCodeBase(), name);
-
+		AudioClip audioClip;
 		URL resource = this.getClass().getResource(name);
 		audioClip = Applet.newAudioClip(resource);
 		if (name.startsWith("../../resources/sounds/default")) {
@@ -3496,75 +3294,4 @@ public class GraphicsPanel extends Panel {
 		return audioClip;
 	}
 
-	public void loadpak4(final MediaTracker mediaTracker, final Toolkit toolkit) {
-		try {
-			String path = "../../resources/graphics/images4.zipo";
-			final ZipInputStream zipInputStream = getInputStream(path);
-			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
-				int i = (int) zipEntry.getSize();
-				final String name = zipEntry.getName();
-				final byte[] b = new byte[i];
-				int off = 0;
-				while (i > 0) {
-					final int read = zipInputStream.read(b, off, i);
-					off += read;
-					i -= read;
-				}
-				if (name.equals("0c.gif")) {
-					this.ocntdn[0] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("damage.gif")) {
-					this.odmg = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("power.gif")) {
-					this.opwr = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("position.gif")) {
-					this.opos = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("wasted.gif")) {
-					this.owas = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("bl.gif")) {
-					this.bl = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("bt.gif")) {
-					this.bt = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("bb.gif")) {
-					this.bb = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("start1.gif")) {
-					this.ostar[0] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("start2.gif")) {
-					this.ostar[1] = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("congrad.gif")) {
-					this.congrd = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("statb.gif")) {
-					this.statb = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("madness.gif")) {
-					this.omdness = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("options.gif")) {
-					this.opti = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("inst1.gif")) {
-					this.inst1 = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("inst2.gif")) {
-					this.inst2 = this.loadimage(b, mediaTracker, toolkit);
-				}
-				if (name.equals("nfmcom.gif")) {
-					this.nfmcom = this.loadimage(b, mediaTracker, toolkit);
-				}
-			}
-			zipInputStream.close();
-		} catch (Exception obj) {
-			System.out.println("Error Reading Images Pak 4: " + obj);
-		}
-	}
 }

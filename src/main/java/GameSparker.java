@@ -33,7 +33,14 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 	int nob;
 	int notb;
 	int view;
+
 	GraphicsPanel graphicsPanel;
+	Trackers trackers;
+	CheckPoints checkPoints;
+	Medium medium;
+	Record record;
+	Geometry[] geometries;
+	Madness[] cars;
 
 	public GameSparker() {
 		this.controls = new Control[5];
@@ -48,70 +55,6 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		addMouseListener(this);
 		addKeyListener(this);
 	}
-
-   /* public void testlocation() {
-        try {
-            final JSObject window = JSObject.getWindow(this);
-            boolean b = false;
-            window.eval("var sti=''+top.location;");
-            final String value = String.valueOf(String.valueOf(window.getMember("sti")));
-            int i = 0;
-            if (value.startsWith("http:/")) {
-                while (i < value.length() - 1) {
-                    if (value.startsWith("freearcade.com", i)) {
-                        b = true;
-                    }
-                    ++i;
-                }
-            }
-            else {
-                b = true;
-            }
-            if (!b) {
-                this.rd.setColor(new Color(0, 0, 0));
-                this.rd.fillRect(0, 0, 550, 400);
-                this.rd.setColor(new Color(255, 255, 255));
-                this.rd.drawString("Access Denied !", 30, 50);
-                this.rd.drawString("This game will not run under this loaction:", 30, 100);
-                this.rd.drawString("" + value, 30, 120);
-                this.rd.drawString("Please contact Radicalplay.com for details.", 30, 200);
-                this.repaint();
-                window.eval("window.open('http://www.radicalplay.com/madness/','olen','menubar=1,toolbar=1,location=1,resizable=1,status=1,scrollbars=1');");
-                this.gamer.stop();
-            }
-        }
-        catch (Exception ex) {
-            boolean b2 = false;
-            final String string = "" + this.getDocumentBase();
-            int j = 0;
-            if (string.startsWith("http:/")) {
-                while (j < string.length() - 1) {
-                    if (string.startsWith("freearcade.com", j)) {
-                        b2 = true;
-                    }
-                    ++j;
-                }
-            }
-            else {
-                b2 = true;
-            }
-            if (!b2) {
-                this.rd.setColor(new Color(0, 0, 0));
-                this.rd.fillRect(0, 0, 550, 400);
-                this.rd.setColor(new Color(255, 255, 255));
-                this.rd.drawString("Access Denied !", 30, 50);
-                this.rd.drawString("This game will not run under this loaction:", 30, 100);
-                this.rd.drawString("" + string, 30, 120);
-                this.rd.drawString("Please contact Radicalplay.com for details.", 30, 200);
-                this.repaint();
-                try {
-                    this.getAppletContext().showDocument(new URL("http://www.radicalplay.com/madness/"), "olen");
-                }
-                catch (Exception ex2) {}
-                this.gamer.stop();
-            }
-        }
-    }*/
 
 	public void stop() {
 		if (this.exwist && this.gamer != null) {
@@ -460,56 +403,27 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
 		this.repaint();
 		// this.testlocation();
-		final Medium medium = new Medium();
 		int n = 5;
 		final int sunytyp = this.sunytyp();
 		if (sunytyp != 0) {
 			n = 15;
 		}
-		final Trackers trackers = new Trackers();
-		final CheckPoints checkPoints = new CheckPoints();
-		try {
-			graphicsPanel = new GraphicsPanel(medium, this.graphics, this, sunytyp);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-		final Record record = new Record(medium);
-		final Geometry[] array = new Geometry[43];
+
+		Geometry[] array = new Geometry[43];
 		this.loadBase(array, medium, trackers);
-		final GraphicsPanel graphicsPanel2 = graphicsPanel;
-		graphicsPanel2.dnload += 29;
+		graphicsPanel.dnload += 29;
 		graphicsPanel.loading(this.graphics, this);
-		final Geometry[] geometries = new Geometry[210];
-		final Madness[] cars = new Madness[5];
 		int n2 = 0;
 		do {
 			cars[n2] = new Madness(medium, record, graphicsPanel, n2);
 			this.controls[n2] = new Control(medium);
 		} while (++n2 < 5);
+
 		float n3 = 35.0f;
 		int n4 = 80;
+
 		graphicsPanel.unlocked = 11;
-		// final int readcookie = this.readcookie("unlocked");
-        /*if (readcookie >= 1 && readcookie <= 11) {
-            xtGraphics.unlocked = readcookie;
-            if (xtGraphics.unlocked != 11) {
-                checkPoints.stage = xtGraphics.unlocked;
-            }
-            else {
-                checkPoints.stage = (int)(Math.random() * 11.0) + 1;
-            }
-            xtGraphics.opselect = 0;
-        }
-        final int readcookie2 = this.readcookie("usercar");
-        if (readcookie2 >= 0 && readcookie2 <= 9) {
-            xtGraphics.sc[0] = readcookie2;
-        }
-        if (this.readcookie("gameprfact") != -1) {
-            n3 = (float)this.readcookie("gameprfact");
-            n4 = 0;
-        }*/
+
 		int n5 = 0;
 		long time = new Date().getTime();
 		float a = 30.0f;
@@ -808,15 +722,13 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 					}
 				}
 				if (graphicsPanel.starcnt == 0) {
-					int n41 = 0;
+					int i = 0;
 					do {
-						int n42 = 0;
-						do {
-							if (n42 != n41) {
-								cars[n41].colide(geometries[n41], cars[n42], geometries[n42]);
-							}
-						} while (++n42 < 5);
-					} while (++n41 < 5);
+						int j = 0;
+						do if (j != i) {
+							cars[i].colide(geometries[i], cars[j], geometries[j]);
+						} while (++j < 5);
+					} while (++i < 5);
 					int n43 = 0;
 					do {
 						cars[n43].drive(this.controls[n43], geometries[n43], trackers, checkPoints);
@@ -1238,7 +1150,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 				frametime = n;
 			}
 			try {
-				Thread.sleep((long) (1000.0 / 30.0));
+				Thread.sleep((long) (frametime));
 			} catch (InterruptedException ex) {
 			}
 			//this.graphics.drawString("FPS:" + String.valueOf(1000 / frametime), 100, 100);
@@ -1251,12 +1163,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 		if (this.offImage != null) {
 			this.graphics = this.offImage.getGraphics();
 		}
+
+		medium = new Medium();
+		trackers = new Trackers();
+		checkPoints = new CheckPoints();
+		graphicsPanel = new GraphicsPanel(medium, this.graphics, this, 1);
+		cars = new Madness[5];
+		record = new Record(medium);
+		geometries = new Geometry[210];
+
 		ResourceLoader resourceLoader = new ResourceLoader(this, this.graphicsPanel);
-		try {
-			resourceLoader.loadResources();
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
+		resourceLoader.loadResources(this.graphicsPanel);
 
 	}
 
@@ -1269,7 +1186,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 
 	@Override
 	public void mouseClicked(MouseEvent mouseEvent) {
-		System.out.println("Mouse pressed.");
+		//System.out.println("Mouse pressed.");
 		if (!this.exwist && this.mouses == 0) {
 			this.xm = mouseEvent.getX();
 			this.ym = mouseEvent.getY();

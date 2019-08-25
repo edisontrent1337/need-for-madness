@@ -44,8 +44,18 @@ public class ResourceLoader {
 		return images;
 	}
 
-	void loadResources() throws URISyntaxException {
-		URI uri = ResourceLoader.class.getResource(GRAPHICS_PATH).toURI();
+	void loadResources(GraphicsPanel graphicsPanel) {
+		this.loadResources();
+		graphicsPanel.setImages(images);
+	}
+
+	private void loadResources() {
+		URI uri = null;
+		try {
+			uri = ResourceLoader.class.getResource(GRAPHICS_PATH).toURI();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 		String graphicsDirectoryPath = Paths.get(uri).toString();
 		Path graphicsDirectory = Paths.get(graphicsDirectoryPath);
 		try (Stream<Path> fileStream = Files.walk(graphicsDirectory)) {

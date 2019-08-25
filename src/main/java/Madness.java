@@ -35,7 +35,7 @@ public class Madness
     int[] flipy;
     int[] msquash;
     int[] clrad;
-    int[] maxmag;
+    int[] maxDamage;
     float[] dammult;
     int[] outdam;
     boolean[] dominate;
@@ -84,7 +84,7 @@ public class Madness
     float tilt;
     int squash;
     int nbsq;
-    int hitmag;
+    int currentDamage;
     int cntdest;
     boolean dest;
     boolean newcar;
@@ -144,7 +144,7 @@ public class Madness
                             oz[l] += (int)(ctmag * this.m.sin(i));
                             final int[] ox = geometry.planes[k].ox;
                             ox[l] -= (int)(ctmag * this.m.sin(j));
-                            this.hitmag += (int)Math.abs(ctmag);
+                            this.currentDamage += (int)Math.abs(ctmag);
                         }
                     }
                     if (ctmag != 0.0f) {
@@ -206,7 +206,7 @@ public class Madness
                                     oy[n10] += (int)ctmag2;
                                     n7 += (int)ctmag2;
                                     ++n8;
-                                    this.hitmag += (int)Math.abs(ctmag2);
+                                    this.currentDamage += (int)Math.abs(ctmag2);
                                 }
                             }
                         }
@@ -258,7 +258,7 @@ public class Madness
         this.flipy = new int[] { -50, -26, -90, -41, -55, -53, -54, -85, -60, -127 };
         this.msquash = new int[] { 7, 3, 7, 2, 3, 3, 6, 10, 10, 8 };
         this.clrad = new int[] { 3300, 1500, 4700, 3000, 1700, 2100, 3500, 7000, 4000, 4000 };
-        this.maxmag = new int[] { 3500, 1700, 7500, 5000, 3000, 4100, 6000, 9000, 4400, 9500 };
+        this.maxDamage = new int[] { 3500, 1700, 7500, 5000, 3000, 4100, 6000, 9000, 4400, 9500 };
         this.dammult = new float[] { 1.0f, 2.028f, 0.9375f, 1.1791f, 1.0f, 0.9066f, 1.0f, 0.6969f, 0.8266f, 0.7667f };
         this.outdam = new int[] { 77, 35, 80, 67, 55, 75, 81, 100, 75, 90 };
         this.dominate = new boolean[5];
@@ -307,7 +307,7 @@ public class Madness
         this.tilt = 0.0f;
         this.squash = 0;
         this.nbsq = 0;
-        this.hitmag = 0;
+        this.currentDamage = 0;
         this.cntdest = 0;
         this.dest = false;
         this.newcar = false;
@@ -354,7 +354,7 @@ public class Madness
                         oz[j] += (int)(n2 * this.m.cos(geometry.xz) * this.m.cos(geometry.zy));
                         final int[] ox = geometry.planes[i].ox;
                         ox[j] += (int)(n2 * this.m.sin(geometry.xz) * this.m.cos(geometry.xy));
-                        this.hitmag += (int)Math.abs(n2);
+                        this.currentDamage += (int)Math.abs(n2);
                     }
                 }
                 if (n2 != 0.0f) {
@@ -494,8 +494,7 @@ public class Madness
                             scx2[n3] -= n5;
                             this.regx(n3, -n5 * madness.moment[this.cn], geometry);
                             final float[] scy = this.scy;
-                            final int n9 = n3;
-                            scy[n9] -= this.revlift[this.cn];
+                            scy[n3] -= this.revlift[this.cn];
                             if (this.im == 0) {
                                 madness.colidim = true;
                             }
@@ -633,7 +632,7 @@ public class Madness
         checkPoints.dested[this.im] = 0;
         this.squash = 0;
         this.nbsq = 0;
-        this.hitmag = 0;
+        this.currentDamage = 0;
         this.cntdest = 0;
         this.dest = false;
         this.newcar = false;
@@ -661,7 +660,7 @@ public class Madness
                         oz[j] -= (int)(n2 * this.m.sin(geometry.xz) * this.m.cos(geometry.zy));
                         final int[] ox = geometry.planes[i].ox;
                         ox[j] += (int)(n2 * this.m.cos(geometry.xz) * this.m.cos(geometry.xy));
-                        this.hitmag += (int)Math.abs(n2);
+                        this.currentDamage += (int)Math.abs(n2);
                     }
                 }
                 if (n2 != 0.0f) {
@@ -1858,7 +1857,7 @@ public class Madness
             geometry.zy += (int)((this.m.random() * 4.0f * this.speed / this.swits[this.cn][2] - 2.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
             geometry.xy += (int)((this.m.random() * 4.0f * this.speed / this.swits[this.cn][2] - 2.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
         }
-        if (this.hitmag > this.maxmag[this.cn] && !this.dest) {
+        if (this.currentDamage > this.maxDamage[this.cn] && !this.dest) {
             this.distruct(geometry);
             if (this.cntdest == 7) {
                 this.dest = true;
@@ -2012,7 +2011,7 @@ public class Madness
         if (geometry.fcnt == 7 || geometry.fcnt == 8) {
             this.squash = 0;
             this.nbsq = 0;
-            this.hitmag = 0;
+            this.currentDamage = 0;
             this.cntdest = 0;
             this.dest = false;
             this.newcar = true;
