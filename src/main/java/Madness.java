@@ -1120,9 +1120,7 @@ public class Madness
             array[n15] = (float)(geometry.keyx[n15] + geometry.x);
             array3[n15] = (float)(grat + geometry.y);
             array2[n15] = (float)(geometry.z + geometry.keyz[n15]);
-            final float[] scy = this.scy;
-            final int n16 = n15;
-            scy[n16] += 7.0f;
+            this.scy[n15] += 7.0f;
         } while (++n15 < 4);
         this.rot(array, array3, geometry.x, geometry.y, this.pxy, 4);
         this.rot(array3, array2, geometry.y, geometry.z, this.pzy, 4);
@@ -1147,15 +1145,9 @@ public class Madness
         } while (++n19 < 4);
         int n20 = 0;
         do {
-            final float[] array4 = array3;
-            final int n21 = n20;
-            array4[n21] += this.scy[n20];
-            final float[] array5 = array;
-            final int n22 = n20;
-            array5[n22] += (this.scx[0] + this.scx[1] + this.scx[2] + this.scx[3]) / 4.0f;
-            final float[] array6 = array2;
-            final int n23 = n20;
-            array6[n23] += (this.scz[0] + this.scz[1] + this.scz[2] + this.scz[3]) / 4.0f;
+            array3[n20] += this.scy[n20];
+            array[n20] += (this.scx[0] + this.scx[1] + this.scx[2] + this.scx[3]) / 4.0f;
+            array2[n20] += (this.scz[0] + this.scz[1] + this.scz[2] + this.scz[3]) / 4.0f;
         } while (++n20 < 4);
         int n24 = 1;
         for (int k = 0; k < trackers.nt; ++k) {
@@ -1218,14 +1210,10 @@ public class Madness
             do {
                 if (Math.abs(this.scx[n31] - n26) > n25) {
                     if (this.scx[n31] < n26) {
-                        final float[] scx = this.scx;
-                        final int n32 = n31;
-                        scx[n32] += n25;
+                        this.scx[n31] += n25;
                     }
                     else {
-                        final float[] scx2 = this.scx;
-                        final int n33 = n31;
-                        scx2[n33] -= n25;
+                        this.scx[n31] -= n25;
                     }
                 }
                 else {
@@ -1233,14 +1221,10 @@ public class Madness
                 }
                 if (Math.abs(this.scz[n31] - n27) > n25) {
                     if (this.scz[n31] < n27) {
-                        final float[] scz = this.scz;
-                        final int n34 = n31;
-                        scz[n34] += n25;
+                        this.scz[n31] += n25;
                     }
                     else {
-                        final float[] scz2 = this.scz;
-                        final int n35 = n31;
-                        scz2[n35] -= n25;
+                        this.scz[n31] -= n25;
                     }
                 }
                 else {
@@ -1358,9 +1342,7 @@ public class Madness
                 int n44 = 0;
                 do {
                     if (n41 != n44 && array3[n44] <= 245.0f) {
-                        final float[] array8 = array3;
-                        final int n45 = n44;
-                        array8[n45] -= array3[n41] - 250.0f;
+                        array3[n44] -= array3[n41] - 250.0f;
                     }
                 } while (++n44 < 4);
                 float n46 = (Math.abs(this.medium.sin(this.pxy)) + Math.abs(this.medium.sin(this.pzy))) / 3.0f;
@@ -1373,9 +1355,7 @@ public class Madness
                 }
                 this.regy(n41, Math.abs(this.scy[n41] * n47), geometry);
                 if (this.scy[n41] > 0.0f) {
-                    final float[] scy4 = this.scy;
-                    final int n48 = n41;
-                    scy4[n48] -= Math.abs(this.scy[n41] * n47);
+                    this.scy[n41] -= Math.abs(this.scy[n41] * n47);
                 }
             }
             array7[n41] = false;
