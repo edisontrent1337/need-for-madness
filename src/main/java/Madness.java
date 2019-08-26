@@ -1409,9 +1409,7 @@ public class Madness
                         int n55 = 0;
                         do {
                             if (n52 != n55 && array3[n55] <= trackers.y[l] - 5) {
-                                final float[] array9 = array3;
-                                final int n56 = n55;
-                                array9[n56] -= array3[n52] - trackers.y[l];
+                                array3[n55] -= array3[n52] - trackers.y[l];
                             }
                         } while (++n55 < 4);
                         float n57 = (Math.abs(this.medium.sin(this.pxy)) + Math.abs(this.medium.sin(this.pzy))) / 3.0f;
@@ -1424,9 +1422,7 @@ public class Madness
                         }
                         this.regy(n52, Math.abs(this.scy[n52] * n58), geometry);
                         if (this.scy[n52] > 0.0f) {
-                            final float[] scy5 = this.scy;
-                            final int n59 = n52;
-                            scy5[n59] -= Math.abs(this.scy[n52] * n58);
+                            this.scy[n52] -= Math.abs(this.scy[n52] * n58);
                         }
                         array7[n52] = true;
                     }
@@ -1435,9 +1431,7 @@ public class Madness
                         int n60 = 0;
                         do {
                             if (n52 != n60 && array2[n60] >= trackers.z[l] + trackers.radz[l]) {
-                                final float[] array10 = array2;
-                                final int n61 = n60;
-                                array10[n61] -= array2[n52] - (trackers.z[l] + trackers.radz[l]);
+                                array2[n60] -= array2[n52] - (trackers.z[l] + trackers.radz[l]);
                             }
                         } while (++n60 < 4);
                         float n62 = (Math.abs(this.medium.cos(this.pxy)) + Math.abs(this.medium.cos(this.pzy))) / 4.0f;
@@ -1452,9 +1446,7 @@ public class Madness
                             n63 = 1.1f;
                         }
                         this.regz(n52, Math.abs(this.scz[n52] * n63 * trackers.dam[l]), geometry);
-                        final float[] scz3 = this.scz;
-                        final int n64 = n52;
-                        scz3[n64] += Math.abs(this.scz[n52] * n63);
+                        this.scz[n52] += Math.abs(this.scz[n52] * n63);
                         this.skid = 2;
                         b2 = true;
                         array7[n52] = true;
@@ -1465,9 +1457,7 @@ public class Madness
                         int n65 = 0;
                         do {
                             if (n52 != n65 && array2[n65] <= trackers.z[l] - trackers.radz[l]) {
-                                final float[] array11 = array2;
-                                final int n66 = n65;
-                                array11[n66] -= array2[n52] - (trackers.z[l] - trackers.radz[l]);
+                                array2[n65] -= array2[n52] - (trackers.z[l] - trackers.radz[l]);
                             }
                         } while (++n65 < 4);
                         float n67 = (Math.abs(this.medium.cos(this.pxy)) + Math.abs(this.medium.cos(this.pzy))) / 4.0f;
@@ -1482,9 +1472,7 @@ public class Madness
                             n68 = 1.1f;
                         }
                         this.regz(n52, -Math.abs(this.scz[n52] * n68 * trackers.dam[l]), geometry);
-                        final float[] scz4 = this.scz;
-                        final int n69 = n52;
-                        scz4[n69] -= Math.abs(this.scz[n52] * n68);
+                        this.scz[n52] -= Math.abs(this.scz[n52] * n68);
                         this.skid = 2;
                         b2 = true;
                         array7[n52] = true;
@@ -1495,9 +1483,7 @@ public class Madness
                         int n70 = 0;
                         do {
                             if (n52 != n70 && array[n70] >= trackers.x[l] + trackers.radx[l]) {
-                                final float[] array12 = array;
-                                final int n71 = n70;
-                                array12[n71] -= array[n52] - (trackers.x[l] + trackers.radx[l]);
+                                array[n70] -= array[n52] - (trackers.x[l] + trackers.radx[l]);
                             }
                         } while (++n70 < 4);
                         float n72 = (Math.abs(this.medium.cos(this.pxy)) + Math.abs(this.medium.cos(this.pzy))) / 4.0f;
@@ -1512,9 +1498,7 @@ public class Madness
                             n73 = 1.1f;
                         }
                         this.regx(n52, Math.abs(this.scx[n52] * n73 * trackers.dam[l]), geometry);
-                        final float[] scx3 = this.scx;
-                        final int n74 = n52;
-                        scx3[n74] += Math.abs(this.scx[n52] * n73);
+                        this.scx[n52] += Math.abs(this.scx[n52] * n73);
                         this.skid = 2;
                         b2 = true;
                         array7[n52] = true;
@@ -1525,9 +1509,7 @@ public class Madness
                         int n75 = 0;
                         do {
                             if (n52 != n75 && array[n75] <= trackers.x[l] - trackers.radx[l]) {
-                                final float[] array13 = array;
-                                final int n76 = n75;
-                                array13[n76] -= array[n52] - (trackers.x[l] - trackers.radx[l]);
+                                array[n75] -= array[n52] - (trackers.x[l] - trackers.radx[l]);
                             }
                         } while (++n75 < 4);
                         float n77 = (Math.abs(this.medium.cos(this.pxy)) + Math.abs(this.medium.cos(this.pzy))) / 4.0f;
@@ -1543,8 +1525,7 @@ public class Madness
                         }
                         this.regx(n52, -Math.abs(this.scx[n52] * n78 * trackers.dam[l]), geometry);
                         final float[] scx4 = this.scx;
-                        final int n79 = n52;
-                        scx4[n79] -= Math.abs(this.scx[n52] * n78);
+                        scx4[n52] -= Math.abs(this.scx[n52] * n78);
                         this.skid = 2;
                         b2 = true;
                         array7[n52] = true;
