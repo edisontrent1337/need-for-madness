@@ -2,8 +2,7 @@ package main.java;//
 // Decompiled by Procyon v0.5.36
 //
 
-public class CheckPoints
-{
+public class CheckPoints {
     int[] x;
     int[] z;
     int[] y;
@@ -46,7 +45,7 @@ public class CheckPoints
         this.stage = 1;
         this.nlaps = 0;
         this.name = "hogan rewish";
-        this.pos = new int[] { 4, 4, 4, 4, 4 };
+        this.pos = new int[]{4, 4, 4, 4, 4};
         this.clear = new int[5];
         this.dested = new int[5];
         this.wasted = 0;
@@ -65,8 +64,7 @@ public class CheckPoints
                 this.opz[i] = geometries[i].z;
                 if (this.dested[i] == 0) {
                     this.clear[i] = cars[i].clear;
-                }
-                else {
+                } else {
                     this.clear[i] = -1;
                 }
             }
@@ -77,24 +75,21 @@ public class CheckPoints
                         if (this.clear[n2] < this.clear[i]) {
                             final int[] pos = this.pos;
                             ++pos[n2];
-                        }
-                        else {
+                        } else {
                             final int[] pos2 = this.pos;
                             ++pos2[i];
                         }
-                    }
-                    else {
+                    } else {
                         int n5 = 0;
                         for (n5 = cars[n2].pcleared + 1; this.typ[n5] <= 0; ++n5) {
                             if (n5 == this.n) {
-                            	n5 = 0;
-							}
+                                n5 = 0;
+                            }
                         }
                         if (this.py(geometries[n2].x / 100, this.x[n5] / 100, geometries[n2].z / 100, this.z[n5] / 100) > this.py(geometries[i].x / 100, this.x[n5] / 100, geometries[i].z / 100, this.z[n5] / 100)) {
                             final int[] pos3 = this.pos;
                             ++pos3[n2];
-                        }
-                        else {
+                        } else {
                             final int[] pos4 = this.pos;
                             ++pos4[i];
                         }

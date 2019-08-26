@@ -8,9 +8,9 @@ import java.awt.Color;
 
 public class Madness
 {
-    Medium m;
+    Medium medium;
     Record rpd;
-    GraphicsPanel xt;
+    GraphicsPanel graphicsPanel;
     int cn;
     int im;
     float mxz;
@@ -132,18 +132,18 @@ public class Madness
                 n4 = 1;
             }
             if (this.im == 0 || this.colidim) {
-                this.xt.crash(n2, n4 * n3);
+                this.graphicsPanel.crash(n2, n4 * n3);
             }
             if (n4 * n3 == 0 || this.mtouch) {
                 for (int k = 0; k < geometry.numberOfPlanes; ++k) {
                     float ctmag = 0.0f;
                     for (int l = 0; l < geometry.planes[k].n; ++l) {
                         if (geometry.planes[k].wz == 0 && this.py(geometry.keyx[n], geometry.planes[k].ox[l], geometry.keyz[n], geometry.planes[k].oz[l]) < this.clrad[this.cn]) {
-                            ctmag = n2 / 20.0f * this.m.random();
+                            ctmag = n2 / 20.0f * this.medium.random();
                             final int[] oz = geometry.planes[k].oz;
-                            oz[l] += (int)(ctmag * this.m.sin(i));
+                            oz[l] += (int)(ctmag * this.medium.sin(i));
                             final int[] ox = geometry.planes[k].ox;
-                            ox[l] -= (int)(ctmag * this.m.sin(j));
+                            ox[l] -= (int)(ctmag * this.medium.sin(j));
                             this.currentDamage += (int)Math.abs(ctmag);
                         }
                     }
@@ -200,7 +200,7 @@ public class Madness
                         float ctmag2 = 0.0f;
                         for (int n10 = 0; n10 < geometry.planes[n9].n; ++n10) {
                             if (geometry.planes[n9].wz == 0) {
-                                ctmag2 = n2 / 15.0f * this.m.random();
+                                ctmag2 = n2 / 15.0f * this.medium.random();
                                 if ((Math.abs(geometry.planes[n9].oy[n10] - this.flipy[this.cn] - this.squash) < this.msquash[this.cn] * 3 || geometry.planes[n9].oy[n10] < this.flipy[this.cn] + this.squash) && this.squash < this.msquash[this.cn]) {
                                     final int[] oy = geometry.planes[n9].oy;
                                     oy[n10] += (int)ctmag2;
@@ -233,7 +233,7 @@ public class Madness
         }
     }
 
-    public Madness(final Medium m, final Record rpd, final GraphicsPanel xt, final int im) {
+    public Madness(final Medium medium, final Record rpd, final GraphicsPanel graphicsPanel, final int im) {
         this.cn = 0;
         this.im = 0;
         this.mxz = 0;
@@ -322,9 +322,9 @@ public class Madness
         this.point = 0;
         this.nofocus = false;
         this.colidim = false;
-        this.m = m;
+        this.medium = medium;
         this.rpd = rpd;
-        this.xt = xt;
+        this.graphicsPanel = graphicsPanel;
         this.im = im;
     }
 
@@ -343,17 +343,17 @@ public class Madness
                 a += 100.0f;
             }
             if (this.im == 0 || this.colidim) {
-                this.xt.crash(a, 0);
+                this.graphicsPanel.crash(a, 0);
             }
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
                 for (int j = 0; j < geometry.planes[i].n; ++j) {
                     if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < this.clrad[this.cn]) {
-                        n2 = a / 20.0f * this.m.random();
+                        n2 = a / 20.0f * this.medium.random();
                         final int[] oz = geometry.planes[i].oz;
-                        oz[j] += (int)(n2 * this.m.cos(geometry.xz) * this.m.cos(geometry.zy));
+                        oz[j] += (int)(n2 * this.medium.cos(geometry.xz) * this.medium.cos(geometry.zy));
                         final int[] ox = geometry.planes[i].ox;
-                        ox[j] += (int)(n2 * this.m.sin(geometry.xz) * this.m.cos(geometry.xy));
+                        ox[j] += (int)(n2 * this.medium.sin(geometry.xz) * this.medium.cos(geometry.xy));
                         this.currentDamage += (int)Math.abs(n2);
                     }
                 }
@@ -409,8 +409,8 @@ public class Madness
             for (int i = 0; i < n4; ++i) {
                 final float n5 = array[i];
                 final float n6 = array2[i];
-                array[i] = n + ((n5 - n) * this.m.cos(n3) - (n6 - n2) * this.m.sin(n3));
-                array2[i] = n2 + ((n5 - n) * this.m.sin(n3) + (n6 - n2) * this.m.cos(n3));
+                array[i] = n + ((n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3));
+                array2[i] = n2 + ((n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3));
             }
         }
     }
@@ -649,17 +649,17 @@ public class Madness
                 a += 100.0f;
             }
             if (this.im == 0 || this.colidim) {
-                this.xt.crash(a, 0);
+                this.graphicsPanel.crash(a, 0);
             }
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
                 for (int j = 0; j < geometry.planes[i].n; ++j) {
                     if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < this.clrad[this.cn]) {
-                        n2 = a / 20.0f * this.m.random();
+                        n2 = a / 20.0f * this.medium.random();
                         final int[] oz = geometry.planes[i].oz;
-                        oz[j] -= (int)(n2 * this.m.sin(geometry.xz) * this.m.cos(geometry.zy));
+                        oz[j] -= (int)(n2 * this.medium.sin(geometry.xz) * this.medium.cos(geometry.zy));
                         final int[] ox = geometry.planes[i].ox;
-                        ox[j] += (int)(n2 * this.m.cos(geometry.xz) * this.m.cos(geometry.xy));
+                        ox[j] += (int)(n2 * this.medium.cos(geometry.xz) * this.medium.cos(geometry.xy));
                         this.currentDamage += (int)Math.abs(n2);
                     }
                 }
@@ -821,8 +821,8 @@ public class Madness
                     if (this.ucomp < 20.0f) {
                         this.ucomp += (float)(0.5 * this.airs[this.cn]);
                     }
-                    n4 = -this.airc[this.cn] * this.m.sin(geometry.xz) * n2;
-                    n5 = this.airc[this.cn] * this.m.cos(geometry.xz) * n2;
+                    n4 = -this.airc[this.cn] * this.medium.sin(geometry.xz) * n2;
+                    n5 = this.airc[this.cn] * this.medium.cos(geometry.xz) * n2;
                 }
                 else if (this.ucomp != 0.0f && this.ucomp > -2.0f) {
                     this.ucomp -= (float)(0.5 * this.airs[this.cn]);
@@ -853,8 +853,8 @@ public class Madness
                     if (this.lcomp < 20.0f) {
                         this.lcomp += 2.0f * this.airs[this.cn];
                     }
-                    n4 = -this.airc[this.cn] * this.m.cos(geometry.xz) * n;
-                    n5 = -this.airc[this.cn] * this.m.sin(geometry.xz) * n;
+                    n4 = -this.airc[this.cn] * this.medium.cos(geometry.xz) * n;
+                    n5 = -this.airc[this.cn] * this.medium.sin(geometry.xz) * n;
                 }
                 else if (this.lcomp > 0.0f) {
                     this.lcomp -= 2.0f * this.airs[this.cn];
@@ -866,18 +866,18 @@ public class Madness
                     if (this.rcomp < 20.0f) {
                         this.rcomp += 2.0f * this.airs[this.cn];
                     }
-                    n4 = this.airc[this.cn] * this.m.cos(geometry.xz) * n;
-                    n5 = this.airc[this.cn] * this.m.sin(geometry.xz) * n;
+                    n4 = this.airc[this.cn] * this.medium.cos(geometry.xz) * n;
+                    n5 = this.airc[this.cn] * this.medium.sin(geometry.xz) * n;
                 }
                 else if (this.rcomp > 0.0f) {
                     this.rcomp -= 2.0f * this.airs[this.cn];
                 }
-                this.pzy += (int)((this.dcomp - this.ucomp) * this.m.cos(this.pxy));
+                this.pzy += (int)((this.dcomp - this.ucomp) * this.medium.cos(this.pxy));
                 if (zyinv) {
-                    geometry.xz += (int)((this.dcomp - this.ucomp) * this.m.sin(this.pxy));
+                    geometry.xz += (int)((this.dcomp - this.ucomp) * this.medium.sin(this.pxy));
                 }
                 else {
-                    geometry.xz -= (int)((this.dcomp - this.ucomp) * this.m.sin(this.pxy));
+                    geometry.xz -= (int)((this.dcomp - this.ucomp) * this.medium.sin(this.pxy));
                 }
                 this.pxy += (int)(this.rcomp - this.lcomp);
             }
@@ -1007,12 +1007,12 @@ public class Madness
                         }
                         this.pd = false;
                     }
-                    this.pzy += (int)((this.dcomp - this.ucomp) * this.m.cos(this.pxy));
+                    this.pzy += (int)((this.dcomp - this.ucomp) * this.medium.cos(this.pxy));
                     if (zyinv) {
-                        geometry.xz += (int)((this.dcomp - this.ucomp) * this.m.sin(this.pxy));
+                        geometry.xz += (int)((this.dcomp - this.ucomp) * this.medium.sin(this.pxy));
                     }
                     else {
-                        geometry.xz -= (int)((this.dcomp - this.ucomp) * this.m.sin(this.pxy));
+                        geometry.xz -= (int)((this.dcomp - this.ucomp) * this.medium.sin(this.pxy));
                     }
                     this.pxy += (int)(this.rcomp - this.lcomp);
                 }
@@ -1183,9 +1183,9 @@ public class Madness
             if (n24 == 2) {
                 n25 *= (float)0.55;
             }
-            int n26 = -(int)(this.speed * this.m.sin(geometry.xz) * this.m.cos(this.pzy));
-            int n27 = (int)(this.speed * this.m.cos(geometry.xz) * this.m.cos(this.pzy));
-            int n28 = -(int)(this.speed * this.m.sin(this.pzy));
+            int n26 = -(int)(this.speed * this.medium.sin(geometry.xz) * this.medium.cos(this.pzy));
+            int n27 = (int)(this.speed * this.medium.cos(geometry.xz) * this.medium.cos(this.pzy));
+            int n28 = -(int)(this.speed * this.medium.sin(this.pzy));
             if (this.capsized || this.dest || checkPoints.haltall) {
                 n26 = 0;
                 n27 = 0;
@@ -1273,18 +1273,18 @@ public class Madness
                         if (n24 != 0) {
                             n38 = 1.2f;
                         }
-                        if (this.m.random() > 0.75) {
+                        if (this.medium.random() > 0.75) {
                             geometry.dust(n31, array[n31], array3[n31], array2[n31], this.scx[n31], this.scz[n31], n38 * this.simag[this.cn], true, (int)this.tilt);
                             if (this.im == 0 && !this.capsized) {
-                                this.xt.skid(n24, (float)Math.sqrt(this.scx[n31] * this.scx[n31] + this.scz[n31] * this.scz[n31]));
+                                this.graphicsPanel.skid(n24, (float)Math.sqrt(this.scx[n31] * this.scx[n31] + this.scz[n31] * this.scz[n31]));
                             }
                         }
                     }
                     else {
-                        if (n24 == 1 && this.m.random() > 0.85) {
+                        if (n24 == 1 && this.medium.random() > 0.85) {
                             geometry.dust(n31, array[n31], array3[n31], array2[n31], this.scx[n31], this.scz[n31], 1.1f * this.simag[this.cn], false, (int)this.tilt);
                         }
-                        if ((n24 == 2 || n24 == 3) && this.m.random() > 0.7) {
+                        if ((n24 == 2 || n24 == 3) && this.medium.random() > 0.7) {
                             geometry.dust(n31, array[n31], array3[n31], array2[n31], this.scx[n31], this.scz[n31], 1.15f * this.simag[this.cn], false, (int)this.tilt);
                         }
                     }
@@ -1296,7 +1296,7 @@ public class Madness
                     }
                 }
                 if (n24 == 3) {
-                    this.scy[(int)(this.m.random() * 4.0f)] = (float)(-100.0f * this.m.random() * (this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
+                    this.scy[(int)(this.medium.random() * 4.0f)] = (float)(-100.0f * this.medium.random() * (this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
                 }
                 n29 += this.scx[n31];
                 n30 += this.scz[n31];
@@ -1315,10 +1315,10 @@ public class Madness
                     n29 /= 4.0f;
                     n30 /= 4.0f;
                     if (b) {
-                        this.speed = -((float)Math.sqrt(n29 * n29 + n30 * n30) * this.m.cos(this.mxz - geometry.xz));
+                        this.speed = -((float)Math.sqrt(n29 * n29 + n30 * n30) * this.medium.cos(this.mxz - geometry.xz));
                     }
                     else {
-                        this.speed = (float)Math.sqrt(n29 * n29 + n30 * n30) * this.m.cos(this.mxz - geometry.xz);
+                        this.speed = (float)Math.sqrt(n29 * n29 + n30 * n30) * this.medium.cos(this.mxz - geometry.xz);
                     }
                 }
                 this.skid = 0;
@@ -1363,7 +1363,7 @@ public class Madness
                         array8[n45] -= array3[n41] - 250.0f;
                     }
                 } while (++n44 < 4);
-                float n46 = (Math.abs(this.m.sin(this.pxy)) + Math.abs(this.m.sin(this.pzy))) / 3.0f;
+                float n46 = (Math.abs(this.medium.sin(this.pxy)) + Math.abs(this.medium.sin(this.pzy))) / 3.0f;
                 if (n46 > 0.4) {
                     n46 = 0.4f;
                 }
@@ -1414,7 +1414,7 @@ public class Madness
                                 array9[n56] -= array3[n52] - trackers.y[l];
                             }
                         } while (++n55 < 4);
-                        float n57 = (Math.abs(this.m.sin(this.pxy)) + Math.abs(this.m.sin(this.pzy))) / 3.0f;
+                        float n57 = (Math.abs(this.medium.sin(this.pxy)) + Math.abs(this.medium.sin(this.pzy))) / 3.0f;
                         if (n57 > 0.4) {
                             n57 = 0.4f;
                         }
@@ -1440,7 +1440,7 @@ public class Madness
                                 array10[n61] -= array2[n52] - (trackers.z[l] + trackers.radz[l]);
                             }
                         } while (++n60 < 4);
-                        float n62 = (Math.abs(this.m.cos(this.pxy)) + Math.abs(this.m.cos(this.pzy))) / 4.0f;
+                        float n62 = (Math.abs(this.medium.cos(this.pxy)) + Math.abs(this.medium.cos(this.pzy))) / 4.0f;
                         if (n62 > 0.3) {
                             n62 = 0.3f;
                         }
@@ -1470,7 +1470,7 @@ public class Madness
                                 array11[n66] -= array2[n52] - (trackers.z[l] - trackers.radz[l]);
                             }
                         } while (++n65 < 4);
-                        float n67 = (Math.abs(this.m.cos(this.pxy)) + Math.abs(this.m.cos(this.pzy))) / 4.0f;
+                        float n67 = (Math.abs(this.medium.cos(this.pxy)) + Math.abs(this.medium.cos(this.pzy))) / 4.0f;
                         if (n67 > 0.3) {
                             n67 = 0.3f;
                         }
@@ -1500,7 +1500,7 @@ public class Madness
                                 array12[n71] -= array[n52] - (trackers.x[l] + trackers.radx[l]);
                             }
                         } while (++n70 < 4);
-                        float n72 = (Math.abs(this.m.cos(this.pxy)) + Math.abs(this.m.cos(this.pzy))) / 4.0f;
+                        float n72 = (Math.abs(this.medium.cos(this.pxy)) + Math.abs(this.medium.cos(this.pzy))) / 4.0f;
                         if (n72 > 0.3) {
                             n72 = 0.3f;
                         }
@@ -1530,7 +1530,7 @@ public class Madness
                                 array13[n76] -= array[n52] - (trackers.x[l] - trackers.radx[l]);
                             }
                         } while (++n75 < 4);
-                        float n77 = (Math.abs(this.m.cos(this.pxy)) + Math.abs(this.m.cos(this.pzy))) / 4.0f;
+                        float n77 = (Math.abs(this.medium.cos(this.pxy)) + Math.abs(this.medium.cos(this.pzy))) / 4.0f;
                         if (n77 > 0.3) {
                             n77 = 0.3f;
                         }
@@ -1556,8 +1556,8 @@ public class Madness
                         if (n81 < 1.0f) {
                             n81 = 1.0f;
                         }
-                        final float n82 = trackers.y[l] + ((array3[n52] - trackers.y[l]) * this.m.cos(n80) - (array2[n52] - trackers.z[l]) * this.m.sin(n80));
-                        float n83 = trackers.z[l] + ((array3[n52] - trackers.y[l]) * this.m.sin(n80) + (array2[n52] - trackers.z[l]) * this.m.cos(n80));
+                        final float n82 = trackers.y[l] + ((array3[n52] - trackers.y[l]) * this.medium.cos(n80) - (array2[n52] - trackers.z[l]) * this.medium.sin(n80));
+                        float n83 = trackers.z[l] + ((array3[n52] - trackers.y[l]) * this.medium.sin(n80) + (array2[n52] - trackers.z[l]) * this.medium.cos(n80));
                         if (n83 > trackers.z[l] && n83 < trackers.z[l] + 200) {
                             final float[] scy6 = this.scy;
                             final int n84 = n52;
@@ -1577,8 +1577,8 @@ public class Madness
                                 geometry.dust(n52, array[n52], array3[n52], array2[n52], this.scx[n52], this.scz[n52], 1.4f * this.simag[this.cn], true, 0);
                             }
                         }
-                        array3[n52] = trackers.y[l] + ((n82 - trackers.y[l]) * this.m.cos(-n80) - (n83 - trackers.z[l]) * this.m.sin(-n80));
-                        array2[n52] = trackers.z[l] + ((n82 - trackers.y[l]) * this.m.sin(-n80) + (n83 - trackers.z[l]) * this.m.cos(-n80));
+                        array3[n52] = trackers.y[l] + ((n82 - trackers.y[l]) * this.medium.cos(-n80) - (n83 - trackers.z[l]) * this.medium.sin(-n80));
+                        array2[n52] = trackers.z[l] + ((n82 - trackers.y[l]) * this.medium.sin(-n80) + (n83 - trackers.z[l]) * this.medium.cos(-n80));
                         array7[n52] = true;
                     }
                     if (trackers.xy[l] == 0 || trackers.xy[l] == 90 || trackers.xy[l] == -90) {
@@ -1589,8 +1589,8 @@ public class Madness
                     if (n86 < 1.0f) {
                         n86 = 1.0f;
                     }
-                    final float n87 = trackers.y[l] + ((array3[n52] - trackers.y[l]) * this.m.cos(n85) - (array[n52] - trackers.x[l]) * this.m.sin(n85));
-                    float n88 = trackers.x[l] + ((array3[n52] - trackers.y[l]) * this.m.sin(n85) + (array[n52] - trackers.x[l]) * this.m.cos(n85));
+                    final float n87 = trackers.y[l] + ((array3[n52] - trackers.y[l]) * this.medium.cos(n85) - (array[n52] - trackers.x[l]) * this.medium.sin(n85));
+                    float n88 = trackers.x[l] + ((array3[n52] - trackers.y[l]) * this.medium.sin(n85) + (array[n52] - trackers.x[l]) * this.medium.cos(n85));
                     if (n88 > trackers.x[l] && n88 < trackers.x[l] + 200) {
                         final float[] scy7 = this.scy;
                         final int n89 = n52;
@@ -1610,8 +1610,8 @@ public class Madness
                             geometry.dust(n52, array[n52], array3[n52], array2[n52], this.scx[n52], this.scz[n52], 1.4f * this.simag[this.cn], true, 0);
                         }
                     }
-                    array3[n52] = trackers.y[l] + ((n87 - trackers.y[l]) * this.m.cos(-n85) - (n88 - trackers.x[l]) * this.m.sin(-n85));
-                    array[n52] = trackers.x[l] + ((n87 - trackers.y[l]) * this.m.sin(-n85) + (n88 - trackers.x[l]) * this.m.cos(-n85));
+                    array3[n52] = trackers.y[l] + ((n87 - trackers.y[l]) * this.medium.cos(-n85) - (n88 - trackers.x[l]) * this.medium.sin(-n85));
+                    array[n52] = trackers.x[l] + ((n87 - trackers.y[l]) * this.medium.sin(-n85) + (n88 - trackers.x[l]) * this.medium.cos(-n85));
                     array7[n52] = true;
                 }
             } while (++n52 < 4);
@@ -1789,7 +1789,7 @@ public class Madness
         else {
             this.cntouch = 0;
         }
-        geometry.y = (int)((array3[0] + array3[1] + array3[2] + array3[3]) / 4.0f - grat * this.m.cos(this.pzy) * this.m.cos(this.pxy) + n6);
+        geometry.y = (int)((array3[0] + array3[1] + array3[2] + array3[3]) / 4.0f - grat * this.medium.cos(this.pzy) * this.medium.cos(this.pxy) + n6);
         int n95;
         if (zyinv) {
             n95 = -1;
@@ -1797,8 +1797,8 @@ public class Madness
         else {
             n95 = 1;
         }
-        geometry.x = (int)((array[0] - geometry.keyx[0] * this.m.cos(geometry.xz) + n95 * geometry.keyz[0] * this.m.sin(geometry.xz) + array[1] - geometry.keyx[1] * this.m.cos(geometry.xz) + n95 * geometry.keyz[1] * this.m.sin(geometry.xz) + array[2] - geometry.keyx[2] * this.m.cos(geometry.xz) + n95 * geometry.keyz[2] * this.m.sin(geometry.xz) + array[3] - geometry.keyx[3] * this.m.cos(geometry.xz) + n95 * geometry.keyz[3] * this.m.sin(geometry.xz)) / 4.0f + grat * this.m.sin(this.pxy) * this.m.cos(geometry.xz) - grat * this.m.sin(this.pzy) * this.m.sin(geometry.xz) + n4);
-        geometry.z = (int)((array2[0] - n95 * geometry.keyz[0] * this.m.cos(geometry.xz) - geometry.keyx[0] * this.m.sin(geometry.xz) + array2[1] - n95 * geometry.keyz[1] * this.m.cos(geometry.xz) - geometry.keyx[1] * this.m.sin(geometry.xz) + array2[2] - n95 * geometry.keyz[2] * this.m.cos(geometry.xz) - geometry.keyx[2] * this.m.sin(geometry.xz) + array2[3] - n95 * geometry.keyz[3] * this.m.cos(geometry.xz) - geometry.keyx[3] * this.m.sin(geometry.xz)) / 4.0f + grat * this.m.sin(this.pxy) * this.m.sin(geometry.xz) - grat * this.m.sin(this.pzy) * this.m.cos(geometry.xz) + n5);
+        geometry.x = (int)((array[0] - geometry.keyx[0] * this.medium.cos(geometry.xz) + n95 * geometry.keyz[0] * this.medium.sin(geometry.xz) + array[1] - geometry.keyx[1] * this.medium.cos(geometry.xz) + n95 * geometry.keyz[1] * this.medium.sin(geometry.xz) + array[2] - geometry.keyx[2] * this.medium.cos(geometry.xz) + n95 * geometry.keyz[2] * this.medium.sin(geometry.xz) + array[3] - geometry.keyx[3] * this.medium.cos(geometry.xz) + n95 * geometry.keyz[3] * this.medium.sin(geometry.xz)) / 4.0f + grat * this.medium.sin(this.pxy) * this.medium.cos(geometry.xz) - grat * this.medium.sin(this.pzy) * this.medium.sin(geometry.xz) + n4);
+        geometry.z = (int)((array2[0] - n95 * geometry.keyz[0] * this.medium.cos(geometry.xz) - geometry.keyx[0] * this.medium.sin(geometry.xz) + array2[1] - n95 * geometry.keyz[1] * this.medium.cos(geometry.xz) - geometry.keyx[1] * this.medium.sin(geometry.xz) + array2[2] - n95 * geometry.keyz[2] * this.medium.cos(geometry.xz) - geometry.keyx[2] * this.medium.sin(geometry.xz) + array2[3] - n95 * geometry.keyz[3] * this.medium.cos(geometry.xz) - geometry.keyx[3] * this.medium.sin(geometry.xz)) / 4.0f + grat * this.medium.sin(this.pxy) * this.medium.sin(geometry.xz) - grat * this.medium.sin(this.pzy) * this.medium.cos(geometry.xz) + n5);
         if (Math.abs(this.speed) > 10.0f || !this.mtouch) {
             if (Math.abs(this.pxy - geometry.xy) >= 4) {
                 if (this.pxy > geometry.xy) {
@@ -1851,12 +1851,12 @@ public class Madness
             this.tilt = 0.0f;
         }
         if (this.wtouch && n24 == 2) {
-            geometry.zy += (int)((this.m.random() * 6.0f * this.speed / this.swits[this.cn][2] - 3.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
-            geometry.xy += (int)((this.m.random() * 6.0f * this.speed / this.swits[this.cn][2] - 3.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
+            geometry.zy += (int)((this.medium.random() * 6.0f * this.speed / this.swits[this.cn][2] - 3.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
+            geometry.xy += (int)((this.medium.random() * 6.0f * this.speed / this.swits[this.cn][2] - 3.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
         }
         if (this.wtouch && n24 == 1) {
-            geometry.zy += (int)((this.m.random() * 4.0f * this.speed / this.swits[this.cn][2] - 2.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
-            geometry.xy += (int)((this.m.random() * 4.0f * this.speed / this.swits[this.cn][2] - 2.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
+            geometry.zy += (int)((this.medium.random() * 4.0f * this.speed / this.swits[this.cn][2] - 2.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
+            geometry.xy += (int)((this.medium.random() * 4.0f * this.speed / this.swits[this.cn][2] - 2.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
         }
         if (this.currentDamage > this.maxDamage[this.cn] && !this.dest) {
             this.distruct(geometry);
@@ -1988,8 +1988,8 @@ public class Madness
                         geometry.fcnt = 8;
                     }
                     else {
-                        if (this.im == 0 && !geometry.fix && !this.xt.isSoundMuted) {
-                            this.xt.carfixed.play();
+                        if (this.im == 0 && !geometry.fix && !this.graphicsPanel.isSoundMuted) {
+                            this.graphicsPanel.carfixed.play();
                         }
                         geometry.fix = true;
                     }
@@ -2001,8 +2001,8 @@ public class Madness
                     geometry.fcnt = 8;
                 }
                 else {
-                    if (this.im == 0 && !geometry.fix && !this.xt.isSoundMuted) {
-                        this.xt.carfixed.play();
+                    if (this.im == 0 && !geometry.fix && !this.graphicsPanel.isSoundMuted) {
+                        this.graphicsPanel.carfixed.play();
                     }
                     geometry.fix = true;
                 }
