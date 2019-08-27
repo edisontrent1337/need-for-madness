@@ -219,8 +219,8 @@ public class Control {
 					if (checkPoints.stage == 9) {
 						this.usebounce = false;
 					}
-					this.perfection = !(this.m.random() > madness.currentDamage / (float) madness.maxDamage[madness.cn]);
-					if (100.0f * madness.currentDamage / madness.maxDamage[madness.cn] > 60.0f) {
+					this.perfection = !(this.m.random() > madness.currentDamage / (float) madness.maxDamage[madness.carIndex]);
+					if (100.0f * madness.currentDamage / madness.maxDamage[madness.carIndex] > 60.0f) {
 						this.perfection = true;
 					}
 					if (checkPoints.stage == 6 || checkPoints.stage == 8 || checkPoints.stage == 9 || checkPoints.stage == 10 || checkPoints.stage == 11) {
@@ -370,10 +370,10 @@ public class Control {
 					}
 					if (this.trfix != 3) {
 						this.trfix = 0;
-						if (100.0f * madness.currentDamage / madness.maxDamage[madness.cn] > 50.0f) {
+						if (100.0f * madness.currentDamage / madness.maxDamage[madness.carIndex] > 50.0f) {
 							this.trfix = 1;
 						}
-						if (!b2 && 100.0f * madness.currentDamage / madness.maxDamage[madness.cn] > 80.0f) {
+						if (!b2 && 100.0f * madness.currentDamage / madness.maxDamage[madness.carIndex] > 80.0f) {
 							this.trfix = 2;
 						}
 					} else {
@@ -383,10 +383,10 @@ public class Control {
 						this.clrnce = 2;
 					}
 					if (!this.bulistc) {
-						if (checkPoints.stage == 6 && madness.cn == 7) {
+						if (checkPoints.stage == 6 && madness.carIndex == 7) {
 							this.bulistc = true;
 						}
-						if (checkPoints.stage == 9 && this.afta && (checkPoints.pos[madness.im] == 4 || checkPoints.pos[madness.im] == 3) && madness.cn != 9 && this.trfix != 0) {
+						if (checkPoints.stage == 9 && this.afta && (checkPoints.pos[madness.im] == 4 || checkPoints.pos[madness.im] == 3) && madness.carIndex != 9 && this.trfix != 0) {
 							this.bulistc = true;
 						}
 					}
@@ -583,7 +583,7 @@ public class Control {
 								this.right = true;
 								this.lastl = false;
 							}
-							if (Math.abs(xz - this.pan) > 50 && madness.speed > madness.swits[madness.cn][0] && this.turntyp != 0) {
+							if (Math.abs(xz - this.pan) > 50 && madness.speed > madness.swits[madness.carIndex][0] && this.turntyp != 0) {
 								if (this.turntyp == 1) {
 									this.down = true;
 								}
@@ -603,7 +603,7 @@ public class Control {
 							this.left = true;
 							this.lastl = true;
 						}
-						if (Math.abs(xz - this.pan) < 310 && madness.speed > madness.swits[madness.cn][0] && this.turntyp != 0) {
+						if (Math.abs(xz - this.pan) < 310 && madness.speed > madness.swits[madness.carIndex][0] && this.turntyp != 0) {
 							if (this.turntyp == 1) {
 								this.down = true;
 							}

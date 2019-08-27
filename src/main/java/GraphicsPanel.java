@@ -951,8 +951,8 @@ public class GraphicsPanel extends Panel {
 				if (!madness.capsized) {
 					if (!b2) {
 						if (madness.power != 98.0f) {
-							if (Math.abs(madness.speed) > 0.0f && Math.abs(madness.speed) <= madness.swits[madness.cn][0]) {
-								int n2 = (int) (3.0f * Math.abs(madness.speed) / madness.swits[madness.cn][0]);
+							if (Math.abs(madness.speed) > 0.0f && Math.abs(madness.speed) <= madness.swits[madness.carIndex][0]) {
+								int n2 = (int) (3.0f * Math.abs(madness.speed) / madness.swits[madness.carIndex][0]);
 								if (n2 == 2) {
 									if (this.pwait == 0) {
 										n2 = 0;
@@ -964,8 +964,8 @@ public class GraphicsPanel extends Panel {
 								}
 								this.sparkeng(n2);
 							}
-							if (Math.abs(madness.speed) > madness.swits[madness.cn][0] && Math.abs(madness.speed) <= madness.swits[madness.cn][1]) {
-								int n3 = (int) (3.0f * (Math.abs(madness.speed) - madness.swits[madness.cn][0]) / (madness.swits[madness.cn][1] - madness.swits[madness.cn][0]));
+							if (Math.abs(madness.speed) > madness.swits[madness.carIndex][0] && Math.abs(madness.speed) <= madness.swits[madness.carIndex][1]) {
+								int n3 = (int) (3.0f * (Math.abs(madness.speed) - madness.swits[madness.carIndex][0]) / (madness.swits[madness.carIndex][1] - madness.swits[madness.carIndex][0]));
 								if (n3 == 2) {
 									if (this.pwait == 0) {
 										n3 = 0;
@@ -977,13 +977,13 @@ public class GraphicsPanel extends Panel {
 								}
 								this.sparkeng(n3);
 							}
-							if (Math.abs(madness.speed) > madness.swits[madness.cn][1] && Math.abs(madness.speed) <= madness.swits[madness.cn][2]) {
-								this.sparkeng((int) (3.0f * (Math.abs(madness.speed) - madness.swits[madness.cn][1]) / (madness.swits[madness.cn][2] - madness.swits[madness.cn][1])));
+							if (Math.abs(madness.speed) > madness.swits[madness.carIndex][1] && Math.abs(madness.speed) <= madness.swits[madness.carIndex][2]) {
+								this.sparkeng((int) (3.0f * (Math.abs(madness.speed) - madness.swits[madness.carIndex][1]) / (madness.swits[madness.carIndex][2] - madness.swits[madness.carIndex][1])));
 							}
 						} else {
 							int n4 = 2;
 							if (this.pwait == 0) {
-								if (Math.abs(madness.speed) > madness.swits[madness.cn][1]) {
+								if (Math.abs(madness.speed) > madness.swits[madness.carIndex][1]) {
 									n4 = 3;
 								}
 							} else {
@@ -1711,7 +1711,7 @@ public class GraphicsPanel extends Panel {
 					this.laps = madness.nlaps;
 				}
 			}
-			this.drawStat(graphics, madness.maxDamage[madness.cn], madness.currentDamage, madness.newcar, madness.power);
+			this.drawStat(graphics, madness.maxDamage[madness.carIndex], madness.currentDamage, madness.newcar, madness.power);
 		}
 		if (n == 0) {
 			if (this.starcnt != 0) {

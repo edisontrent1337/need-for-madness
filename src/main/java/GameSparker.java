@@ -674,7 +674,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						final int xz = geometries[i].xz;
 						final int xy = geometries[i].xy;
 						final int zy = geometries[i].zy;
-						geometries[i] = new Geometry(array[cars[i].cn], geometries[i].x, geometries[i].y, geometries[i].z, 0);
+						geometries[i] = new Geometry(array[cars[i].carIndex], geometries[i].x, geometries[i].y, geometries[i].z, 0);
 						geometries[i].xz = xz;
 						geometries[i].xy = xy;
 						geometries[i].zy = zy;
@@ -849,7 +849,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						}
 					}
 					if (geometries[n58].fcnt == 7 || geometries[n58].fcnt == 8) {
-						geometries[n58] = new Geometry(array[cars[n58].cn], 0, 0, 0, 0);
+						geometries[n58] = new Geometry(array[cars[n58].carIndex], 0, 0, 0, 0);
 						record.cntdest[n58] = 0;
 					}
 					if (n8 == 299) {
@@ -937,7 +937,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 						}
 					}
 					if (geometries[n71].fcnt == 7 || geometries[n71].fcnt == 8) {
-						geometries[n71] = new Geometry(array[cars[n71].cn], 0, 0, 0, 0);
+						geometries[n71] = new Geometry(array[cars[n71].carIndex], 0, 0, 0, 0);
 						record.cntdest[n71] = 0;
 					}
 					record.playh(geometries[n71], cars[n71], n71, n8);

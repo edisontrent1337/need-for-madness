@@ -11,7 +11,7 @@ public class Madness
     Medium medium;
     Record rpd;
     GraphicsPanel graphicsPanel;
-    int cn;
+    int carIndex;
     int im;
     float mxz;
     float cxz;
@@ -59,10 +59,10 @@ public class Madness
     int skid;
     boolean pushed;
     boolean gtouch;
-    boolean pl;
-    boolean pr;
-    boolean pd;
-    boolean pu;
+    boolean playerLeft;
+    boolean playerRight;
+    boolean playerDown;
+    boolean playerUp;
     int loop;
     float ucomp;
     float dcomp;
@@ -105,7 +105,7 @@ public class Madness
     }
 
     public void regy(final int n, float n2, final Geometry geometry) {
-        n2 *= this.dammult[this.cn];
+        n2 *= this.dammult[this.carIndex];
         if (n2 > 100.0f) {
             this.rpd.recy(n, n2, this.mtouch, this.im);
             n2 -= 100.0f;
@@ -138,7 +138,7 @@ public class Madness
                 for (int k = 0; k < geometry.numberOfPlanes; ++k) {
                     float ctmag = 0.0f;
                     for (int l = 0; l < geometry.planes[k].n; ++l) {
-                        if (geometry.planes[k].wz == 0 && this.py(geometry.keyx[n], geometry.planes[k].ox[l], geometry.keyz[n], geometry.planes[k].oz[l]) < this.clrad[this.cn]) {
+                        if (geometry.planes[k].wz == 0 && this.py(geometry.keyx[n], geometry.planes[k].ox[l], geometry.keyz[n], geometry.planes[k].oz[l]) < this.clrad[this.carIndex]) {
                             ctmag = n2 / 20.0f * this.medium.random();
                             final int[] oz = geometry.planes[k].oz;
                             oz[l] += (int)(ctmag * this.medium.sin(i));
@@ -201,7 +201,7 @@ public class Madness
                         for (int n10 = 0; n10 < geometry.planes[n9].n; ++n10) {
                             if (geometry.planes[n9].wz == 0) {
                                 ctmag2 = n2 / 15.0f * this.medium.random();
-                                if ((Math.abs(geometry.planes[n9].oy[n10] - this.flipy[this.cn] - this.squash) < this.msquash[this.cn] * 3 || geometry.planes[n9].oy[n10] < this.flipy[this.cn] + this.squash) && this.squash < this.msquash[this.cn]) {
+                                if ((Math.abs(geometry.planes[n9].oy[n10] - this.flipy[this.carIndex] - this.squash) < this.msquash[this.carIndex] * 3 || geometry.planes[n9].oy[n10] < this.flipy[this.carIndex] + this.squash) && this.squash < this.msquash[this.carIndex]) {
                                     final int[] oy = geometry.planes[n9].oy;
                                     oy[n10] += (int)ctmag2;
                                     n7 += (int)ctmag2;
@@ -234,7 +234,7 @@ public class Madness
     }
 
     public Madness(final Medium medium, final Record rpd, final GraphicsPanel graphicsPanel, final int im) {
-        this.cn = 0;
+        this.carIndex = 0;
         this.im = 0;
         this.mxz = 0;
         this.cxz = 0;
@@ -282,10 +282,10 @@ public class Madness
         this.skid = 0;
         this.pushed = false;
         this.gtouch = false;
-        this.pl = false;
-        this.pr = false;
-        this.pd = false;
-        this.pu = false;
+        this.playerLeft = false;
+        this.playerRight = false;
+        this.playerDown = false;
+        this.playerUp = false;
         this.loop = 0;
         this.ucomp = 0.0f;
         this.dcomp = 0.0f;
@@ -333,7 +333,7 @@ public class Madness
     }
 
     public void regz(final int n, float a, final Geometry geometry) {
-        a *= this.dammult[this.cn];
+        a *= this.dammult[this.carIndex];
         if (Math.abs(a) > 100.0f) {
             this.rpd.recz(n, a, this.im);
             if (a > 100.0f) {
@@ -348,7 +348,7 @@ public class Madness
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
                 for (int j = 0; j < geometry.planes[i].n; ++j) {
-                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < this.clrad[this.cn]) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < this.clrad[this.carIndex]) {
                         n2 = a / 20.0f * this.medium.random();
                         final int[] oz = geometry.planes[i].oz;
                         oz[j] += (int)(n2 * this.medium.cos(geometry.xz) * this.medium.cos(geometry.zy));
@@ -426,7 +426,7 @@ public class Madness
         do {
             array[n] = (float)(geometry.x + geometry.keyx[n]);
             if (this.capsized) {
-                array2[n] = (float)(geometry.y + this.flipy[this.cn] + this.squash);
+                array2[n] = (float)(geometry.y + this.flipy[this.carIndex] + this.squash);
             }
             else {
                 array2[n] = (float)(geometry.y + geometry.grat);
@@ -434,7 +434,7 @@ public class Madness
             array3[n] = (float)(geometry.z + geometry.keyz[n]);
             array4[n] = (float)(geometry2.x + geometry2.keyx[n]);
             if (this.capsized) {
-                array5[n] = (float)(geometry2.y + madness.flipy[madness.cn] + madness.squash);
+                array5[n] = (float)(geometry2.y + madness.flipy[madness.carIndex] + madness.squash);
             }
             else {
                 array5[n] = (float)(geometry2.y + geometry2.grat);
@@ -449,10 +449,10 @@ public class Madness
         this.rot(array4, array6, geometry2.x, geometry2.z, geometry2.xz, 4);
         if (this.rpy((float) geometry.x, (float) geometry2.x, (float) geometry.y, (float) geometry2.y, (float) geometry.z, (float) geometry2.z) < (geometry.maxR * geometry.maxR + geometry2.maxR * geometry2.maxR) * 1.5) {
             if (!this.caught[madness.im] && (this.speed != 0.0f || madness.speed != 0.0f)) {
-                if (Math.abs(this.power * this.speed * this.moment[this.cn]) != Math.abs(madness.power * madness.speed * madness.moment[madness.cn])) {
-                    this.dominate[madness.im] = Math.abs(this.power * this.speed * this.moment[this.cn]) > Math.abs(madness.power * madness.speed * madness.moment[madness.cn]);
+                if (Math.abs(this.power * this.speed * this.moment[this.carIndex]) != Math.abs(madness.power * madness.speed * madness.moment[madness.carIndex])) {
+                    this.dominate[madness.im] = Math.abs(this.power * this.speed * this.moment[this.carIndex]) > Math.abs(madness.power * madness.speed * madness.moment[madness.carIndex]);
                 }
-                else this.dominate[madness.im] = this.moment[this.cn] > madness.moment[madness.cn];
+                else this.dominate[madness.im] = this.moment[this.carIndex] > madness.moment[madness.carIndex];
                 this.caught[madness.im] = true;
             }
         }
@@ -465,16 +465,16 @@ public class Madness
             do {
                 int n4 = 0;
                 do {
-                    if (this.rpy(array[n3], array4[n4], array2[n3], array5[n4], array3[n3], array6[n4]) < (n2 + 7000) * (this.comprad[madness.cn] + this.comprad[this.cn])) {
-                        if (Math.abs(this.scx[n3] * this.moment[this.cn]) > Math.abs(madness.scx[n4] * madness.moment[madness.cn])) {
-                            float n5 = madness.scx[n4] * this.revpush[this.cn];
+                    if (this.rpy(array[n3], array4[n4], array2[n3], array5[n4], array3[n3], array6[n4]) < (n2 + 7000) * (this.comprad[madness.carIndex] + this.comprad[this.carIndex])) {
+                        if (Math.abs(this.scx[n3] * this.moment[this.carIndex]) > Math.abs(madness.scx[n4] * madness.moment[madness.carIndex])) {
+                            float n5 = madness.scx[n4] * this.revpush[this.carIndex];
                             if (n5 > 300.0f) {
                                 n5 = 300.0f;
                             }
                             if (n5 < -300.0f) {
                                 n5 = -300.0f;
                             }
-                            float n6 = this.scx[n3] * this.push[this.cn];
+                            float n6 = this.scx[n3] * this.push[this.carIndex];
                             if (n6 > 300.0f) {
                                 n6 = 300.0f;
                             }
@@ -486,32 +486,32 @@ public class Madness
                             if (this.im == 0) {
                                 madness.colidim = true;
                             }
-                            madness.regx(n4, n6 * this.moment[this.cn], geometry2);
+                            madness.regx(n4, n6 * this.moment[this.carIndex], geometry2);
                             if (madness.colidim) {
                                 madness.colidim = false;
                             }
                             final float[] scx2 = this.scx;
                             scx2[n3] -= n5;
-                            this.regx(n3, -n5 * madness.moment[this.cn], geometry);
+                            this.regx(n3, -n5 * madness.moment[this.carIndex], geometry);
                             final float[] scy = this.scy;
-                            scy[n3] -= this.revlift[this.cn];
+                            scy[n3] -= this.revlift[this.carIndex];
                             if (this.im == 0) {
                                 madness.colidim = true;
                             }
-                            madness.regy(n4, (float)(this.revlift[this.cn] * 7), geometry2);
+                            madness.regy(n4, (float)(this.revlift[this.carIndex] * 7), geometry2);
                             if (madness.colidim) {
                                 madness.colidim = false;
                             }
                         }
-                        if (Math.abs(this.scz[n3] * this.moment[this.cn]) > Math.abs(madness.scz[n4] * madness.moment[madness.cn])) {
-                            float n10 = madness.scz[n4] * this.revpush[this.cn];
+                        if (Math.abs(this.scz[n3] * this.moment[this.carIndex]) > Math.abs(madness.scz[n4] * madness.moment[madness.carIndex])) {
+                            float n10 = madness.scz[n4] * this.revpush[this.carIndex];
                             if (n10 > 300.0f) {
                                 n10 = 300.0f;
                             }
                             if (n10 < -300.0f) {
                                 n10 = -300.0f;
                             }
-                            float n11 = this.scz[n3] * this.push[this.cn];
+                            float n11 = this.scz[n3] * this.push[this.carIndex];
                             if (n11 > 300.0f) {
                                 n11 = 300.0f;
                             }
@@ -523,19 +523,19 @@ public class Madness
                             if (this.im == 0) {
                                 madness.colidim = true;
                             }
-                            madness.regz(n4, n11 * this.moment[this.cn], geometry2);
+                            madness.regz(n4, n11 * this.moment[this.carIndex], geometry2);
                             if (madness.colidim) {
                                 madness.colidim = false;
                             }
                             final float[] scz2 = this.scz;
                             scz2[n3] -= n10;
-                            this.regz(n3, -n10 * madness.moment[this.cn], geometry);
+                            this.regz(n3, -n10 * madness.moment[this.carIndex], geometry);
                             final float[] scy2 = this.scy;
-                            scy2[n3] -= this.revlift[this.cn];
+                            scy2[n3] -= this.revlift[this.carIndex];
                             if (this.im == 0) {
                                 madness.colidim = true;
                             }
-                            madness.regy(n4, (float)(this.revlift[this.cn] * 7), geometry2);
+                            madness.regy(n4, (float)(this.revlift[this.carIndex] * 7), geometry2);
                             if (madness.colidim) {
                                 madness.colidim = false;
                             }
@@ -547,7 +547,7 @@ public class Madness
                             this.lastcolido = 70;
                         }
                         final float[] scy3 = madness.scy;
-                        scy3[n4] -= this.lift[this.cn];
+                        scy3[n4] -= this.lift[this.carIndex];
                     }
                 } while (++n4 < 4);
             } while (++n3 < 4);
@@ -563,18 +563,18 @@ public class Madness
     }
 
     public void reseto(final int cn, final Geometry geometry, final CheckPoints checkPoints) {
-        this.cn = cn;
+        this.carIndex = cn;
         int n = 0;
         do {
             this.dominate[n] = false;
             this.caught[n] = false;
         } while (++n < 5);
-        if (this.cn == 7 && this.im == 0) {
+        if (this.carIndex == 7 && this.im == 0) {
             if (checkPoints.stage == 10) {
-                this.moment[this.cn] = 1.7f;
+                this.moment[this.carIndex] = 1.7f;
             }
             else {
-                this.moment[this.cn] = 2.0f;
+                this.moment[this.carIndex] = 2.0f;
             }
         }
         this.mxz = 0;
@@ -588,7 +588,7 @@ public class Madness
             this.scx[n2] = 0.0f;
             this.scz[n2] = 0.0f;
         } while (++n2 < 4);
-        this.forca = ((float)Math.sqrt(geometry.keyz[0] * geometry.keyz[0] + geometry.keyx[0] * geometry.keyx[0]) + (float)Math.sqrt(geometry.keyz[1] * geometry.keyz[1] + geometry.keyx[1] * geometry.keyx[1]) + (float)Math.sqrt(geometry.keyz[2] * geometry.keyz[2] + geometry.keyx[2] * geometry.keyx[2]) + (float)Math.sqrt(geometry.keyz[3] * geometry.keyz[3] + geometry.keyx[3] * geometry.keyx[3])) / 10000.0f * (float)(this.bounce[this.cn] - 0.3);
+        this.forca = ((float)Math.sqrt(geometry.keyz[0] * geometry.keyz[0] + geometry.keyx[0] * geometry.keyx[0]) + (float)Math.sqrt(geometry.keyz[1] * geometry.keyz[1] + geometry.keyx[1] * geometry.keyx[1]) + (float)Math.sqrt(geometry.keyz[2] * geometry.keyz[2] + geometry.keyx[2] * geometry.keyx[2]) + (float)Math.sqrt(geometry.keyz[3] * geometry.keyz[3] + geometry.keyx[3] * geometry.keyx[3])) / 10000.0f * (float)(this.bounce[this.carIndex] - 0.3);
         this.mtouch = false;
         this.wtouch = false;
         this.txz = 0;
@@ -599,10 +599,10 @@ public class Madness
         this.skid = 0;
         this.pushed = false;
         this.gtouch = false;
-        this.pl = false;
-        this.pr = false;
-        this.pd = false;
-        this.pu = false;
+        this.playerLeft = false;
+        this.playerRight = false;
+        this.playerDown = false;
+        this.playerUp = false;
         this.loop = 0;
         this.ucomp = 0.0f;
         this.dcomp = 0.0f;
@@ -639,7 +639,7 @@ public class Madness
     }
 
     public void regx(final int n, float a, final Geometry geometry) {
-        a *= this.dammult[this.cn];
+        a *= this.dammult[this.carIndex];
         if (Math.abs(a) > 100.0f) {
             this.rpd.recx(n, a, this.im);
             if (a > 100.0f) {
@@ -654,7 +654,7 @@ public class Madness
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
                 for (int j = 0; j < geometry.planes[i].n; ++j) {
-                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < this.clrad[this.cn]) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < this.clrad[this.carIndex]) {
                         n2 = a / 20.0f * this.medium.random();
                         final int[] oz = geometry.planes[i].oz;
                         oz[j] -= (int)(n2 * this.medium.sin(geometry.xz) * this.medium.cos(geometry.zy));
@@ -711,7 +711,7 @@ public class Madness
     }
 
     public void drive(final Control control, final Geometry geometry, final Trackers trackers, final CheckPoints checkPoints) {
-        //System.out.println(this.loop);
+        System.out.println(this.carIndex+ "::wtouch:" + this.wtouch + "| mtouch:" + this.mtouch);
         int n = 1;
         int n2 = 1;
         boolean zyinv = false;
@@ -752,7 +752,7 @@ public class Madness
             this.capsized = true;
         }
         if (this.capsized) {
-            grat = this.flipy[this.cn] + this.squash;
+            grat = this.flipy[this.carIndex] + this.squash;
         }
         control.zyinv = zyinv;
         float n4 = 0.0f;
@@ -765,16 +765,16 @@ public class Madness
             if (this.loop == 2 || this.loop == -1) {
                 this.loop = -1;
                 if (control.left) {
-                    this.pl = true;
+                    this.playerLeft = true;
                 }
                 if (control.right) {
-                    this.pr = true;
+                    this.playerRight = true;
                 }
                 if (control.up) {
-                    this.pu = true;
+                    this.playerUp = true;
                 }
                 if (control.down) {
-                    this.pd = true;
+                    this.playerDown = true;
                 }
             }
             this.ucomp = 0.0f;
@@ -816,16 +816,16 @@ public class Madness
                         if (this.ucomp > 10.0f) {
                             this.ucomp = 10.0f;
                         }
-                        this.ucomp *= this.airs[this.cn];
+                        this.ucomp *= this.airs[this.carIndex];
                     }
                     if (this.ucomp < 20.0f) {
-                        this.ucomp += (float)(0.5 * this.airs[this.cn]);
+                        this.ucomp += (float)(0.5 * this.airs[this.carIndex]);
                     }
-                    n4 = -this.airc[this.cn] * this.medium.sin(geometry.xz) * n2;
-                    n5 = this.airc[this.cn] * this.medium.cos(geometry.xz) * n2;
+                    n4 = -this.airc[this.carIndex] * this.medium.sin(geometry.xz) * n2;
+                    n5 = this.airc[this.carIndex] * this.medium.cos(geometry.xz) * n2;
                 }
                 else if (this.ucomp != 0.0f && this.ucomp > -2.0f) {
-                    this.ucomp -= (float)(0.5 * this.airs[this.cn]);
+                    this.ucomp -= (float)(0.5 * this.airs[this.carIndex]);
                 }
                 if (control.down) {
                     if (this.dcomp == 0.0f) {
@@ -836,41 +836,41 @@ public class Madness
                         if (this.dcomp > 10.0f) {
                             this.dcomp = 10.0f;
                         }
-                        this.dcomp *= this.airs[this.cn];
+                        this.dcomp *= this.airs[this.carIndex];
                     }
                     if (this.dcomp < 20.0f) {
-                        this.dcomp += (float)(0.5 * this.airs[this.cn]);
+                        this.dcomp += (float)(0.5 * this.airs[this.carIndex]);
                     }
-                    n6 = (float)(-this.airc[this.cn]);
+                    n6 = (float)(-this.airc[this.carIndex]);
                 }
                 else if (this.dcomp != 0.0f && this.ucomp > -2.0f) {
-                    this.dcomp -= (float)(0.5 * this.airs[this.cn]);
+                    this.dcomp -= (float)(0.5 * this.airs[this.carIndex]);
                 }
                 if (control.left) {
                     if (this.lcomp == 0.0f) {
                         this.lcomp = 5.0f;
                     }
                     if (this.lcomp < 20.0f) {
-                        this.lcomp += 2.0f * this.airs[this.cn];
+                        this.lcomp += 2.0f * this.airs[this.carIndex];
                     }
-                    n4 = -this.airc[this.cn] * this.medium.cos(geometry.xz) * n;
-                    n5 = -this.airc[this.cn] * this.medium.sin(geometry.xz) * n;
+                    n4 = -this.airc[this.carIndex] * this.medium.cos(geometry.xz) * n;
+                    n5 = -this.airc[this.carIndex] * this.medium.sin(geometry.xz) * n;
                 }
                 else if (this.lcomp > 0.0f) {
-                    this.lcomp -= 2.0f * this.airs[this.cn];
+                    this.lcomp -= 2.0f * this.airs[this.carIndex];
                 }
                 if (control.right) {
                     if (this.rcomp == 0.0f) {
                         this.rcomp = 5.0f;
                     }
                     if (this.rcomp < 20.0f) {
-                        this.rcomp += 2.0f * this.airs[this.cn];
+                        this.rcomp += 2.0f * this.airs[this.carIndex];
                     }
-                    n4 = this.airc[this.cn] * this.medium.cos(geometry.xz) * n;
-                    n5 = this.airc[this.cn] * this.medium.sin(geometry.xz) * n;
+                    n4 = this.airc[this.carIndex] * this.medium.cos(geometry.xz) * n;
+                    n5 = this.airc[this.carIndex] * this.medium.sin(geometry.xz) * n;
                 }
                 else if (this.rcomp > 0.0f) {
-                    this.rcomp -= 2.0f * this.airs[this.cn];
+                    this.rcomp -= 2.0f * this.airs[this.carIndex];
                 }
                 this.pzy += (int)((this.dcomp - this.ucomp) * this.medium.cos(this.pxy));
                 if (zyinv) {
@@ -896,116 +896,116 @@ public class Madness
                 }
                 if (control.down) {
                     if (this.speed > 0.0f) {
-                        this.speed -= this.handb[this.cn] / 2;
+                        this.speed -= this.handb[this.carIndex] / 2;
                     }
                     else {
                         int n9 = 0;
                         int n10 = 0;
                         do {
-                            if (this.speed <= -(this.swits[this.cn][n10] / 2 + power * this.swits[this.cn][n10] / 196.0f)) {
+                            if (this.speed <= -(this.swits[this.carIndex][n10] / 2 + power * this.swits[this.carIndex][n10] / 196.0f)) {
                                 ++n9;
                             }
                         } while (++n10 < 2);
                         if (n9 != 2) {
-                            this.speed -= this.acelf[this.cn][n9] / 2.0f + power * this.acelf[this.cn][n9] / 196.0f;
+                            this.speed -= this.acelf[this.carIndex][n9] / 2.0f + power * this.acelf[this.carIndex][n9] / 196.0f;
                         }
                         else {
-                            this.speed = -(this.swits[this.cn][1] / 2 + power * this.swits[this.cn][1] / 196.0f);
+                            this.speed = -(this.swits[this.carIndex][1] / 2 + power * this.swits[this.carIndex][1] / 196.0f);
                         }
                     }
                 }
                 if (control.up) {
                     if (this.speed < 0.0f) {
-                        this.speed += this.handb[this.cn];
+                        this.speed += this.handb[this.carIndex];
                     }
                     else {
                         int n11 = 0;
                         int n12 = 0;
                         do {
-                            if (this.speed >= this.swits[this.cn][n12] / 2 + power * this.swits[this.cn][n12] / 196.0f) {
+                            if (this.speed >= this.swits[this.carIndex][n12] / 2 + power * this.swits[this.carIndex][n12] / 196.0f) {
                                 ++n11;
                             }
                         } while (++n12 < 3);
                         if (n11 != 3) {
-                            this.speed += this.acelf[this.cn][n11] / 2.0f + power * this.acelf[this.cn][n11] / 196.0f;
+                            this.speed += this.acelf[this.carIndex][n11] / 2.0f + power * this.acelf[this.carIndex][n11] / 196.0f;
                         }
                         else {
-                            this.speed = this.swits[this.cn][2] / 2 + power * this.swits[this.cn][2] / 196.0f;
+                            this.speed = this.swits[this.carIndex][2] / 2 + power * this.swits[this.carIndex][2] / 196.0f;
                         }
                     }
                 }
-                if (control.handb && Math.abs(this.speed) > this.handb[this.cn]) {
+                if (control.handb && Math.abs(this.speed) > this.handb[this.carIndex]) {
                     if (this.speed < 0.0f) {
-                        this.speed += this.handb[this.cn];
+                        this.speed += this.handb[this.carIndex];
                     }
                     else {
-                        this.speed -= this.handb[this.cn];
+                        this.speed -= this.handb[this.carIndex];
                     }
                 }
                 if (this.loop == -1 && geometry.y < 100) {
                     if (control.left) {
-                        if (!this.pl) {
+                        if (!this.playerLeft) {
                             if (this.lcomp == 0.0f) {
-                                this.lcomp = 5.0f * this.airs[this.cn];
+                                this.lcomp = 5.0f * this.airs[this.carIndex];
                             }
                             if (this.lcomp < 20.0f) {
-                                this.lcomp += 2.0f * this.airs[this.cn];
+                                this.lcomp += 2.0f * this.airs[this.carIndex];
                             }
                         }
                     }
                     else {
                         if (this.lcomp > 0.0f) {
-                            this.lcomp -= 2.0f * this.airs[this.cn];
+                            this.lcomp -= 2.0f * this.airs[this.carIndex];
                         }
-                        this.pl = false;
+                        this.playerLeft = false;
                     }
                     if (control.right) {
-                        if (!this.pr) {
+                        if (!this.playerRight) {
                             if (this.rcomp == 0.0f) {
-                                this.rcomp = 5.0f * this.airs[this.cn];
+                                this.rcomp = 5.0f * this.airs[this.carIndex];
                             }
                             if (this.rcomp < 20.0f) {
-                                this.rcomp += 2.0f * this.airs[this.cn];
+                                this.rcomp += 2.0f * this.airs[this.carIndex];
                             }
                         }
                     }
                     else {
                         if (this.rcomp > 0.0f) {
-                            this.rcomp -= 2.0f * this.airs[this.cn];
+                            this.rcomp -= 2.0f * this.airs[this.carIndex];
                         }
-                        this.pr = false;
+                        this.playerRight = false;
                     }
                     if (control.up) {
-                        if (!this.pu) {
+                        if (!this.playerUp) {
                             if (this.ucomp == 0.0f) {
-                                this.ucomp = 5.0f * this.airs[this.cn];
+                                this.ucomp = 5.0f * this.airs[this.carIndex];
                             }
                             if (this.ucomp < 20.0f) {
-                                this.ucomp += 2.0f * this.airs[this.cn];
+                                this.ucomp += 2.0f * this.airs[this.carIndex];
                             }
                         }
                     }
                     else {
                         if (this.ucomp > 0.0f) {
-                            this.ucomp -= 2.0f * this.airs[this.cn];
+                            this.ucomp -= 2.0f * this.airs[this.carIndex];
                         }
-                        this.pu = false;
+                        this.playerUp = false;
                     }
                     if (control.down) {
-                        if (!this.pd) {
+                        if (!this.playerDown) {
                             if (this.dcomp == 0.0f) {
-                                this.dcomp = 5.0f * this.airs[this.cn];
+                                this.dcomp = 5.0f * this.airs[this.carIndex];
                             }
                             if (this.dcomp < 20.0f) {
-                                this.dcomp += 2.0f * this.airs[this.cn];
+                                this.dcomp += 2.0f * this.airs[this.carIndex];
                             }
                         }
                     }
                     else {
                         if (this.dcomp > 0.0f) {
-                            this.dcomp -= 2.0f * this.airs[this.cn];
+                            this.dcomp -= 2.0f * this.airs[this.carIndex];
                         }
-                        this.pd = false;
+                        this.playerDown = false;
                     }
                     this.pzy += (int)((this.dcomp - this.ucomp) * this.medium.cos(this.pxy));
                     if (zyinv) {
@@ -1018,7 +1018,7 @@ public class Madness
                 }
             }
         }
-        float n13 = 20.0f * this.speed / (154.0f * this.simag[this.cn]);
+        float n13 = 20.0f * this.speed / (154.0f * this.simag[this.carIndex]);
         if (n13 > 20.0f) {
             n13 = 20.0f;
         }
@@ -1030,13 +1030,13 @@ public class Madness
             geometry.wzy -= 45;
         }
         if (control.right) {
-            geometry.wxz -= this.turn[this.cn];
+            geometry.wxz -= this.turn[this.carIndex];
             if (geometry.wxz < -36) {
                 geometry.wxz = -36;
             }
         }
         if (control.left) {
-            geometry.wxz += this.turn[this.cn];
+            geometry.wxz += this.turn[this.carIndex];
             if (geometry.wxz > 36) {
                 geometry.wxz = 36;
             }
@@ -1054,14 +1054,14 @@ public class Madness
                 }
             }
             else {
-                if (Math.abs(geometry.wxz) < this.turn[this.cn] * 2) {
+                if (Math.abs(geometry.wxz) < this.turn[this.carIndex] * 2) {
                     geometry.wxz = 0;
                 }
                 if (geometry.wxz > 0) {
-                    geometry.wxz -= this.turn[this.cn] * 2;
+                    geometry.wxz -= this.turn[this.carIndex] * 2;
                 }
                 if (geometry.wxz < 0) {
-                    geometry.wxz += this.turn[this.cn] * 2;
+                    geometry.wxz += this.turn[this.carIndex] * 2;
                 }
             }
         }
@@ -1156,11 +1156,11 @@ public class Madness
             }
         }
         if (this.mtouch) {
-            float n25 = this.grip[this.cn] - Math.abs(this.txz - geometry.xz) * this.speed / 250.0f;
+            float n25 = this.grip[this.carIndex] - Math.abs(this.txz - geometry.xz) * this.speed / 250.0f;
             if (control.handb) {
                 n25 -= Math.abs(this.txz - geometry.xz) * 4;
             }
-            if (n25 < this.grip[this.cn]) {
+            if (n25 < this.grip[this.carIndex]) {
                 if (this.skid != 2) {
                     this.skid = 1;
                 }
@@ -1182,7 +1182,7 @@ public class Madness
                 n26 = 0;
                 n27 = 0;
                 n28 = 0;
-                n25 = this.grip[this.cn] / 5.0f;
+                n25 = this.grip[this.carIndex] / 5.0f;
                 if (this.speed > 0.0f) {
                     this.speed -= 2.0f;
                 }
@@ -1190,12 +1190,12 @@ public class Madness
                     this.speed += 2.0f;
                 }
             }
-            if (Math.abs(this.speed) > this.drag[this.cn]) {
+            if (Math.abs(this.speed) > this.drag[this.carIndex]) {
                 if (this.speed > 0.0f) {
-                    this.speed -= this.drag[this.cn];
+                    this.speed -= this.drag[this.carIndex];
                 }
                 else {
-                    this.speed += this.drag[this.cn];
+                    this.speed += this.drag[this.carIndex];
                 }
             }
             else {
@@ -1232,33 +1232,29 @@ public class Madness
                 }
                 if (Math.abs(this.scy[n31] - n28) > n25) {
                     if (this.scy[n31] < n28) {
-                        final float[] scy2 = this.scy;
-                        final int n36 = n31;
-                        scy2[n36] += n25;
+                        this.scy[n31] += n25;
                     }
                     else {
-                        final float[] scy3 = this.scy;
-                        final int n37 = n31;
-                        scy3[n37] -= n25;
+                        this.scy[n31] -= n25;
                     }
                 }
                 else {
                     this.scy[n31] = (float)n28;
                 }
-                if (n25 < this.grip[this.cn]) {
+                if (n25 < this.grip[this.carIndex]) {
                     if (this.txz != geometry.xz) {
                         ++this.dcnt;
                     }
                     else if (this.dcnt != 0) {
                         this.dcnt = 0;
                     }
-                    if (this.dcnt > 40.0f * n25 / this.grip[this.cn] || this.capsized) {
+                    if (this.dcnt > 40.0f * n25 / this.grip[this.carIndex] || this.capsized) {
                         float n38 = 1.0f;
                         if (n24 != 0) {
                             n38 = 1.2f;
                         }
                         if (this.medium.random() > 0.75) {
-                            geometry.dust(n31, array[n31], array3[n31], array2[n31], this.scx[n31], this.scz[n31], n38 * this.simag[this.cn], true, (int)this.tilt);
+                            geometry.dust(n31, array[n31], array3[n31], array2[n31], this.scx[n31], this.scz[n31], n38 * this.simag[this.carIndex], true, (int)this.tilt);
                             if (this.im == 0 && !this.capsized) {
                                 this.graphicsPanel.skid(n24, (float)Math.sqrt(this.scx[n31] * this.scx[n31] + this.scz[n31] * this.scz[n31]));
                             }
@@ -1266,10 +1262,10 @@ public class Madness
                     }
                     else {
                         if (n24 == 1 && this.medium.random() > 0.85) {
-                            geometry.dust(n31, array[n31], array3[n31], array2[n31], this.scx[n31], this.scz[n31], 1.1f * this.simag[this.cn], false, (int)this.tilt);
+                            geometry.dust(n31, array[n31], array3[n31], array2[n31], this.scx[n31], this.scz[n31], 1.1f * this.simag[this.carIndex], false, (int)this.tilt);
                         }
                         if ((n24 == 2 || n24 == 3) && this.medium.random() > 0.7) {
-                            geometry.dust(n31, array[n31], array3[n31], array2[n31], this.scx[n31], this.scz[n31], 1.15f * this.simag[this.cn], false, (int)this.tilt);
+                            geometry.dust(n31, array[n31], array3[n31], array2[n31], this.scx[n31], this.scz[n31], 1.15f * this.simag[this.carIndex], false, (int)this.tilt);
                         }
                     }
                 }
@@ -1280,7 +1276,7 @@ public class Madness
                     }
                 }
                 if (n24 == 3) {
-                    this.scy[(int)(this.medium.random() * 4.0f)] = (float)(-100.0f * this.medium.random() * (this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
+                    this.scy[(int)(this.medium.random() * 4.0f)] = (float)(-100.0f * this.medium.random() * (this.speed / this.swits[this.carIndex][2]) * (this.bounce[this.carIndex] - 0.3));
                 }
                 n29 += this.scx[n31];
                 n30 += this.scz[n31];
@@ -1336,7 +1332,7 @@ public class Madness
                     else {
                         n43 = (float)(n42 + 1.2);
                     }
-                    geometry.dust(n41, array[n41], array3[n41], array2[n41], this.scx[n41], this.scz[n41], n43 * this.simag[this.cn], true, 0);
+                    geometry.dust(n41, array[n41], array3[n41], array2[n41], this.scx[n41], this.scz[n41], n43 * this.simag[this.carIndex], true, 0);
                 }
                 array3[n41] = 250.0f;
                 int n44 = 0;
@@ -1349,7 +1345,7 @@ public class Madness
                 if (n46 > 0.4) {
                     n46 = 0.4f;
                 }
-                float n47 = n46 + this.bounce[this.cn];
+                float n47 = n46 + this.bounce[this.carIndex];
                 if (n47 < 1.1) {
                     n47 = 1.1f;
                 }
@@ -1383,7 +1379,7 @@ public class Madness
                             else {
                                 n54 = (float)(n53 + 1.2);
                             }
-                            geometry.dust(n52, array[n52], array3[n52], array2[n52], this.scx[n52], this.scz[n52], n54 * this.simag[this.cn], true, 0);
+                            geometry.dust(n52, array[n52], array3[n52], array2[n52], this.scx[n52], this.scz[n52], n54 * this.simag[this.carIndex], true, 0);
                         }
                         array3[n52] = (float)trackers.y[l];
                         int n55 = 0;
@@ -1396,7 +1392,7 @@ public class Madness
                         if (n57 > 0.4) {
                             n57 = 0.4f;
                         }
-                        float n58 = n57 + this.bounce[this.cn];
+                        float n58 = n57 + this.bounce[this.carIndex];
                         if (n58 < 1.1) {
                             n58 = 1.1f;
                         }
@@ -1421,7 +1417,7 @@ public class Madness
                         if (b3) {
                             n62 = 0.0f;
                         }
-                        float n63 = (float)(n62 + (this.bounce[this.cn] - 0.2));
+                        float n63 = (float)(n62 + (this.bounce[this.carIndex] - 0.2));
                         if (n63 < 1.1) {
                             n63 = 1.1f;
                         }
@@ -1447,7 +1443,7 @@ public class Madness
                         if (b3) {
                             n67 = 0.0f;
                         }
-                        float n68 = (float)(n67 + (this.bounce[this.cn] - 0.2));
+                        float n68 = (float)(n67 + (this.bounce[this.carIndex] - 0.2));
                         if (n68 < 1.1) {
                             n68 = 1.1f;
                         }
@@ -1473,7 +1469,7 @@ public class Madness
                         if (b3) {
                             n72 = 0.0f;
                         }
-                        float n73 = (float)(n72 + (this.bounce[this.cn] - 0.2));
+                        float n73 = (float)(n72 + (this.bounce[this.carIndex] - 0.2));
                         if (n73 < 1.1) {
                             n73 = 1.1f;
                         }
@@ -1499,7 +1495,7 @@ public class Madness
                         if (b3) {
                             n77 = 0.0f;
                         }
-                        float n78 = (float)(n77 + (this.bounce[this.cn] - 0.2));
+                        float n78 = (float)(n77 + (this.bounce[this.carIndex] - 0.2));
                         if (n78 < 1.1) {
                             n78 = 1.1f;
                         }
@@ -1520,9 +1516,7 @@ public class Madness
                         final float n82 = trackers.y[l] + ((array3[n52] - trackers.y[l]) * this.medium.cos(n80) - (array2[n52] - trackers.z[l]) * this.medium.sin(n80));
                         float n83 = trackers.z[l] + ((array3[n52] - trackers.y[l]) * this.medium.sin(n80) + (array2[n52] - trackers.z[l]) * this.medium.cos(n80));
                         if (n83 > trackers.z[l] && n83 < trackers.z[l] + 200) {
-                            final float[] scy6 = this.scy;
-                            final int n84 = n52;
-                            scy6[n84] -= (n83 - trackers.z[l]) / n81;
+                            this.scy[n52] -= (n83 - trackers.z[l]) / n81;
                             n83 = (float)trackers.z[l];
                         }
                         if (n83 > trackers.z[l] - 30) {
@@ -1535,7 +1529,7 @@ public class Madness
                             this.wtouch = true;
                             this.gtouch = false;
                             if (!b3 && n24 != 0) {
-                                geometry.dust(n52, array[n52], array3[n52], array2[n52], this.scx[n52], this.scz[n52], 1.4f * this.simag[this.cn], true, 0);
+                                geometry.dust(n52, array[n52], array3[n52], array2[n52], this.scx[n52], this.scz[n52], 1.4f * this.simag[this.carIndex], true, 0);
                             }
                         }
                         array3[n52] = trackers.y[l] + ((n82 - trackers.y[l]) * this.medium.cos(-n80) - (n83 - trackers.z[l]) * this.medium.sin(-n80));
@@ -1553,9 +1547,7 @@ public class Madness
                     final float n87 = trackers.y[l] + ((array3[n52] - trackers.y[l]) * this.medium.cos(n85) - (array[n52] - trackers.x[l]) * this.medium.sin(n85));
                     float n88 = trackers.x[l] + ((array3[n52] - trackers.y[l]) * this.medium.sin(n85) + (array[n52] - trackers.x[l]) * this.medium.cos(n85));
                     if (n88 > trackers.x[l] && n88 < trackers.x[l] + 200) {
-                        final float[] scy7 = this.scy;
-                        final int n89 = n52;
-                        scy7[n89] -= (n88 - trackers.x[l]) / n86;
+                        this.scy[n52] -= (n88 - trackers.x[l]) / n86;
                         n88 = (float)trackers.x[l];
                     }
                     if (n88 > trackers.x[l] - 30) {
@@ -1568,7 +1560,7 @@ public class Madness
                         this.wtouch = true;
                         this.gtouch = false;
                         if (!b3 && n24 != 0) {
-                            geometry.dust(n52, array[n52], array3[n52], array2[n52], this.scx[n52], this.scz[n52], 1.4f * this.simag[this.cn], true, 0);
+                            geometry.dust(n52, array[n52], array3[n52], array2[n52], this.scx[n52], this.scz[n52], 1.4f * this.simag[this.carIndex], true, 0);
                         }
                     }
                     array3[n52] = trackers.y[l] + ((n87 - trackers.y[l]) * this.medium.cos(-n85) - (n88 - trackers.x[l]) * this.medium.sin(-n85));
@@ -1785,19 +1777,19 @@ public class Madness
             }
         }
         if (this.wtouch && !this.capsized) {
-            final float n96 = (float)(this.speed / this.swits[this.cn][2] * 14.0f * (this.bounce[this.cn] - 0.4));
+            final float n96 = (float)(this.speed / this.swits[this.carIndex][2] * 14.0f * (this.bounce[this.carIndex] - 0.4));
             if (control.left && this.tilt < n96 && this.tilt >= 0.0f) {
                 this.tilt += (float)0.4;
             }
             else if (control.right && this.tilt > -n96 && this.tilt <= 0.0f) {
                 this.tilt -= (float)0.4;
             }
-            else if (Math.abs(this.tilt) > 3.0 * (this.bounce[this.cn] - 0.4)) {
+            else if (Math.abs(this.tilt) > 3.0 * (this.bounce[this.carIndex] - 0.4)) {
                 if (this.tilt > 0.0f) {
-                    this.tilt -= (float)(3.0 * (this.bounce[this.cn] - 0.3));
+                    this.tilt -= (float)(3.0 * (this.bounce[this.carIndex] - 0.3));
                 }
                 else {
-                    this.tilt += (float)(3.0 * (this.bounce[this.cn] - 0.3));
+                    this.tilt += (float)(3.0 * (this.bounce[this.carIndex] - 0.3));
                 }
             }
             else {
@@ -1812,14 +1804,14 @@ public class Madness
             this.tilt = 0.0f;
         }
         if (this.wtouch && n24 == 2) {
-            geometry.zy += (int)((this.medium.random() * 6.0f * this.speed / this.swits[this.cn][2] - 3.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
-            geometry.xy += (int)((this.medium.random() * 6.0f * this.speed / this.swits[this.cn][2] - 3.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
+            geometry.zy += (int)((this.medium.random() * 6.0f * this.speed / this.swits[this.carIndex][2] - 3.0f * this.speed / this.swits[this.carIndex][2]) * (this.bounce[this.carIndex] - 0.3));
+            geometry.xy += (int)((this.medium.random() * 6.0f * this.speed / this.swits[this.carIndex][2] - 3.0f * this.speed / this.swits[this.carIndex][2]) * (this.bounce[this.carIndex] - 0.3));
         }
         if (this.wtouch && n24 == 1) {
-            geometry.zy += (int)((this.medium.random() * 4.0f * this.speed / this.swits[this.cn][2] - 2.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
-            geometry.xy += (int)((this.medium.random() * 4.0f * this.speed / this.swits[this.cn][2] - 2.0f * this.speed / this.swits[this.cn][2]) * (this.bounce[this.cn] - 0.3));
+            geometry.zy += (int)((this.medium.random() * 4.0f * this.speed / this.swits[this.carIndex][2] - 2.0f * this.speed / this.swits[this.carIndex][2]) * (this.bounce[this.carIndex] - 0.3));
+            geometry.xy += (int)((this.medium.random() * 4.0f * this.speed / this.swits[this.carIndex][2] - 2.0f * this.speed / this.swits[this.carIndex][2]) * (this.bounce[this.carIndex] - 0.3));
         }
-        if (this.currentDamage > this.maxDamage[this.cn] && !this.dest) {
+        if (this.currentDamage > this.maxDamage[this.carIndex] && !this.dest) {
             this.distruct(geometry);
             if (this.cntdest == 7) {
                 this.dest = true;
@@ -2100,7 +2092,7 @@ public class Madness
                     ++this.capcnt;
                     if (this.capcnt == 30) {
                         this.speed = 0.0f;
-                        geometry.y += this.flipy[this.cn];
+                        geometry.y += this.flipy[this.carIndex];
                         this.pxy += 180;
                         geometry.xy += 180;
                         this.capcnt = 0;
@@ -2110,7 +2102,7 @@ public class Madness
             if (this.trcnt == 0) {
                 if (this.xtpower == 0) {
                     if (this.power > 0.0f) {
-                        this.power -= this.power * this.power * this.power / this.powerloss[this.cn];
+                        this.power -= this.power * this.power * this.power / this.powerloss[this.carIndex];
                     }
                     else {
                         this.power = 0.0f;

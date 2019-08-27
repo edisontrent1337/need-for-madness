@@ -117,7 +117,7 @@ public class Record
                 for (int k = 0; k < geometry.numberOfPlanes; ++k) {
                     float n5 = 0.0f;
                     for (int l = 0; l < geometry.planes[k].n; ++l) {
-                        if (geometry.planes[k].wz == 0 && this.py(geometry.keyx[n], geometry.planes[k].ox[l], geometry.keyz[n], geometry.planes[k].oz[l]) < madness.clrad[madness.cn]) {
+                        if (geometry.planes[k].wz == 0 && this.py(geometry.keyx[n], geometry.planes[k].ox[l], geometry.keyz[n], geometry.planes[k].oz[l]) < madness.clrad[madness.carIndex]) {
                             n5 = n2 / 20.0f * this.m.random();
                             final int[] oz = geometry.planes[k].oz;
                             final int n6 = l;
@@ -180,7 +180,7 @@ public class Record
                     for (int n12 = 0; n12 < geometry.planes[n10].n; ++n12) {
                         if (geometry.planes[n10].wz == 0) {
                             n11 = n2 / 15.0f * this.m.random();
-                            if ((Math.abs(geometry.planes[n10].oy[n12] - madness.flipy[madness.cn] - this.squash[0][madness.im]) < madness.msquash[madness.cn] * 3 || geometry.planes[n10].oy[n12] < madness.flipy[madness.cn] + this.squash[0][madness.im]) && this.squash[0][madness.im] < madness.msquash[madness.cn]) {
+                            if ((Math.abs(geometry.planes[n10].oy[n12] - madness.flipy[madness.carIndex] - this.squash[0][madness.im]) < madness.msquash[madness.carIndex] * 3 || geometry.planes[n10].oy[n12] < madness.flipy[madness.carIndex] + this.squash[0][madness.im]) && this.squash[0][madness.im] < madness.msquash[madness.carIndex]) {
                                 final int[] oy = geometry.planes[n10].oy;
                                 final int n13 = n12;
                                 oy[n13] += (int)n11;
@@ -416,7 +416,7 @@ public class Record
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
                 for (int j = 0; j < geometry.planes[i].n; ++j) {
-                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.cn]) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.carIndex]) {
                         n2 = a / 20.0f * this.m.random();
                     }
                 }
@@ -439,7 +439,7 @@ public class Record
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float a2 = 0.0f;
                 for (int j = 0; j < geometry.planes[i].n; ++j) {
-                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.cn]) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.carIndex]) {
                         a2 = a / 20.0f * this.m.random();
                         final int[] oz = geometry.planes[i].oz;
                         final int n2 = j;
@@ -752,7 +752,7 @@ public class Record
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
                 for (int j = 0; j < geometry.planes[i].n; ++j) {
-                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.cn]) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.carIndex]) {
                         n2 = a / 20.0f * this.m.random();
                     }
                 }
@@ -775,7 +775,7 @@ public class Record
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float a2 = 0.0f;
                 for (int j = 0; j < geometry.planes[i].n; ++j) {
-                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.cn]) {
+                    if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.carIndex]) {
                         a2 = a / 20.0f * this.m.random();
                         final int[] oz = geometry.planes[i].oz;
                         final int n2 = j;
