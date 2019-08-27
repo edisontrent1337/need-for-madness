@@ -73,11 +73,9 @@ public class CheckPoints {
                 for (int i = n2 + 1; i < 5; ++i) {
                     if (this.clear[n2] != this.clear[i]) {
                         if (this.clear[n2] < this.clear[i]) {
-                            final int[] pos = this.pos;
-                            ++pos[n2];
+                            ++this.pos[n2];
                         } else {
-                            final int[] pos2 = this.pos;
-                            ++pos2[i];
+                            ++this.pos[i];
                         }
                     } else {
                         int n5 = 0;
@@ -87,11 +85,9 @@ public class CheckPoints {
                             }
                         }
                         if (this.py(geometries[n2].x / 100, this.x[n5] / 100, geometries[n2].z / 100, this.z[n5] / 100) > this.py(geometries[i].x / 100, this.x[n5] / 100, geometries[i].z / 100, this.z[n5] / 100)) {
-                            final int[] pos3 = this.pos;
-                            ++pos3[n2];
+                            ++this.pos[n2];
                         } else {
-                            final int[] pos4 = this.pos;
-                            ++pos4[i];
+                            ++this.pos[i];
                         }
                     }
                 }
@@ -99,10 +95,8 @@ public class CheckPoints {
         }
         this.wasted = 0;
         int n8 = 1;
-        do {
-            if (cars[n8].dest) {
-                ++this.wasted;
-            }
+        do if (cars[n8].dest) {
+            ++this.wasted;
         } while (++n8 < 5);
     }
 

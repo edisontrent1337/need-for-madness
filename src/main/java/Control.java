@@ -646,8 +646,8 @@ public class Control {
 				if (this.trickfase == 0) {
 					final int n22 = (int) ((madness.scy[0] + madness.scy[1] + madness.scy[2] + madness.scy[3]) * (geometry.y - 300) / 4000.0f);
 					if (n22 > 9 && this.m.random() > this.trickprf / 3.0f) {
-						this.oxy = madness.pxy;
-						this.ozy = madness.pzy;
+						this.oxy = madness.xyRotation;
+						this.ozy = madness.zyRotation;
 						this.flycnt = 0;
 						this.uddirect = 0;
 						this.lrdirect = 0;
@@ -726,7 +726,7 @@ public class Control {
 				if (this.trickfase == 1) {
 					++this.flycnt;
 					if (this.lrdirect != 0 && this.flycnt > this.lrstart) {
-						if (this.lrswt && Math.abs(madness.pxy - this.oxy) > 180) {
+						if (this.lrswt && Math.abs(madness.xyRotation - this.oxy) > 180) {
 							if (this.lrdirect == -1) {
 								this.lrdirect = 1;
 							} else {
@@ -743,7 +743,7 @@ public class Control {
 						}
 					}
 					if (this.uddirect != 0 && this.flycnt > this.udstart) {
-						if (this.udswt && Math.abs(madness.pzy - this.ozy) > 180) {
+						if (this.udswt && Math.abs(madness.zyRotation - this.ozy) > 180) {
 							if (this.uddirect == -1) {
 								this.uddirect = 1;
 							} else {
@@ -800,7 +800,7 @@ public class Control {
 					}
 					if (this.udbare) {
 						int a;
-						a = madness.pzy + 90;
+						a = madness.zyRotation + 90;
 						while (a < 0) {
 							a += 360;
 						}
@@ -862,7 +862,7 @@ public class Control {
 						}
 					}
 					if (this.lrbare) {
-						int a2 = madness.pxy + 90;
+						int a2 = madness.xyRotation + 90;
 						if (this.zyinv) {
 							a2 += 180;
 						}

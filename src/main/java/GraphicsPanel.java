@@ -1742,7 +1742,7 @@ public class GraphicsPanel extends Panel {
 					graphics.drawImage(this.cntdn[this.gocnt], 238, 50, null);
 				}
 			}
-			if (this.looped != 0 && madness.loop == 2) {
+			if (this.looped != 0 && madness.airState == 2) {
 				this.looped = 0;
 			}
 			if (madness.power < 45.0f) {
