@@ -2,7 +2,7 @@ package main.java;
 
 import java.applet.Applet;
 
-import sun.audio.AudioPlayer;
+//import sun.audio.AudioPlayer;
 
 //
 // Decompiled by Procyon v0.5.36
@@ -15,7 +15,7 @@ public class RadicalMod {
     public void stop() {
         if (this.playing) {
             try {
-                AudioPlayer.player.stop(this.stream);
+//                AudioPlayer.player.stop(this.stream);
             } catch (Exception ex) {
             }
             this.playing = false;
@@ -25,7 +25,7 @@ public class RadicalMod {
     protected void outwithit() {
         if (this.playing) {
             try {
-                AudioPlayer.player.stop(this.stream);
+//                AudioPlayer.player.stop(this.stream);
             } catch (Exception ex) {
             }
             this.playing = false;
@@ -38,9 +38,9 @@ public class RadicalMod {
         }
     }
 
-    public RadicalMod(final String path, final int n, final int n2, final int n3, final Applet applet) {
+    public RadicalMod(final String path, final int n, final int n2, final int n3) {
         this.playing = false;
-        final ModSlayer modSlayer = new ModSlayer(new Mod(path, applet), n2, n, n3);
+        final ModSlayer modSlayer = new ModSlayer(new Mod(path), n2, n, n3);
         try {
             this.stream = new SuperStream(modSlayer.turnToBytes());
         } catch (Exception obj) {
@@ -65,7 +65,7 @@ public class RadicalMod {
                 this.stream.reset();
             }
             try {
-                AudioPlayer.player.start(this.stream);
+//                AudioPlayer.player.start(this.stream);
             } catch (Exception ex) {
             }
             this.playing = true;

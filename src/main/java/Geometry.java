@@ -4,6 +4,9 @@ import java.io.DataInputStream;
 import java.io.ByteArrayInputStream;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Arrays;
+
+import static main.java.Util.snapRGBs;
 
 //
 // Decompiled by Procyon v0.5.36
@@ -69,23 +72,22 @@ public class Geometry {
 			} else {
 				n3 = this.stg[n] * this.stg[n] * this.stg[n] + 1;
 			}
-			int r = (this.medium.cgrnd[0] * n3 + this.medium.cfade[0] * 2 + this.medium.skyColor[0]) / (3 + n3);
-			int g = (this.medium.cgrnd[1] * n3 + this.medium.cfade[0] * 2 + this.medium.skyColor[1]) / (3 + n3);
-			int b = (this.medium.cgrnd[2] * n3 + this.medium.cfade[0] * 2 + this.medium.skyColor[2]) / (3 + n3);
+			int r = (this.medium.groundColor[0] * n3 + this.medium.fadeColor[0] * 2 + this.medium.skyColor[0]) / (3 + n3);
+			int g = (this.medium.groundColor[1] * n3 + this.medium.fadeColor[0] * 2 + this.medium.skyColor[1]) / (3 + n3);
+			int b = (this.medium.groundColor[2] * n3 + this.medium.fadeColor[0] * 2 + this.medium.skyColor[2]) / (3 + n3);
 			for (int i = 0; i < this.trackers.nt; ++i) {
 				if (Math.abs(this.trackers.zy[i]) != 90 && Math.abs(this.trackers.xy[i]) != 90 && Math.abs(this.sx[n] - this.trackers.x[i]) < this.trackers.radx[i] && Math.abs(this.sz[n] - this.trackers.z[i]) < this.trackers.radz[i]) {
 					if (this.trackers.skd[i] == 0) {
 						n3 = this.stg[n] * this.stg[n] * this.stg[n] + 2;
 					}
-					r = (int) ((this.trackers.objectColor[i][0] * 0.87 * n3 + this.medium.cfade[0] * 2 + this.medium.skyColor[0]) / (3 + n3));
-					g = (int) ((this.trackers.objectColor[i][1] * 0.87 * n3 + this.medium.cfade[0] * 2 + this.medium.skyColor[1]) / (3 + n3));
-					b = (int) ((this.trackers.objectColor[i][2] * 0.87 * n3 + this.medium.cfade[0] * 2 + this.medium.skyColor[2]) / (3 + n3));
+					r = (int) ((this.trackers.objectColor[i][0] * 0.87 * n3 + this.medium.fadeColor[0] * 2 + this.medium.skyColor[0]) / (3 + n3));
+					g = (int) ((this.trackers.objectColor[i][1] * 0.87 * n3 + this.medium.fadeColor[0] * 2 + this.medium.skyColor[1]) / (3 + n3));
+					b = (int) ((this.trackers.objectColor[i][2] * 0.87 * n3 + this.medium.fadeColor[0] * 2 + this.medium.skyColor[2]) / (3 + n3));
 				}
 			}
 			if (this.sy[n] > 250) {
 				this.sy[n] = 250;
 			}
-			final int n4 = this.sy[n];
 			final float n5 = this.medium.centerX + (int) ((this.sx[n] - this.medium.positionX - this.medium.centerX) * this.medium.cos(this.medium.xz) - (this.sz[n] - this.medium.positionZ - this.medium.centerZ) * this.medium.sin(this.medium.xz));
 			final float n6 = this.medium.centerZ + (int) ((this.sx[n] - this.medium.positionX - this.medium.centerX) * this.medium.sin(this.medium.xz) + (this.sz[n] - this.medium.positionZ - this.medium.centerZ) * this.medium.cos(this.medium.xz));
 			final float n7 = this.medium.centerY + (int) ((this.sy[n] - this.medium.positionY - this.medium.centerY) * this.medium.cos(this.medium.zy) - (n6 - this.medium.centerZ) * this.medium.sin(this.medium.zy));
@@ -94,9 +96,9 @@ public class Geometry {
 			int n10 = 0;
 			do {
 				if (n9 > this.medium.fade[n10]) {
-					r = (r * 3 + this.medium.cfade[0]) / 4;
-					g = (g * 3 + this.medium.cfade[1]) / 4;
-					b = (b * 3 + this.medium.cfade[2]) / 4;
+					r = (r * 3 + this.medium.fadeColor[0]) / 4;
+					g = (g * 3 + this.medium.fadeColor[1]) / 4;
+					b = (b * 3 + this.medium.fadeColor[2]) / 4;
 				}
 			} while (++n10 < 8);
 			if (Math.abs(this.scx[n]) + Math.abs(this.scz[n]) > 150) {
@@ -388,7 +390,7 @@ public class Geometry {
 			dataInputStream.close();
 		} catch (Exception obj) {
 			System.out.println("ContO Loading Error: " + obj);
-			System.out.println("At File: " + array + ".rad");
+			System.out.println("At File: " + Arrays.toString(array) + ".rad");
 			System.out.println("At Line: " + string);
 			System.out.println("--------------------");
 		}
@@ -444,7 +446,7 @@ public class Geometry {
 		this.grat = geometry.grat;
 		this.planes = new Plane[geometry.numberOfPlanes];
 		for (int i = 0; i < this.numberOfPlanes; ++i) {
-			this.planes[i] = new Plane(this.medium, this.trackers, geometry.planes[i].ox, geometry.planes[i].oz, geometry.planes[i].oy, geometry.planes[i].n, geometry.planes[i].oc, geometry.planes[i].glass, geometry.planes[i].gr, geometry.planes[i].wx, geometry.planes[i].wy, geometry.planes[i].wz, geometry.disline, geometry.planes[i].bfase, geometry.planes[i].road);
+			this.planes[i] = new Plane(this.medium, this.trackers, geometry.planes[i].ox, geometry.planes[i].oz, geometry.planes[i].oy, geometry.planes[i].n, geometry.planes[i].oc, geometry.planes[i].isGlass, geometry.planes[i].gr, geometry.planes[i].wx, geometry.planes[i].wy, geometry.planes[i].wz, geometry.disline, geometry.planes[i].bfase, geometry.planes[i].isRoad);
 		}
 		this.x = x;
 		this.y = y;
@@ -596,22 +598,7 @@ public class Geometry {
 		}
 	}
 
-	public int getpy(final int n, final int n2, final int n3) {
-		return (n - this.x) / 10 * ((n - this.x) / 10) + (n2 - this.y) / 10 * ((n2 - this.y) / 10) + (n3 - this.z) / 10 * ((n3 - this.z) / 10);
-	}
-
 	public void rot(final int[] array, final int[] array2, final int n, final int n2, final int n3, final int n4) {
-		if (n3 != 0) {
-			for (int i = 0; i < n4; ++i) {
-				final int n5 = array[i];
-				final int n6 = array2[i];
-				array[i] = n + (int) ((n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3));
-				array2[i] = n2 + (int) ((n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3));
-			}
-		}
-	}
-
-	public void rot(final int[] array, final int[] array2, final int n, final int n2, final float n3, final int n4) {
 		if (n3 != 0) {
 			for (int i = 0; i < n4; ++i) {
 				final int n5 = array[i];
@@ -656,7 +643,7 @@ public class Geometry {
 
 	public int getvalue(final String s, final String s2, final int n) {
 		int n2 = 0;
-		String string = "";
+		StringBuilder string = new StringBuilder();
 		for (int i = s.length() + 1; i < s2.length(); ++i) {
 			final String string2 = "" + s2.charAt(i);
 			if (string2.equals(",") || string2.equals(")")) {
@@ -664,10 +651,10 @@ public class Geometry {
 				++i;
 			}
 			if (n2 == n) {
-				string += s2.charAt(i);
+				string.append(s2.charAt(i));
 			}
 		}
-		return Integer.valueOf(string);
+		return Integer.parseInt(string.toString());
 	}
 
 	public int xs(final int n, int n2) {
@@ -706,9 +693,9 @@ public class Geometry {
 		array[3] = (int) (this.keyx[2] * 1.2 + this.x - this.medium.positionX);
 		array3[3] = (int) (this.keyz[2] * n2 * 1.4 + this.z - this.medium.positionZ);
 		this.rot(array, array3, this.x - this.medium.positionX, this.z - this.medium.positionZ, this.xz, 4);
-		int r = (int) ((float) this.medium.cgrnd[0] / 1.5);
-		int g = (int) ((float) this.medium.cgrnd[1] / 1.5);
-		int b = (int) ((float) this.medium.cgrnd[2] / 1.5);
+		int r = (int) ((float) this.medium.groundColor[0] / 1.5);
+		int g = (int) ((float) this.medium.groundColor[1] / 1.5);
+		int b = (int) ((float) this.medium.groundColor[2] / 1.5);
 		int n3 = 0;
 		do {
 			array2[n3] = (int) this.medium.ground;
@@ -769,9 +756,9 @@ public class Geometry {
 			int n14 = 0;
 			do {
 				if (n > this.medium.fade[n14]) {
-					r = (r * 3 + this.medium.cfade[0]) / 4;
-					g = (g * 3 + this.medium.cfade[1]) / 4;
-					b = (b * 3 + this.medium.cfade[2]) / 4;
+					r = (r * 3 + this.medium.fadeColor[0]) / 4;
+					g = (g * 3 + this.medium.fadeColor[1]) / 4;
+					b = (b * 3 + this.medium.fadeColor[2]) / 4;
 				}
 			} while (++n14 < 8);
 			graphics.setColor(new Color(r, g, b));
@@ -786,20 +773,14 @@ public class Geometry {
 		if (this.fcnt == 1) {
 			for (int i = 0; i < this.numberOfPlanes; ++i) {
 				Plane currentPlane = this.planes[i];
-				currentPlane.hsb[0] = 0.57f;
+				currentPlane.hsb[0] = 0.8f;
 				currentPlane.hsb[1] = 0.8f;
 				currentPlane.hsb[2] = 0.8f;
 				final Color hsbColor = Color.getHSBColor(currentPlane.hsb[0], currentPlane.hsb[1], currentPlane.hsb[2]);
-				int r = (int) (hsbColor.getRed() + hsbColor.getRed() * (this.medium.snap[0] / 100.0f));
-				r = Util.clamp(r, 0, 255);
 
-				int g = (int) (hsbColor.getGreen() + hsbColor.getGreen() * (this.medium.snap[1] / 100.0f));
-				g = Util.clamp(g, 0, 255);
+				int[] RGBs = snapRGBs(hsbColor.getRGB(), this.medium.snap);
 
-				int b = (int) (hsbColor.getBlue() + hsbColor.getBlue() * (this.medium.snap[2] / 100.0f));
-				b = Util.clamp(b, 0, 255);
-
-				Color.RGBtoHSB(r, g, b, currentPlane.hsb);
+				Color.RGBtoHSB(RGBs[0], RGBs[1], RGBs[2], currentPlane.hsb);
 				currentPlane.flx = 1;
 			}
 		}

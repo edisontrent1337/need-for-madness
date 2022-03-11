@@ -44,12 +44,7 @@ public class ResourceLoader {
 		return images;
 	}
 
-	void loadResources(GraphicsPanel graphicsPanel) {
-		this.loadResources();
-		graphicsPanel.setImages(images);
-	}
-
-	private void loadResources() {
+	Map<String, Image> loadResources() {
 		URI uri = null;
 		try {
 			uri = ResourceLoader.class.getResource(GRAPHICS_PATH).toURI();
@@ -69,6 +64,7 @@ public class ResourceLoader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return images;
 	}
 
 	/**
@@ -76,6 +72,7 @@ public class ResourceLoader {
 	 *
 	 * @param path path
 	 */
+
 	private void loadImage(Path path) {
 		BufferedImage image;
 		try {

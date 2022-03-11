@@ -152,7 +152,7 @@ public class Madness
                             geometry.planes[k].chip = 1;
                             geometry.planes[k].ctmag = ctmag;
                         }
-                        if (!geometry.planes[k].nocol && !geometry.planes[k].glass) {
+                        if (!geometry.planes[k].isNotColored && !geometry.planes[k].isGlass) {
                             if (geometry.planes[k].bfase > 20 && geometry.planes[k].hsb[1] > 0.2) {
                                 geometry.planes[k].hsb[1] = 0.2f;
                             }
@@ -185,7 +185,7 @@ public class Madness
                             geometry.planes[k].c[1] = hsbColor.getGreen();
                             geometry.planes[k].c[2] = hsbColor.getBlue();
                         }
-                        if (geometry.planes[k].glass) {
+                        if (geometry.planes[k].isGlass) {
                             final Plane plane2 = geometry.planes[k];
                             plane2.gr -= (int)Math.abs(ctmag * 1.5);
                         }
@@ -210,7 +210,7 @@ public class Madness
                                 }
                             }
                         }
-                        if (geometry.planes[n9].glass) {
+                        if (geometry.planes[n9].isGlass) {
                             final Plane plane3 = geometry.planes[n9];
                             plane3.gr -= 5;
                         }
@@ -362,7 +362,7 @@ public class Madness
                         geometry.planes[i].chip = 1;
                         geometry.planes[i].ctmag = n2;
                     }
-                    if (!geometry.planes[i].nocol && !geometry.planes[i].glass) {
+                    if (!geometry.planes[i].isNotColored && !geometry.planes[i].isGlass) {
                         if (geometry.planes[i].bfase > 20 && geometry.planes[i].hsb[1] > 0.2) {
                             geometry.planes[i].hsb[1] = 0.2f;
                         }
@@ -395,7 +395,7 @@ public class Madness
                         geometry.planes[i].c[1] = hsbColor.getGreen();
                         geometry.planes[i].c[2] = hsbColor.getBlue();
                     }
-                    if (geometry.planes[i].glass) {
+                    if (geometry.planes[i].isGlass) {
                         final Plane plane2 = geometry.planes[i];
                         plane2.gr -= (int)Math.abs(n2 * 1.5);
                     }
@@ -668,7 +668,7 @@ public class Madness
                         geometry.planes[i].chip = 1;
                         geometry.planes[i].ctmag = n2;
                     }
-                    if (!geometry.planes[i].nocol && !geometry.planes[i].glass) {
+                    if (!geometry.planes[i].isNotColored && !geometry.planes[i].isGlass) {
                         if (geometry.planes[i].bfase > 20 && geometry.planes[i].hsb[1] > 0.2) {
                             geometry.planes[i].hsb[1] = 0.2f;
                         }
@@ -701,7 +701,7 @@ public class Madness
                         geometry.planes[i].c[1] = hsbColor.getGreen();
                         geometry.planes[i].c[2] = hsbColor.getBlue();
                     }
-                    if (geometry.planes[i].glass) {
+                    if (geometry.planes[i].isGlass) {
                         final Plane plane2 = geometry.planes[i];
                         plane2.gr -= (int)Math.abs(n2 * 1.5);
                     }
@@ -712,7 +712,7 @@ public class Madness
 
     public void drive(final Control control, final Geometry geometry, final Trackers trackers, final CheckPoints checkPoints) {
         if (this.carIndex == 0) {
-            System.out.println("ucomp:" + this.ucomp + " dcomp:" + this.dcomp + "  lcomp:" + this.lcomp + " rcomp:" + this.rcomp);
+            //System.out.println("ucomp:" + this.ucomp + " dcomp:" + this.dcomp + "  lcomp:" + this.lcomp + " rcomp:" + this.rcomp);
         }
         int n = 1;
         int n2 = 1;

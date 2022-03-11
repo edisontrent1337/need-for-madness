@@ -78,7 +78,7 @@ public class CheckPoints {
                             ++this.pos[i];
                         }
                     } else {
-                        int n5 = 0;
+                        int n5;
                         for (n5 = cars[n2].pcleared + 1; this.typ[n5] <= 0; ++n5) {
                             if (n5 == this.n) {
                                 n5 = 0;

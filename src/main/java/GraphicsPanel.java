@@ -15,16 +15,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
+import static main.java.Util.snapRGBs;
+
 //
 // Decompiled by Procyon v0.5.36
 //
 
 public class GraphicsPanel extends Panel {
 	Medium medium;
-	FontMetrics ftm;
-	ImageObserver ob;
+	FontMetrics fontMetrics;
+	ImageObserver imageObserver;
 	Applet app;
-	int fase;
+	int stateInt;
 	int oldfase;
 	int starcnt;
 	int unlocked;
@@ -184,7 +186,7 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public GraphicsPanel(final Medium medium, final Graphics graphics, final Applet app, final int n) {
-		this.fase = 7;
+		this.stateInt = 7;
 		this.oldfase = 0;
 		this.starcnt = 0;
 		this.unlocked = 1;
@@ -294,23 +296,23 @@ public class GraphicsPanel extends Panel {
 		this.app = app;
 		this.resourceLoader = new ResourceLoader(this.app, this);
 
-		final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
+		Toolkit.getDefaultToolkit();
 		final MediaTracker mediaTracker = new MediaTracker(this.app);
 
 		mediaTracker.addImage(this.hello = this.app.getImage(this.app.getCodeBase(), "main/java/hello.gif"), 0);
 		try {
 			mediaTracker.waitForID(0);
-		} catch (Exception ex) {
+		} catch (Exception ignored) {
 		}
 		mediaTracker.addImage(this.sign = this.app.getImage(this.app.getCodeBase(), "main/java/sign.gif"), 0);
 		try {
 			mediaTracker.waitForID(0);
-		} catch (Exception ex2) {
+		} catch (Exception ignored) {
 		}
 		mediaTracker.addImage(this.loadbar = this.app.getImage(this.app.getCodeBase(), "main/java/loadbar.gif"), 0);
 		try {
 			mediaTracker.waitForID(0);
-		} catch (Exception ex3) {
+		} catch (Exception ignored) {
 		}
 		this.kbload = 416;
 		if (n == 2) {
@@ -323,7 +325,7 @@ public class GraphicsPanel extends Panel {
 
 		this.dnload += 44;
 		this.loading(graphics, this.app);
-		this.resourceLoader.loadResources(this);
+		this.images = this.resourceLoader.loadResources();
 		this.resourceLoader.loadTextures();
 
 		this.dnload += 47;
@@ -482,10 +484,10 @@ public class GraphicsPanel extends Panel {
 			this.dnload += 12;
 			this.loading(graphics, this.app);
 		}
-		this.cars = new RadicalMod("../../resources/music/cars.zipo", 500, 7900, 125, this.app);
+		this.cars = new RadicalMod("../../resources/music/cars.zipo", 500, 7900, 125);
 		this.dnload += 26;
 		this.loading(graphics, this.app);
-		this.stages = new RadicalMod("../../resources/music/stages.zipo", 200, 9000, 145, this.app);
+		this.stages = new RadicalMod("../../resources/music/stages.zipo", 200, 9000, 145);
 		this.dnload += 22;
 		this.loading(graphics, this.app);
 		int n8 = 0;
@@ -557,7 +559,7 @@ public class GraphicsPanel extends Panel {
 		this.pnext = 0;
 		graphics.drawImage(this.trackbg, 0, 0, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 110, "> You need to complete current stage " + this.unlocked + " before playing this one...", 0, 0, 0, 3);
 		graphics.drawImage(this.pgate, 96, 150, null);
 		if (this.aflk) {
@@ -574,20 +576,20 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.bb, 0, 357, null);
 		graphics.drawImage(this.back[this.pback], 245, 320, null);
 		graphics.setFont(new Font("SansSerif", 1, 11));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
 		--this.lockcnt;
 		if (this.lockcnt == 0 || control.enter || control.handb || control.left) {
 			control.left = false;
 			control.handb = false;
 			control.enter = false;
-			this.fase = 1;
+			this.stateInt = 1;
 		}
 	}
 
 	public boolean over(final Image image, final int n, final int n2, final int n3, final int n4) {
-		final int height = image.getHeight(this.ob);
-		final int width = image.getWidth(this.ob);
+		final int height = image.getHeight(this.imageObserver);
+		final int width = image.getWidth(this.imageObserver);
 		return n > n3 - 5 && n < n3 + width + 5 && n2 > n4 - 5 && n2 < n4 + height + 5;
 	}
 
@@ -596,7 +598,7 @@ public class GraphicsPanel extends Panel {
 		this.stages.stop();
 		graphics.drawImage(this.trackbg, 0, 0, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 180, "Loading Stage " + stageNumber + ", please wait...", 0, 0, 0, 3);
 		graphics.drawImage(this.select, 201, 45, null);
 		graphics.drawImage(this.bl, 0, 0, null);
@@ -604,7 +606,7 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.br, 509, 0, null);
 		graphics.drawImage(this.bb, 0, 357, null);
 		graphics.setFont(new Font("SansSerif", 1, 11));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
 		this.app.repaint();
 	}
@@ -643,8 +645,8 @@ public class GraphicsPanel extends Panel {
 			}
 			if (this.flipo == 5) {
 				this.flipo = 0;
-				this.fase = this.oldfase;
-				if (this.fase == -7) {
+				this.stateInt = this.oldfase;
+				if (this.stateInt == -7) {
 					graphics.drawImage(this.fleximg, 0, 0, null);
 				}
 			}
@@ -938,7 +940,7 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public void playsounds(final Madness madness, final Control control, final int n) {
-		if (this.fase == 0 && this.starcnt < 35 && this.cntwis != 8 && !this.isSoundMuted) {
+		if (this.stateInt == 0 && this.starcnt < 35 && this.cntwis != 8 && !this.isSoundMuted) {
 			boolean b = (control.up && madness.speed > 0.0f) || (control.down && madness.speed < 10.0f);
 			boolean b2 = (madness.skid == 1 && control.handb) || Math.abs(madness.scz[0] - (madness.scz[1] + madness.scz[0] + madness.scz[2] + madness.scz[3]) / 4.0f) > 1.0f || Math.abs(madness.scx[0] - (madness.scx[1] + madness.scx[0] + madness.scx[2] + madness.scx[3]) / 4.0f) > 1.0f;
 			boolean b3 = false;
@@ -1016,7 +1018,7 @@ public class GraphicsPanel extends Panel {
 					this.grrd = true;
 				}
 				if (!madness.wtouch && !this.aird) {
-					this.stopairs();
+					this.stopAirSounds();
 					this.airSoundEffects[(int) (this.medium.random() * 4.0f)].loop();
 					this.stopcnt = 10;
 					this.aird = true;
@@ -1046,7 +1048,7 @@ public class GraphicsPanel extends Panel {
 		}
 		if (this.stopcnt != -20) {
 			if (this.stopcnt == 1) {
-				this.stopairs();
+				this.stopAirSounds();
 			}
 			--this.stopcnt;
 		}
@@ -1059,7 +1061,7 @@ public class GraphicsPanel extends Panel {
 		if (madness.newcar) {
 			this.cntwis = 0;
 		}
-		if (this.fase == 0 || this.fase == 6 || this.fase == -1 || this.fase == -2 || this.fase == -3 || this.fase == -4 || this.fase == -5) {
+		if (this.stateInt == 0 || this.stateInt == 6 || this.stateInt == -1 || this.stateInt == -2 || this.stateInt == -3 || this.stateInt == -4 || this.stateInt == -5) {
 			if (this.isSoundMuted != control.sound_muted) {
 				this.isSoundMuted = control.sound_muted;
 			}
@@ -1158,13 +1160,14 @@ public class GraphicsPanel extends Panel {
 	}
 
 	private Image pressed(final Image img) {
-		final int height = img.getHeight(this.ob);
-		final int width = img.getWidth(this.ob);
+		final int height = img.getHeight(this.imageObserver);
+		final int width = img.getWidth(this.imageObserver);
 		final int[] array = new int[width * height];
 		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, width, height, array, 0, width);
 		try {
 			pixelGrabber.grabPixels();
-		} catch (InterruptedException ex) {
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		for (int i = 0; i < width * height; ++i) {
 			if (array[i] != array[width * height - 1]) {
@@ -1190,7 +1193,7 @@ public class GraphicsPanel extends Panel {
 		graphics.setColor(new Color(192, 192, 192));
 		graphics.drawRect(20, 20, 510, 360);
 		graphics.setFont(new Font("SansSerif", 1, 11));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 14, "Game lost its focus -Click- screen with mouse to continue.", 100, 100, 100, 3);
 		this.drawCharacters(graphics, 395, "Game lost its focus -Click- screen with mouse to continue.", 100, 100, 100, 3);
 	}
@@ -1305,67 +1308,67 @@ public class GraphicsPanel extends Panel {
 		this.app.setCursor(new Cursor(3));
 		this.app.repaint();
 		if (n == 1 && !this.loadedSoundTracks[0]) {
-			this.soundTracks[0] = new RadicalMod("../../resources/music/stage1.zipo", 350, 8400, 135, this.app);
+			this.soundTracks[0] = new RadicalMod("../../resources/music/stage1.zipo", 350, 8400, 135);
 			if (this.soundTracks[0].stream != null) {
 				this.loadedSoundTracks[0] = true;
 			}
 		}
 		if (n == 2 && !this.loadedSoundTracks[1]) {
-			this.soundTracks[1] = new RadicalMod("../../resources/music/stage2.zipo", 370, 9000, 145, this.app);
+			this.soundTracks[1] = new RadicalMod("../../resources/music/stage2.zipo", 370, 9000, 145);
 			if (this.soundTracks[1].stream != null) {
 				this.loadedSoundTracks[1] = true;
 			}
 		}
 		if (n == 3 && !this.loadedSoundTracks[2]) {
-			this.soundTracks[2] = new RadicalMod("../../resources/music/stage3.zipo", 350, 8500, 145, this.app);
+			this.soundTracks[2] = new RadicalMod("../../resources/music/stage3.zipo", 350, 8500, 145);
 			if (this.soundTracks[2].stream != null) {
 				this.loadedSoundTracks[2] = true;
 			}
 		}
 		if (n == 4 && !this.loadedSoundTracks[3]) {
-			this.soundTracks[3] = new RadicalMod("../../resources/music/stage4.zipo", 300, 7500, 125, this.app);
+			this.soundTracks[3] = new RadicalMod("../../resources/music/stage4.zipo", 300, 7500, 125);
 			if (this.soundTracks[3].stream != null) {
 				this.loadedSoundTracks[3] = true;
 			}
 		}
 		if (n == 5 && !this.loadedSoundTracks[4]) {
-			this.soundTracks[4] = new RadicalMod("../../resources/music/stage5.zipo", 250, 7900, 125, this.app);
+			this.soundTracks[4] = new RadicalMod("../../resources/music/stage5.zipo", 250, 7900, 125);
 			if (this.soundTracks[4].stream != null) {
 				this.loadedSoundTracks[4] = true;
 			}
 		}
 		if (n == 6 && !this.loadedSoundTracks[5]) {
-			this.soundTracks[5] = new RadicalMod("../../resources/music/stage6.zipo", 760, 7900, 125, this.app);
+			this.soundTracks[5] = new RadicalMod("../../resources/music/stage6.zipo", 760, 7900, 125);
 			if (this.soundTracks[5].stream != null) {
 				this.loadedSoundTracks[5] = true;
 			}
 		}
 		if (n == 7 && !this.loadedSoundTracks[6]) {
-			this.soundTracks[6] = new RadicalMod("../../resources/music/stage7.zipo", 300, 7500, 125, this.app);
+			this.soundTracks[6] = new RadicalMod("../../resources/music/stage7.zipo", 300, 7500, 125);
 			if (this.soundTracks[6].stream != null) {
 				this.loadedSoundTracks[6] = true;
 			}
 		}
 		if (n == 8 && !this.loadedSoundTracks[7]) {
-			this.soundTracks[7] = new RadicalMod("../../resources/music/stage8.zipo", 400, 7900, 125, this.app);
+			this.soundTracks[7] = new RadicalMod("../../resources/music/stage8.zipo", 400, 7900, 125);
 			if (this.soundTracks[7].stream != null) {
 				this.loadedSoundTracks[7] = true;
 			}
 		}
 		if (n == 9 && !this.loadedSoundTracks[8]) {
-			this.soundTracks[8] = new RadicalMod("../../resources/music/stage9.zipo", 300, 7900, 125, this.app);
+			this.soundTracks[8] = new RadicalMod("../../resources/music/stage9.zipo", 300, 7900, 125);
 			if (this.soundTracks[8].stream != null) {
 				this.loadedSoundTracks[8] = true;
 			}
 		}
 		if (n == 10 && !this.loadedSoundTracks[9]) {
-			this.soundTracks[9] = new RadicalMod("../../resources/music/stage10.zipo", 550, 8100, 145, this.app);
+			this.soundTracks[9] = new RadicalMod("../../resources/music/stage10.zipo", 550, 8100, 145);
 			if (this.soundTracks[9].stream != null) {
 				this.loadedSoundTracks[9] = true;
 			}
 		}
 		if (n == 11 && !this.loadedSoundTracks[10]) {
-			this.soundTracks[10] = new RadicalMod("../../resources/music/stage11.zipo", 550, 9000, 145, this.app);
+			this.soundTracks[10] = new RadicalMod("../../resources/music/stage11.zipo", 550, 9000, 145);
 			if (this.soundTracks[10].stream != null) {
 				this.loadedSoundTracks[10] = true;
 			}
@@ -1375,9 +1378,9 @@ public class GraphicsPanel extends Panel {
 				this.soundTracks[n - 1].play();
 			}
 			this.app.setCursor(new Cursor(0));
-			this.fase = 6;
+			this.stateInt = 6;
 		} else {
-			this.fase = 176;
+			this.stateInt = 176;
 		}
 		this.pcontin = 0;
 		this.isMusicMuted = false;
@@ -1450,24 +1453,24 @@ public class GraphicsPanel extends Panel {
 				if (this.loadedSoundTracks[n - 1] && !this.isMusicMuted) {
 					this.soundTracks[n - 1].resume();
 				}
-				this.fase = 0;
+				this.stateInt = 0;
 			}
 			if (this.opselect == 1) {
 				if (record.caught >= 300) {
 					if (this.loadedSoundTracks[n - 1] && !this.isMusicMuted) {
 						this.soundTracks[n - 1].resume();
 					}
-					this.fase = -1;
+					this.stateInt = -1;
 				} else {
-					this.fase = -8;
+					this.stateInt = -8;
 				}
 			}
 			if (this.opselect == 2) {
 				this.oldfase = -7;
-				this.fase = 11;
+				this.stateInt = 11;
 			}
 			if (this.opselect == 3) {
-				this.fase = 10;
+				this.stateInt = 10;
 				this.opselect = 0;
 			}
 			control.enter = false;
@@ -1485,10 +1488,10 @@ public class GraphicsPanel extends Panel {
 			fillBlankScreen(graphics);
 			graphics.drawImage(this.radicalplay, 87, 110, null);
 			graphics.setFont(new Font("SansSerif", 1, 13));
-			this.ftm = graphics.getFontMetrics();
+			this.fontMetrics = graphics.getFontMetrics();
 			this.drawCharacters(graphics, 150 + (int) (10.0f * this.medium.random()), "www.radicalplay.com", 112, 120, 143, 3);
 			graphics.setFont(new Font("SansSerif", 1, 11));
-			this.ftm = graphics.getFontMetrics();
+			this.fontMetrics = graphics.getFontMetrics();
 			if (this.aflk) {
 				this.drawCharacters(graphics, 190, "And we are never going to find the new unless we get a little crazy...", 112, 120, 143, 3);
 				this.aflk = false;
@@ -1502,7 +1505,7 @@ public class GraphicsPanel extends Panel {
 			graphics.drawImage(this.bgmain, 0, 0, null);
 			graphics.drawImage(this.omdness, 158, 7, null);
 			graphics.setFont(new Font("SansSerif", 1, 13));
-			this.ftm = graphics.getFontMetrics();
+			this.fontMetrics = graphics.getFontMetrics();
 			this.drawCharacters(graphics, 65, "At Radicalplay.com", 0, 0, 0, 3);
 			this.drawCharacters(graphics, 100, "Cartoon 3D Engine, Game Programming, 3D Models, Graphics and Sound Effects", 0, 0, 0, 3);
 			this.drawCharacters(graphics, 120, "By Omar Waly", 0, 0, 100, 3);
@@ -1524,7 +1527,7 @@ public class GraphicsPanel extends Panel {
 			++this.flipo;
 			if (this.flipo == 4) {
 				this.flipo = 0;
-				this.fase = 10;
+				this.stateInt = 10;
 			}
 			control.enter = false;
 			control.handb = false;
@@ -1538,9 +1541,9 @@ public class GraphicsPanel extends Panel {
 		if (this.wasted == 4) {
 			if (this.medium.flex != 2) {
 				graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
-				graphics.fillRect(166, 70, this.youwastedem.getWidth(this.ob), this.youwastedem.getHeight(this.ob));
-				graphics.setColor(new Color(this.medium.cfade[0], this.medium.cfade[1], this.medium.cfade[2]));
-				graphics.drawRect(166, 70, this.youwastedem.getWidth(this.ob), this.youwastedem.getHeight(this.ob));
+				graphics.fillRect(166, 70, this.youwastedem.getWidth(this.imageObserver), this.youwastedem.getHeight(this.imageObserver));
+				graphics.setColor(new Color(this.medium.fadeColor[0], this.medium.fadeColor[1], this.medium.fadeColor[2]));
+				graphics.drawRect(166, 70, this.youwastedem.getWidth(this.imageObserver), this.youwastedem.getHeight(this.imageObserver));
 			}
 			graphics.drawImage(this.youwastedem, 166, 70, null);
 			if (this.aflk) {
@@ -1558,9 +1561,9 @@ public class GraphicsPanel extends Panel {
 		if (n == 0 && madness.dest && this.cntwis == 8) {
 			if (this.medium.flex != 2) {
 				graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
-				graphics.fillRect(172, 70, this.yourwasted.getWidth(this.ob), this.yourwasted.getHeight(this.ob));
-				graphics.setColor(new Color(this.medium.cfade[0], this.medium.cfade[1], this.medium.cfade[2]));
-				graphics.drawRect(172, 70, this.yourwasted.getWidth(this.ob), this.yourwasted.getHeight(this.ob));
+				graphics.fillRect(172, 70, this.yourwasted.getWidth(this.imageObserver), this.yourwasted.getHeight(this.imageObserver));
+				graphics.setColor(new Color(this.medium.fadeColor[0], this.medium.fadeColor[1], this.medium.fadeColor[2]));
+				graphics.drawRect(172, 70, this.yourwasted.getWidth(this.imageObserver), this.yourwasted.getHeight(this.imageObserver));
 			}
 			graphics.drawImage(this.yourwasted, 172, 70, null);
 			this.drawCharacters(graphics, 350, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
@@ -1574,9 +1577,9 @@ public class GraphicsPanel extends Panel {
 					if (n2 == 0) {
 						if (this.medium.flex != 2) {
 							graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
-							graphics.fillRect(208, 70, this.youwon.getWidth(this.ob), this.youwon.getHeight(this.ob));
-							graphics.setColor(new Color(this.medium.cfade[0], this.medium.cfade[1], this.medium.cfade[2]));
-							graphics.drawRect(208, 70, this.youwon.getWidth(this.ob), this.youwon.getHeight(this.ob));
+							graphics.fillRect(208, 70, this.youwon.getWidth(this.imageObserver), this.youwon.getHeight(this.imageObserver));
+							graphics.setColor(new Color(this.medium.fadeColor[0], this.medium.fadeColor[1], this.medium.fadeColor[2]));
+							graphics.drawRect(208, 70, this.youwon.getWidth(this.imageObserver), this.youwon.getHeight(this.imageObserver));
 						}
 						graphics.drawImage(this.youwon, 208, 70, null);
 						if (this.aflk) {
@@ -1590,9 +1593,9 @@ public class GraphicsPanel extends Panel {
 					} else {
 						if (this.medium.flex != 2) {
 							graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
-							graphics.fillRect(211, 70, this.youlost.getWidth(this.ob), this.youlost.getHeight(this.ob));
-							graphics.setColor(new Color(this.medium.cfade[0], this.medium.cfade[1], this.medium.cfade[2]));
-							graphics.drawRect(211, 70, this.youlost.getWidth(this.ob), this.youlost.getHeight(this.ob));
+							graphics.fillRect(211, 70, this.youlost.getWidth(this.imageObserver), this.youlost.getHeight(this.imageObserver));
+							graphics.setColor(new Color(this.medium.fadeColor[0], this.medium.fadeColor[1], this.medium.fadeColor[2]));
+							graphics.drawRect(211, 70, this.youlost.getWidth(this.imageObserver), this.youlost.getHeight(this.imageObserver));
 						}
 						graphics.drawImage(this.youlost, 211, 70, null);
 						if (this.aflk) {
@@ -1613,7 +1616,7 @@ public class GraphicsPanel extends Panel {
 		if (n != 0) {
 			++this.holdcnt;
 			if (control.enter || this.holdcnt > 250) {
-				this.fase = -2;
+				this.stateInt = -2;
 				control.enter = false;
 			}
 		} else {
@@ -1624,7 +1627,7 @@ public class GraphicsPanel extends Panel {
 				if (this.loadedSoundTracks[checkPoints.stage - 1]) {
 					this.soundTracks[checkPoints.stage - 1].stop();
 				}
-				this.fase = -6;
+				this.stateInt = -6;
 				control.enter = false;
 			}
 		}
@@ -2068,7 +2071,7 @@ public class GraphicsPanel extends Panel {
 				}
 				if (checkPoints.stage != 11) {
 					graphics.setFont(new Font("SansSerif", 1, 13));
-					this.ftm = graphics.getFontMetrics();
+					this.fontMetrics = graphics.getFontMetrics();
 					if (this.aflk) {
 						this.drawCharacters(graphics, 120 + this.pin, "Stage " + (checkPoints.stage + 1) + " unlocked!", 144, 167, 255, 3);
 					} else {
@@ -2116,7 +2119,7 @@ public class GraphicsPanel extends Panel {
 						}
 					}
 					graphics.setFont(new Font("SansSerif", 1, 11));
-					this.ftm = graphics.getFontMetrics();
+					this.fontMetrics = graphics.getFontMetrics();
 					if (this.aflk) {
 						this.drawCharacters(graphics, 335 - this.pin, "( Game Saved )", 112, 120, 143, 3);
 					} else {
@@ -2124,7 +2127,7 @@ public class GraphicsPanel extends Panel {
 					}
 				} else {
 					graphics.setFont(new Font("SansSerif", 1, 13));
-					this.ftm = graphics.getFontMetrics();
+					this.fontMetrics = graphics.getFontMetrics();
 					if (this.aflk) {
 						this.drawCharacters(graphics, 120, "Woohoooo you finished the game!!!", 144, 167, 255, 3);
 					} else {
@@ -2142,7 +2145,7 @@ public class GraphicsPanel extends Panel {
 					}
 					graphics.drawImage(this.radicalplay, 95, 205, null);
 					graphics.setFont(new Font("SansSerif", 1, 11));
-					this.ftm = graphics.getFontMetrics();
+					this.fontMetrics = graphics.getFontMetrics();
 					if (this.aflk) {
 						this.drawCharacters(graphics, 270, "Be sure to check Radicalplay.com for more action!", 144, 167, 255, 3);
 					} else {
@@ -2185,7 +2188,7 @@ public class GraphicsPanel extends Panel {
 		}
 		graphics.drawImage(this.contin2[this.pcontin], 230, 350 - this.pin, null);
 		if (control.enter || control.handb) {
-			this.fase = 10;
+			this.stateInt = 10;
 			if (this.loadedSoundTracks[checkPoints.stage - 1]) {
 				this.soundTracks[checkPoints.stage - 1].stop();
 			}
@@ -2328,14 +2331,14 @@ public class GraphicsPanel extends Panel {
 		}
 		if (n2 == 1) {
 			graphics.setColor(new Color(0, 0, 0));
-			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, yPosition + 1);
+			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.fontMetrics.stringWidth(str) / 2 + 1, yPosition + 1);
 		}
 		if (n2 == 2) {
 			graphics.setColor(new Color((r + this.medium.skyColor[0] * 2) / 3, (g + this.medium.skyColor[1] * 2) / 3, (b + this.medium.skyColor[2] * 2) / 3));
-			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2 + 1, yPosition + 1);
+			graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.fontMetrics.stringWidth(str) / 2 + 1, yPosition + 1);
 		}
 		graphics.setColor(new Color(r, g, b));
-		graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.ftm.stringWidth(str) / 2, yPosition);
+		graphics.drawString(str, Config.SCREEN_WIDTH / 2 - this.fontMetrics.stringWidth(str) / 2, yPosition);
 	}
 
 	public int py(final int n, final int n2, final int n3, final int n4) {
@@ -2363,7 +2366,7 @@ public class GraphicsPanel extends Panel {
 		}
 		graphics.drawImage(this.contin1[this.pcontin], 232, 170, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		if (checkPoints.stage != 11) {
 			this.drawCharacters(graphics, 110, "Stage " + checkPoints.stage + "  >", 255, 255, 255, 3);
 		} else {
@@ -2371,10 +2374,10 @@ public class GraphicsPanel extends Panel {
 		}
 		this.drawCharacters(graphics, 130, "| " + checkPoints.name + " |", 32, 48, 98, 3);
 		graphics.setFont(new Font("SansSerif", 1, 11));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
 		if (control.handb || control.enter) {
-			this.fase = 5;
+			this.stateInt = 5;
 			this.medium.trk = false;
 			control.handb = false;
 			control.enter = false;
@@ -2383,17 +2386,17 @@ public class GraphicsPanel extends Panel {
 		if (control.right && checkPoints.stage != 11) {
 			if (checkPoints.stage != this.unlocked) {
 				++checkPoints.stage;
-				this.fase = 2;
+				this.stateInt = 2;
 				control.right = false;
 			} else {
-				this.fase = 4;
+				this.stateInt = 4;
 				this.lockcnt = 70;
 				control.right = false;
 			}
 		}
 		if (control.left && checkPoints.stage != 1) {
 			--checkPoints.stage;
-			this.fase = 2;
+			this.stateInt = 2;
 			control.left = false;
 		}
 	}
@@ -2424,26 +2427,19 @@ public class GraphicsPanel extends Panel {
 	}
 
 	private Image loadsnap(final Image img) {
-		final int height = img.getHeight(this.ob);
-		final int width = img.getWidth(this.ob);
+		final int height = img.getHeight(this.imageObserver);
+		final int width = img.getWidth(this.imageObserver);
 		final int[] array = new int[width * height];
 		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, width, height, array, 0, width);
 		try {
 			pixelGrabber.grabPixels();
-		} catch (InterruptedException ex) {
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		for (int i = 0; i < width * height; ++i) {
-			if (array[i] != -4144960 && array[i] != array[width * height - 1]) {
-				final Color color = new Color(array[i]);
-				int r = (int) (color.getRed() + color.getRed() * (this.medium.snap[0] / 100.0f));
-				r = Util.clamp(r, 0 ,255);
-				int g = (int) (color.getGreen() + color.getGreen() * (this.medium.snap[1] / 100.0f));
-				g = Util.clamp(g, 0 ,255);
-				int b = (int) (color.getBlue() + color.getBlue() * (this.medium.snap[2] / 100.0f));
-				b = Util.clamp(b, 0 ,255);
-				array[i] = new Color(r, g, b, 255).getRGB();
-			} else if (array[i] == -4144960) {
-				array[i] = new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2], 0).getRGB();
+			if (array[i] != array[width * height - 1]) {
+				int[] RGBs = snapRGBs(array[i], this.medium.snap);
+				array[i] = new Color(RGBs[0], RGBs[1], RGBs[2], 255).getRGB();
 			}
 		}
 		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
@@ -2579,13 +2575,14 @@ public class GraphicsPanel extends Panel {
 	}
 
 	private Image getButtonPressedImage(final Image img) {
-		final int height = img.getHeight(this.ob);
-		final int width = img.getWidth(this.ob);
+		final int height = img.getHeight(this.imageObserver);
+		final int width = img.getWidth(this.imageObserver);
 		final int[] array = new int[width * height];
 		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, width, height, array, 0, width);
 		try {
 			pixelGrabber.grabPixels();
-		} catch (InterruptedException ex) {
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		final Color color = new Color(206, 214, 255);
 		for (int i = 0; i < width * height; ++i) {
@@ -2607,7 +2604,7 @@ public class GraphicsPanel extends Panel {
 		graphics.drawRoundRect(125, 315, 300, 80, 30, 70);
 		graphics.drawImage(this.loadbar, 156, 340, this);
 		graphics.setFont(new Font("SansSerif", Font.PLAIN, 11));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 333, "Loading game, please wait.", 0, 0, 0, 3);
 		graphics.setColor(new Color(255, 255, 255));
 		graphics.fillRect(170, 373, 210, 17);
@@ -2696,17 +2693,17 @@ public class GraphicsPanel extends Panel {
 			if (this.opselect == 0) {
 				if (this.unlocked == 1 && this.oldfase == 0) {
 					this.oldfase = 7;
-					this.fase = 11;
+					this.stateInt = 11;
 				} else {
-					this.fase = -9; //-9
+					this.stateInt = -9; //-9
 				}
 			}
 			if (this.opselect == 1) {
 				this.oldfase = 10;
-				this.fase = 11;
+				this.stateInt = 11;
 			}
 			if (this.opselect == 2) {
-				this.fase = 8;
+				this.stateInt = 8;
 			}
 			this.flipo = 0;
 			control.enter = false;
@@ -2730,7 +2727,7 @@ public class GraphicsPanel extends Panel {
 		fillBlankScreen(graphics);
 		graphics.drawImage(this.loadingmusic, 164, 90, null);
 		graphics.setFont(new Font("SansSerif", 1, 11));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 250, "Loading complete!  press start to begin...", 0, 0, 0, 3);
 		graphics.drawImage(this.star[this.pstar], 234, 280, null);
 		if (n == 10) {
@@ -2768,7 +2765,7 @@ public class GraphicsPanel extends Panel {
 			}
 		}
 		if (control.handb || control.enter) {
-			this.fase = 0;
+			this.stateInt = 0;
 			control.handb = false;
 			control.enter = false;
 		}
@@ -2806,10 +2803,10 @@ public class GraphicsPanel extends Panel {
 		fillBlankScreen(graphics);
 		graphics.drawImage(this.radicalplay, 87, 110, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 150 + (int) (10.0f * this.medium.random()), "www.radicalplay.com", 112, 120, 143, 3);
 		graphics.setFont(new Font("SansSerif", 1, 11));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		if (this.aflk) {
 			this.drawCharacters(graphics, 190, "And we are never going to find the new unless we get a little crazy...", 112, 120, 143, 3);
 			this.aflk = false;
@@ -2896,7 +2893,7 @@ public class GraphicsPanel extends Panel {
 		geometry.draw(graphics);
 		if (this.flipo == 0) {
 			graphics.setFont(new Font("SansSerif", 1, 26));
-			this.ftm = graphics.getFontMetrics();
+			this.fontMetrics = graphics.getFontMetrics();
 			if (this.aflk) {
 				this.drawCharacters(graphics, 250, this.carNames[this.sc[0]], 130, 130, 255, 3);
 				this.aflk = false;
@@ -2928,7 +2925,7 @@ public class GraphicsPanel extends Panel {
 				this.drawCharacters(graphics, 345, "This car unlocks when stage " + (this.sc[0] - 4) * 2 + " is completed...", 160, 176, 255, 3);
 			} else {
 				graphics.setFont(new Font("SansSerif", 1, 11));
-				this.ftm = graphics.getFontMetrics();
+				this.fontMetrics = graphics.getFontMetrics();
 				graphics.setColor(new Color(160, 176, 255));
 				graphics.drawString("Top Speed:", 33, 313);
 				graphics.drawImage(this.statb, 97, 307, null);
@@ -2999,7 +2996,7 @@ public class GraphicsPanel extends Panel {
 			--this.flipo;
 		}
 		graphics.setFont(new Font("SansSerif", 1, 11));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 396, "Use keyboard Arrows and press Enter to continue", 112, 151, 208, 3);
 		if (control.right) {
 			control.right = false;
@@ -3018,23 +3015,23 @@ public class GraphicsPanel extends Panel {
 		if (control.handb || control.enter) {
 			if (this.flipo == 0 && (this.sc[0] - 4) * 2 < this.unlocked) {
 				this.medium.crs = false;
-				this.fase = 2;
+				this.stateInt = 2;
 			}
 			control.handb = false;
 			control.enter = false;
 		}
 	}
 
-	public void ctachm(final int n, final int n2, final int n3, final Control control) {
-		if (this.fase == 1) {
+	public void ctachm(final int mouseX, final int mouseY, final int n3, final Control control) {
+		if (this.stateInt == 1) {
 			if (n3 == 1) {
-				if (this.over(this.next[0], n, n2, 440, 110)) {
+				if (this.over(this.next[0], mouseX, mouseY, 440, 110)) {
 					this.pnext = 1;
 				}
-				if (this.over(this.back[0], n, n2, 50, 110)) {
+				if (this.over(this.back[0], mouseX, mouseY, 50, 110)) {
 					this.pback = 1;
 				}
-				if (this.over(this.contin1[0], n, n2, 232, 170)) {
+				if (this.over(this.contin1[0], mouseX, mouseY, 232, 170)) {
 					this.pcontin = 1;
 				}
 			}
@@ -3050,8 +3047,8 @@ public class GraphicsPanel extends Panel {
 				}
 			}
 		}
-		if (this.fase == 3) {
-			if (n3 == 1 && this.over(this.contin1[0], n, n2, 232, 270)) {
+		if (this.stateInt == 3) {
+			if (n3 == 1 && this.over(this.contin1[0], mouseX, mouseY, 232, 270)) {
 				this.pcontin = 1;
 			}
 			if (n3 == 2 && this.pcontin == 1) {
@@ -3059,8 +3056,8 @@ public class GraphicsPanel extends Panel {
 				this.pcontin = 0;
 			}
 		}
-		if (this.fase == 4) {
-			if (n3 == 1 && this.over(this.back[0], n, n2, 245, 320)) {
+		if (this.stateInt == 4) {
+			if (n3 == 1 && this.over(this.back[0], mouseX, mouseY, 245, 320)) {
 				this.pback = 1;
 			}
 			if (n3 == 2 && this.pback == 1) {
@@ -3068,8 +3065,8 @@ public class GraphicsPanel extends Panel {
 				this.pback = 0;
 			}
 		}
-		if (this.fase == 6) {
-			if (n3 == 1 && this.over(this.star[0], n, n2, 234, 280)) {
+		if (this.stateInt == 6) {
+			if (n3 == 1 && this.over(this.star[0], mouseX, mouseY, 234, 280)) {
 				this.pstar = 2;
 			}
 			if (n3 == 2 && this.pstar == 2) {
@@ -3077,15 +3074,15 @@ public class GraphicsPanel extends Panel {
 				this.pstar = 1;
 			}
 		}
-		if (this.fase == 7) {
+		if (this.stateInt == 7) {
 			if (n3 == 1) {
-				if (this.over(this.next[0], n, n2, 467, 276)) {
+				if (this.over(this.next[0], mouseX, mouseY, 467, 276)) {
 					this.pnext = 2;
 				}
-				if (this.over(this.back[0], n, n2, 23, 276)) {
+				if (this.over(this.back[0], mouseX, mouseY, 23, 276)) {
 					this.pback = 2;
 				}
-				if (this.over(this.contin2[0], n, n2, 232, 360)) {
+				if (this.over(this.contin2[0], mouseX, mouseY, 232, 360)) {
 					this.pcontin = 1;
 				}
 			}
@@ -3102,8 +3099,8 @@ public class GraphicsPanel extends Panel {
 				}
 			}
 		}
-		if (this.fase == -5) {
-			if (n3 == 1 && this.over(this.contin2[0], n, n2, 230, 350 - this.pin)) {
+		if (this.stateInt == -5) {
+			if (n3 == 1 && this.over(this.contin2[0], mouseX, mouseY, 230, 350 - this.pin)) {
 				this.pcontin = 1;
 			}
 			if (n3 == 2 && this.pcontin == 1) {
@@ -3111,21 +3108,21 @@ public class GraphicsPanel extends Panel {
 				this.pcontin = 0;
 			}
 		}
-		if (this.fase == -7) {
+		if (this.stateInt == -7) {
 			if (n3 == 1) {
-				if (this.overon(204, 143, 137, 22, n, n2)) {
+				if (this.overon(204, 143, 137, 22, mouseX, mouseY)) {
 					this.opselect = 0;
 					this.shaded = true;
 				}
-				if (this.overon(195, 171, 155, 22, n, n2)) {
+				if (this.overon(195, 171, 155, 22, mouseX, mouseY)) {
 					this.opselect = 1;
 					this.shaded = true;
 				}
-				if (this.overon(178, 197, 190, 22, n, n2)) {
+				if (this.overon(178, 197, 190, 22, mouseX, mouseY)) {
 					this.opselect = 2;
 					this.shaded = true;
 				}
-				if (this.overon(216, 223, 109, 22, n, n2)) {
+				if (this.overon(216, 223, 109, 22, mouseX, mouseY)) {
 					this.opselect = 3;
 					this.shaded = true;
 				}
@@ -3135,17 +3132,17 @@ public class GraphicsPanel extends Panel {
 				this.shaded = false;
 			}
 		}
-		if (this.fase == 10) {
+		if (this.stateInt == 10) {
 			if (n3 == 1) {
-				if (this.overon(218, 246, 110, 22, n, n2)) {
+				if (this.overon(218, 246, 110, 22, mouseX, mouseY)) {
 					this.opselect = 0;
 					this.shaded = true;
 				}
-				if (this.overon(174, 275, 196, 22, n, n2)) {
+				if (this.overon(174, 275, 196, 22, mouseX, mouseY)) {
 					this.opselect = 1;
 					this.shaded = true;
 				}
-				if (this.overon(230, 306, 85, 22, n, n2)) {
+				if (this.overon(230, 306, 85, 22, mouseX, mouseY)) {
 					this.opselect = 2;
 					this.shaded = true;
 				}
@@ -3155,9 +3152,9 @@ public class GraphicsPanel extends Panel {
 				this.shaded = false;
 			}
 		}
-		if (this.fase == 11) {
+		if (this.stateInt == 11) {
 			if (this.flipo == 1 || this.flipo == 3) {
-				if (n3 == 1 && this.over(this.next[0], n, n2, 460, 370)) {
+				if (n3 == 1 && this.over(this.next[0], mouseX, mouseY, 460, 370)) {
 					this.pnext = 1;
 				}
 				if (n3 == 2 && this.pnext == 1) {
@@ -3166,7 +3163,7 @@ public class GraphicsPanel extends Panel {
 				}
 			}
 			if (this.flipo == 5) {
-				if (n3 == 1 && this.over(this.contin2[0], n, n2, 230, 370)) {
+				if (n3 == 1 && this.over(this.contin2[0], mouseX, mouseY, 230, 370)) {
 					this.pcontin = 1;
 				}
 				if (n3 == 2 && this.pcontin == 1) {
@@ -3175,8 +3172,8 @@ public class GraphicsPanel extends Panel {
 				}
 			}
 		}
-		if (this.fase == 8) {
-			if (n3 == 1 && this.over(this.next[0], n, n2, 460, 370)) {
+		if (this.stateInt == 8) {
+			if (n3 == 1 && this.over(this.next[0], mouseX, mouseY, 460, 370)) {
 				this.pnext = 1;
 			}
 			if (n3 == 2 && this.pnext == 1) {
@@ -3186,7 +3183,7 @@ public class GraphicsPanel extends Panel {
 		}
 	}
 
-	public void stopairs() {
+	public void stopAirSounds() {
 		int n = 0;
 		do {
 			this.airSoundEffects[n].stop();
@@ -3194,60 +3191,32 @@ public class GraphicsPanel extends Panel {
 	}
 
 	private Image loadOpSnap(final Image img, final int n) {
-		final int height = img.getHeight(this.ob);
-		final int width = img.getWidth(this.ob);
+		final int height = img.getHeight(this.imageObserver);
+		final int width = img.getWidth(this.imageObserver);
 		final int[] array = new int[width * height];
 		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, width, height, array, 0, width);
 		try {
 			pixelGrabber.grabPixels();
-		} catch (InterruptedException ex) {
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		for (int i = 0; i < width * height; ++i) {
 			if (array[i] != array[76]) {
 				final Color color = new Color(array[i]);
-				int r;
-				int green;
-				int b;
+				int r, g ,b;
 				if (this.hipno[n - 1] != 0) {
 					r = (int) (color.getRed() - color.getRed() * (this.medium.snap[0] / (float) (50 * this.hipno[n - 1])));
-					if (r > 255) {
-						r = 255;
-					}
-					if (r < 0) {
-						r = 0;
-					}
-					green = (int) (color.getGreen() - color.getGreen() * (this.medium.snap[1] / (float) (50 * this.hipno[n - 1])));
-					if (green > 255) {
-						green = 255;
-					}
-					if (green < 0) {
-						green = 0;
-					}
+					g = (int) (color.getGreen() - color.getGreen() * (this.medium.snap[1] / (float) (50 * this.hipno[n - 1])));
 					b = (int) (color.getBlue() - color.getBlue() * (this.medium.snap[2] / (float) (50 * this.hipno[n - 1])));
-					if (b > 255) {
-						b = 255;
-					}
-					if (b < 0) {
-						b = 0;
-					}
 				} else {
 					r = (int) (color.getRed() + color.getRed() * 0.25f);
-					if (r > 255) {
-						r = 255;
-					}
-					if (r < 0) {
-						r = 0;
-					}
-					green = color.getGreen();
-					b = (int) (color.getBlue() - color.getBlue() * 0.25);
-					if (b > 255) {
-						b = 255;
-					}
-					if (b < 0) {
-						b = 0;
-					}
+					g = color.getGreen();
+					b = (int) (color.getBlue() - color.getBlue() * 0.25f);
 				}
-				array[i] = new Color(r, green, b).getRGB();
+				r = Util.clamp(r, 0, 255);
+				g = Util.clamp(g, 0, 255);
+				b = Util.clamp(b, 0, 255);
+				array[i] = new Color(r, g, b).getRGB();
 			}
 		}
 		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
@@ -3257,7 +3226,7 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.trackbg, 0, 0, null);
 		graphics.drawImage(this.select, 201, 45, null);
 		graphics.setFont(new Font("SansSerif", 1, 13));
-		this.ftm = graphics.getFontMetrics();
+		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 140, "Error Loading Stage " + i, 200, 0, 70, 3);
 		this.drawCharacters(graphics, 170, "Your internet connection may have been lost...", 0, 0, 0, 3);
 		this.drawCharacters(graphics, 220, "Press Enter to try again.", 0, 0, 0, 3);
@@ -3267,20 +3236,18 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.br, 509, 0, null);
 		graphics.drawImage(this.bb, 0, 357, null);
 		if (control.handb || control.enter) {
-			this.fase = 2;
+			this.stateInt = 2;
 			control.handb = false;
 			control.enter = false;
 		}
 	}
 
 	private AudioClip getSound(final String name) {
-		//
 		AudioClip audioClip;
 		URL resource = this.getClass().getResource(name);
 		audioClip = Applet.newAudioClip(resource);
 		if (name.startsWith("../../resources/sounds/default")) {
 			audioClip.play();
-			//Thread.yield();
 			audioClip.stop();
 		}
 		return audioClip;

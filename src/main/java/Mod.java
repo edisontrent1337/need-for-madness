@@ -25,7 +25,6 @@ public class Mod {
 
 	String name;
 	int numtracks;
-	int track_shift;
 	int numpatterns;
 	byte[][] patterns;
 	ModInstrument[] insts;
@@ -44,15 +43,11 @@ public class Mod {
 
 	static final int[] voice_31_list;
 
-	public int getNumPatterns() {
-		return this.numpatterns;
-	}
-
 	public String toString() {
 		return this.name + " (" + this.numtracks + " tracks, " + this.numpatterns + " patterns, " + this.insts.length + " samples)";
 	}
 
-	Mod(final String s, final Applet applet) {
+	Mod(final String s) {
 		try {
 			//final DataInputStream in = new DataInputStream(new URL(applet.getCodeBase(), drawShadow).openStream());
 			//final ZipInputStream zipInputStream = new ZipInputStream(in);
