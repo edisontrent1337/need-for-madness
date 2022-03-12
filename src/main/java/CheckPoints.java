@@ -13,7 +13,7 @@ public class CheckPoints {
     int[] fx;
     int[] fz;
     int[] fy;
-    boolean[] roted;
+    boolean[] rotated;
     boolean[] special;
     int fn;
     int stage;
@@ -39,7 +39,7 @@ public class CheckPoints {
         this.fx = new int[5];
         this.fz = new int[5];
         this.fy = new int[5];
-        this.roted = new boolean[5];
+        this.rotated = new boolean[5];
         this.special = new boolean[5];
         this.fn = 0;
         this.stage = 1;

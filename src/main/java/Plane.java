@@ -141,7 +141,7 @@ public class Plane {
 		if (!isGlass) {
 			int n3 = 0;
 			do {
-				this.c[n3] = (int) (array4[n3] + array4[n3] * (this.m.snap[n3] / 100.0f));
+				this.c[n3] = (int) (array4[n3] + array4[n3] * (this.m.snapColor[n3] / 100.0f));
 				if (this.c[n3] > 255) {
 					this.c[n3] = 255;
 				}
@@ -331,11 +331,11 @@ public class Plane {
 					array6[n18] = this.xs(array[n18], array2[n18]);
 					array7[n18] = this.ys(array3[n18], array2[n18]);
 				} while (++n18 < 3);
-				int r = (int) (255.0f + 255.0f * (this.m.snap[0] / 400.0f));
+				int r = (int) (255.0f + 255.0f * (this.m.snapColor[0] / 400.0f));
 				r = Util.clamp(r, 0, 255);
-				int g = (int) (169.0f + 169.0f * (this.m.snap[1] / 300.0f));
+				int g = (int) (169.0f + 169.0f * (this.m.snapColor[1] / 300.0f));
 				g = Util.clamp(g, 0, 255);
-				int b2 = (int) (89.0f + 89.0f * (this.m.snap[2] / 200.0f));
+				int b2 = (int) (89.0f + 89.0f * (this.m.snapColor[2] / 200.0f));
 				b2 = Util.clamp(b2, 0, 255);
 				graphics.setColor(new Color(r, g, b2));
 				graphics.fillPolygon(array6, array7, 3);
@@ -372,11 +372,11 @@ public class Plane {
 					array6[n23] = this.xs(array[n23], array2[n23]);
 					array7[n23] = this.ys(array3[n23], array2[n23]);
 				} while (++n23 < 3);
-				int r2 = (int) (255.0f + 255.0f * (this.m.snap[0] / 400.0f));
+				int r2 = (int) (255.0f + 255.0f * (this.m.snapColor[0] / 400.0f));
 				r2 = Util.clamp(r2, 0, 255);
-				int g2 = (int) (207.0f + 207.0f * (this.m.snap[1] / 300.0f));
+				int g2 = (int) (207.0f + 207.0f * (this.m.snapColor[1] / 300.0f));
 				g2 = Util.clamp(g2, 0, 255);
-				int b3 = (int) (136.0f + 136.0f * (this.m.snap[2] / 200.0f));
+				int b3 = (int) (136.0f + 136.0f * (this.m.snapColor[2] / 200.0f));
 				b3 = Util.clamp(b3, 0, 255);
 
 				graphics.setColor(new Color(r2, g2, b3));
@@ -742,19 +742,19 @@ public class Plane {
 						graphics.drawPolygon(array26, array27, this.n);
 					}
 					if (this.flx == 1) {
-						int g3 = (int) (223.0f + 223.0f * (this.m.snap[1] / 100.0f));
+						int g3 = (int) (223.0f + 223.0f * (this.m.snapColor[1] / 100.0f));
 						g3 = Util.clamp(g3, 0, 255);
-						int b6 = (int) (255.0f + 255.0f * (this.m.snap[2] / 100.0f));
+						int b6 = (int) (255.0f + 255.0f * (this.m.snapColor[2] / 100.0f));
 						b6 = Util.clamp(b6, 0, 255);
 						graphics.setColor(new Color(0, g3, b6));
 						graphics.drawPolygon(array26, array27, this.n);
 						this.flx = 2;
 					}
 					if (this.flx == 3) {
-						int g4 = (int) (255.0f + 255.0f * (this.m.snap[1] / 100.0f));
+						int g4 = (int) (255.0f + 255.0f * (this.m.snapColor[1] / 100.0f));
 						g4 = Util.clamp(g4, 0, 255);
 
-						int b7 = (int) (223.0f + 223.0f * (this.m.snap[2] / 100.0f));
+						int b7 = (int) (223.0f + 223.0f * (this.m.snapColor[2] / 100.0f));
 						b7 = Util.clamp(b7, 0, 255);
 
 						graphics.setColor(new Color(0, g4, b7));

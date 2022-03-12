@@ -1,5 +1,5 @@
 
- name(The Introductory Stage)
+name(The Introductory Stage)
 
 snap(0,0,0)
 

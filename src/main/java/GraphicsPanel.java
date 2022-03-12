@@ -497,21 +497,21 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public void framer(final int n, final Graphics graphics) {
-		int r = (int) (230.0f - 230.0f * (this.medium.snap[0] / (float) (100 * this.hipno[n - 1])));
+		int r = (int) (230.0f - 230.0f * (this.medium.snapColor[0] / (float) (100 * this.hipno[n - 1])));
 		if (r > 255) {
 			r = 255;
 		}
 		if (r < 0) {
 			r = 0;
 		}
-		int g = (int) (230.0f - 230.0f * (this.medium.snap[1] / (float) (100 * this.hipno[n - 1])));
+		int g = (int) (230.0f - 230.0f * (this.medium.snapColor[1] / (float) (100 * this.hipno[n - 1])));
 		if (g > 255) {
 			g = 255;
 		}
 		if (g < 0) {
 			g = 0;
 		}
-		int b = (int) (230.0f - 230.0f * (this.medium.snap[2] / (float) (100 * this.hipno[n - 1])));
+		int b = (int) (230.0f - 230.0f * (this.medium.snapColor[2] / (float) (100 * this.hipno[n - 1])));
 		if (b > 255) {
 			b = 255;
 		}
@@ -786,9 +786,9 @@ public class GraphicsPanel extends Panel {
 					xCoordinates[n13] = this.xs(xCoordinates[n13], yCoordinates[n13]);
 					zCoordinates[n13] = this.ys(zCoordinates[n13], yCoordinates[n13]);
 				} while (++n13 < 7);
-				int r = (int) (190.0f + 190.0f * (this.medium.snap[0] / 100.0f));
+				int r = (int) (190.0f + 190.0f * (this.medium.snapColor[0] / 100.0f));
 				r = Util.clamp(r, 0, 255);
-				int g = (int) (255.0f + 255.0f * (this.medium.snap[1] / 100.0f));
+				int g = (int) (255.0f + 255.0f * (this.medium.snapColor[1] / 100.0f));
 				g = Util.clamp(g, 0, 255);
 				int b2 = 0;
 				if (n2 <= 0) {
@@ -798,7 +798,7 @@ public class GraphicsPanel extends Panel {
 						b2 = (b2 * abs + this.medium.skyColor[2] * (45 - abs)) / 45;
 					}
 					if (abs >= 90) {
-						int n14 = (int) (255.0f + 255.0f * (this.medium.snap[0] / 100.0f));
+						int n14 = (int) (255.0f + 255.0f * (this.medium.snapColor[0] / 100.0f));
 						if (n14 > 255) {
 							n14 = 255;
 						}
@@ -811,7 +811,7 @@ public class GraphicsPanel extends Panel {
 						}
 					}
 				} else if (this.flk) {
-					r = (int) (255.0f + 255.0f * (this.medium.snap[0] / 100.0f));
+					r = (int) (255.0f + 255.0f * (this.medium.snapColor[0] / 100.0f));
 					if (r > 255) {
 						r = 255;
 					}
@@ -820,14 +820,14 @@ public class GraphicsPanel extends Panel {
 					}
 					this.flk = false;
 				} else {
-					r = (int) (255.0f + 255.0f * (this.medium.snap[0] / 100.0f));
+					r = (int) (255.0f + 255.0f * (this.medium.snapColor[0] / 100.0f));
 					if (r > 255) {
 						r = 255;
 					}
 					if (r < 0) {
 						r = 0;
 					}
-					g = (int) (220.0f + 220.0f * (this.medium.snap[1] / 100.0f));
+					g = (int) (220.0f + 220.0f * (this.medium.snapColor[1] / 100.0f));
 					if (g > 255) {
 						g = 255;
 					}
@@ -838,14 +838,14 @@ public class GraphicsPanel extends Panel {
 				}
 				graphics.setColor(new Color(r, g, b2));
 				graphics.fillPolygon(xCoordinates, zCoordinates, 7);
-				int r2 = (int) (115.0f + 115.0f * (this.medium.snap[0] / 100.0f));
+				int r2 = (int) (115.0f + 115.0f * (this.medium.snapColor[0] / 100.0f));
 				if (r2 > 255) {
 					r2 = 255;
 				}
 				if (r2 < 0) {
 					r2 = 0;
 				}
-				int g2 = (int) (170.0f + 170.0f * (this.medium.snap[1] / 100.0f));
+				int g2 = (int) (170.0f + 170.0f * (this.medium.snapColor[1] / 100.0f));
 				if (g2 > 255) {
 					g2 = 255;
 				}
@@ -860,7 +860,7 @@ public class GraphicsPanel extends Panel {
 						b3 = (b3 * abs + this.medium.skyColor[2] * (45 - abs)) / 45;
 					}
 				} else if (this.flk) {
-					r2 = (int) (255.0f + 255.0f * (this.medium.snap[0] / 100.0f));
+					r2 = (int) (255.0f + 255.0f * (this.medium.snapColor[0] / 100.0f));
 					if (r2 > 255) {
 						r2 = 255;
 					}
@@ -878,21 +878,21 @@ public class GraphicsPanel extends Panel {
 				xCoordinates[n15] = this.xs(xCoordinates[n15], yCoordinates[n15]);
 				zCoordinates[n15] = this.ys(zCoordinates[n15], yCoordinates[n15]);
 			} while (++n15 < 7);
-			int r3 = (int) (159.0f + 159.0f * (this.medium.snap[0] / 100.0f));
+			int r3 = (int) (159.0f + 159.0f * (this.medium.snapColor[0] / 100.0f));
 			if (r3 > 255) {
 				r3 = 255;
 			}
 			if (r3 < 0) {
 				r3 = 0;
 			}
-			int g3 = (int) (207.0f + 207.0f * (this.medium.snap[1] / 100.0f));
+			int g3 = (int) (207.0f + 207.0f * (this.medium.snapColor[1] / 100.0f));
 			if (g3 > 255) {
 				g3 = 255;
 			}
 			if (g3 < 0) {
 				g3 = 0;
 			}
-			int b4 = (int) (255.0f + 255.0f * (this.medium.snap[2] / 100.0f));
+			int b4 = (int) (255.0f + 255.0f * (this.medium.snapColor[2] / 100.0f));
 			if (b4 > 255) {
 				b4 = 255;
 			}
@@ -901,21 +901,21 @@ public class GraphicsPanel extends Panel {
 			}
 			graphics.setColor(new Color(r3, g3, b4));
 			graphics.fillPolygon(xCoordinates, zCoordinates, 7);
-			int r4 = (int) (120.0f + 120.0f * (this.medium.snap[0] / 100.0f));
+			int r4 = (int) (120.0f + 120.0f * (this.medium.snapColor[0] / 100.0f));
 			if (r4 > 255) {
 				r4 = 255;
 			}
 			if (r4 < 0) {
 				r4 = 0;
 			}
-			int g4 = (int) (114.0f + 114.0f * (this.medium.snap[1] / 100.0f));
+			int g4 = (int) (114.0f + 114.0f * (this.medium.snapColor[1] / 100.0f));
 			if (g4 > 255) {
 				g4 = 255;
 			}
 			if (g4 < 0) {
 				g4 = 0;
 			}
-			int b5 = (int) (255.0f + 255.0f * (this.medium.snap[2] / 100.0f));
+			int b5 = (int) (255.0f + 255.0f * (this.medium.snapColor[2] / 100.0f));
 			if (b5 > 255) {
 				b5 = 255;
 			}
@@ -1253,21 +1253,21 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public void loadmusic(final int n, final int n2, final Graphics graphics) {
-		int r = (int) (230.0f - 230.0f * (this.medium.snap[0] / (float) (100 * this.hipno[n - 1])));
+		int r = (int) (230.0f - 230.0f * (this.medium.snapColor[0] / (float) (100 * this.hipno[n - 1])));
 		if (r > 255) {
 			r = 255;
 		}
 		if (r < 0) {
 			r = 0;
 		}
-		int g = (int) (230.0f - 230.0f * (this.medium.snap[1] / (float) (100 * this.hipno[n - 1])));
+		int g = (int) (230.0f - 230.0f * (this.medium.snapColor[1] / (float) (100 * this.hipno[n - 1])));
 		if (g > 255) {
 			g = 255;
 		}
 		if (g < 0) {
 			g = 0;
 		}
-		int b = (int) (230.0f - 230.0f * (this.medium.snap[2] / (float) (100 * this.hipno[n - 1])));
+		int b = (int) (230.0f - 230.0f * (this.medium.snapColor[2] / (float) (100 * this.hipno[n - 1])));
 		if (b > 255) {
 			b = 255;
 		}
@@ -2313,19 +2313,19 @@ public class GraphicsPanel extends Panel {
 
 	public void drawCharacters(final Graphics graphics, final int yPosition, final String str, int r, int g, int b, final int n2) {
 		if (n2 != 3 && n2 != 4) {
-			r += (int) (r * (this.medium.snap[0] / 100.0f));
+			r += (int) (r * (this.medium.snapColor[0] / 100.0f));
 			r = Util.clamp(r, 0, 255);
-			g += (int) (g * (this.medium.snap[1] / 100.0f));
+			g += (int) (g * (this.medium.snapColor[1] / 100.0f));
 			g = Util.clamp(g, 0, 255);
-			b += (int) (b * (this.medium.snap[2] / 100.0f));
+			b += (int) (b * (this.medium.snapColor[2] / 100.0f));
 			b = Util.clamp(b, 0, 255);
 		}
 		if (n2 == 4) {
-			r -= (int) (r * (this.medium.snap[0] / 100.0f));
+			r -= (int) (r * (this.medium.snapColor[0] / 100.0f));
 			r = Util.clamp(r, 0, 255);
-			g -= (int) (g * (this.medium.snap[1] / 100.0f));
+			g -= (int) (g * (this.medium.snapColor[1] / 100.0f));
 			g = Util.clamp(g, 0, 255);
-			b -= (int) (b * (this.medium.snap[2] / 100.0f));
+			b -= (int) (b * (this.medium.snapColor[2] / 100.0f));
 			b = Util.clamp(b, 0, 255);
 
 		}
@@ -2438,7 +2438,7 @@ public class GraphicsPanel extends Panel {
 		}
 		for (int i = 0; i < width * height; ++i) {
 			if (array[i] != array[width * height - 1]) {
-				int[] RGBs = snapRGBs(array[i], this.medium.snap);
+				int[] RGBs = snapRGBs(array[i], this.medium.snapColor);
 				array[i] = new Color(RGBs[0], RGBs[1], RGBs[2], 255).getRGB();
 			}
 		}
@@ -2523,11 +2523,11 @@ public class GraphicsPanel extends Panel {
 				this.dmcnt = 0;
 			}
 		}
-		int r = (int) (n5 + n5 * (this.medium.snap[0] / 100.0f));
+		int r = (int) (n5 + n5 * (this.medium.snapColor[0] / 100.0f));
 		r = Util.clamp(r, 0, 255);
-		int g = (int) (n6 + n6 * (this.medium.snap[1] / 100.0f));
+		int g = (int) (n6 + n6 * (this.medium.snapColor[1] / 100.0f));
 		g = Util.clamp(g, 0, 255);
-		int b2 = (int) (n7 + n7 * (this.medium.snap[2] / 100.0f));
+		int b2 = (int) (n7 + n7 * (this.medium.snapColor[2] / 100.0f));
 		b2 = Util.clamp(b2, 0, 255);
 		graphics.setColor(new Color(r, g, b2));
 		graphics.fillPolygon(xCoordinates, yCoordinates, 4);
@@ -2551,11 +2551,11 @@ public class GraphicsPanel extends Panel {
 			n9 = 244;
 			n10 = 244;
 		}
-		int r2 = (int) (n8 + n8 * (this.medium.snap[0] / 100.0f));
+		int r2 = (int) (n8 + n8 * (this.medium.snapColor[0] / 100.0f));
 		r2 = Util.clamp(r2, 0, 255);
-		int g2 = (int) (n9 + n9 * (this.medium.snap[1] / 100.0f));
+		int g2 = (int) (n9 + n9 * (this.medium.snapColor[1] / 100.0f));
 		g2 = Util.clamp(g2, 0, 255);
-		int b3 = (int) (n10 + n10 * (this.medium.snap[2] / 100.0f));
+		int b3 = (int) (n10 + n10 * (this.medium.snapColor[2] / 100.0f));
 		b3 = Util.clamp(b3, 0, 255);
 		graphics.setColor(new Color(r2, g2, b3));
 		graphics.fillPolygon(xCoordinates, yCoordinates, 4);
@@ -2712,11 +2712,11 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public void musicomp(final int n, final Graphics graphics, final Control control) {
-		int r = (int) (230.0f - 230.0f * (this.medium.snap[0] / (float) (100 * this.hipno[n - 1])));
+		int r = (int) (230.0f - 230.0f * (this.medium.snapColor[0] / (float) (100 * this.hipno[n - 1])));
 		r = Util.clamp(r, 0, 255);
-		int g = (int) (230.0f - 230.0f * (this.medium.snap[1] / (float) (100 * this.hipno[n - 1])));
+		int g = (int) (230.0f - 230.0f * (this.medium.snapColor[1] / (float) (100 * this.hipno[n - 1])));
 		g = Util.clamp(g, 0, 255);
-		int b = (int) (230.0f - 230.0f * (this.medium.snap[2] / (float) (100 * this.hipno[n - 1])));
+		int b = (int) (230.0f - 230.0f * (this.medium.snapColor[2] / (float) (100 * this.hipno[n - 1])));
 		b = Util.clamp(b, 0, 255);
 		if (this.hipno[n - 1] == 0) {
 			r = 255;
@@ -3205,9 +3205,9 @@ public class GraphicsPanel extends Panel {
 				final Color color = new Color(array[i]);
 				int r, g ,b;
 				if (this.hipno[n - 1] != 0) {
-					r = (int) (color.getRed() - color.getRed() * (this.medium.snap[0] / (float) (50 * this.hipno[n - 1])));
-					g = (int) (color.getGreen() - color.getGreen() * (this.medium.snap[1] / (float) (50 * this.hipno[n - 1])));
-					b = (int) (color.getBlue() - color.getBlue() * (this.medium.snap[2] / (float) (50 * this.hipno[n - 1])));
+					r = (int) (color.getRed() - color.getRed() * (this.medium.snapColor[0] / (float) (50 * this.hipno[n - 1])));
+					g = (int) (color.getGreen() - color.getGreen() * (this.medium.snapColor[1] / (float) (50 * this.hipno[n - 1])));
+					b = (int) (color.getBlue() - color.getBlue() * (this.medium.snapColor[2] / (float) (50 * this.hipno[n - 1])));
 				} else {
 					r = (int) (color.getRed() + color.getRed() * 0.25f);
 					g = color.getGreen();

@@ -1,6 +1,8 @@
 package main.java;
 
 import java.awt.*;
+import java.util.List;
+import java.util.stream.IntStream;
 
 //
 // Decompiled by Procyon v0.5.36
@@ -14,7 +16,7 @@ public class Medium {
     int[] skyColor;
     int[] groundColor;
     int[] fadeColor;
-    int[] snap;
+    int[] snapColor;
     int origfade;
     int flex;
     boolean trk;
@@ -59,7 +61,7 @@ public class Medium {
         this.skyColor = new int[]{217, 224, 255};
         this.groundColor = new int[]{205, 200, 200};
         this.fadeColor = new int[]{255, 220, 220};
-        this.snap = new int[3];
+        this.snapColor = new int[3];
         this.origfade = 3000;
         this.flex = 0;
         this.trk = false;
@@ -102,25 +104,25 @@ public class Medium {
         return (n2 - this.focusPoint) * ((int) this.centerY - n) / n2 + n;
     }
 
-	float random() {
-		if (this.randomCnt == 0) {
-		    for(int i = 0;i < 3; i++) {
+    float random() {
+        if (this.randomCnt == 0) {
+            for (int i = 0; i < 3; i++) {
                 this.randomList[i] = (int) (10.0 * Math.random());
                 this.directionUp[i] = Math.random() > 0.5d;
             }
-			this.randomCnt = 20;
-		} else {
-			--this.randomCnt;
-		}
-
-		for(int i = 0; i < 3; i++) {
-		    this.randomList[i] = Math.floorMod(this.randomList[i] + (this.directionUp[i] ? 1 : -1), 10);
+            this.randomCnt = 20;
+        } else {
+            --this.randomCnt;
         }
 
-		this.turn = (this.turn + 1) % 3;
+        for (int i = 0; i < 3; i++) {
+            this.randomList[i] = Math.floorMod(this.randomList[i] + (this.directionUp[i] ? 1 : -1), 10);
+        }
 
-		return this.randomList[this.turn] / 10.0f;
-	}
+        this.turn = (this.turn + 1) % 3;
+
+        return this.randomList[this.turn] / 10.0f;
+    }
 
     public float ys(final float n, float n2) {
         if (n2 < 10) {
@@ -129,17 +131,12 @@ public class Medium {
         return (n2 - this.focusPoint) * (this.centerY - n) / n2 + n;
     }
 
-
-    void setFade(final int red, final int green, final int blue) {
-        this.fadeColor[0] = (int) (red + red * (this.snap[0] / 100.0f));
-        this.fadeColor[0] = Util.clamp(this.fadeColor[0], 0, 255);
-
-        this.fadeColor[1] = (int) (green + green * (this.snap[1] / 100.0f));
-        this.fadeColor[1] = Util.clamp(this.fadeColor[1], 0, 255);
-
-        this.fadeColor[2] = (int) (blue + blue * (this.snap[2] / 100.0f));
-        this.fadeColor[2] = Util.clamp(this.fadeColor[2], 0, 255);
+    void setFade(List<Integer> fadeValues) {
+        IntStream.range(0, 3)
+                .forEach(i -> this.fadeColor[i] = (int) Util.clampCol(fadeValues.get(i) * (1 + 0.01f * this.snapColor[i])));
     }
+
+
 
     void draw(final Graphics graphics) {
         this.nsp = 0;
@@ -276,10 +273,8 @@ public class Medium {
         }
     }
 
-    void setSnap(final int n, final int n2, final int n3) {
-        this.snap[0] = n;
-        this.snap[1] = n2;
-        this.snap[2] = n3;
+    void setSnapColor(List<Integer> snapValues) {
+        IntStream.range(0, 3).forEach(i -> this.snapColor[i] = snapValues.get(i));
     }
 
     void circleAroundCar(final Geometry geometry, final boolean isStartAnimation) {
@@ -307,7 +302,7 @@ public class Medium {
         }
         int n = 500 + this.adv;
         n = Math.max(n, 1500);
-        System.out.println(n);
+        //System.out.println(n);
         this.positionY = geometry.y - this.adv;
         if (this.positionY > 10) {
             this.vert = false;
@@ -340,13 +335,9 @@ public class Medium {
 
     }
 
-    void setGround(final int red, final int green, final int blue) {
-        this.groundColor[0] = (int) (red + red * (this.snap[0] / 100.0f));
-        this.groundColor[1] = (int) (green + green * (this.snap[1] / 100.0f));
-        this.groundColor[2] = (int) (blue + blue * (this.snap[2] / 100.0f));
-        groundColor[0] = Util.clamp(groundColor[0], 0, 255);
-        groundColor[1] = Util.clamp(groundColor[1], 0, 255);
-        groundColor[2] = Util.clamp(groundColor[2], 0, 255);
+    void setGround(List<Integer> groundValues) {
+        IntStream.range(0, 3)
+                .forEach(i -> this.groundColor[i] = (int) Util.clampCol(groundValues.get(i) * (1 + 0.01f * this.snapColor[i])));
     }
 
     void adjustFade(final float n) {
@@ -422,12 +413,17 @@ public class Medium {
     }
 
     void setSky(final int n, final int n2, final int n3) {
-        this.skyColor[0] = (int) (n + n * (this.snap[0] / 100.0f));
-        this.skyColor[1] = (int) (n2 + n2 * (this.snap[1] / 100.0f));
-        this.skyColor[2] = (int) (n3 + n3 * (this.snap[2] / 100.0f));
+        this.skyColor[0] = (int) (n + n * (this.snapColor[0] / 100.0f));
+        this.skyColor[1] = (int) (n2 + n2 * (this.snapColor[1] / 100.0f));
+        this.skyColor[2] = (int) (n3 + n3 * (this.snapColor[2] / 100.0f));
         skyColor[0] = Util.clamp(skyColor[0], 0, 255);
         skyColor[1] = Util.clamp(skyColor[1], 0, 255);
         skyColor[2] = Util.clamp(skyColor[2], 0, 255);
+    }
+
+    void setSky(List<Integer> skyValues) {
+        IntStream.range(0, 3)
+                .forEach(i -> this.skyColor[i] = (int) Util.clampCol(skyValues.get(i) * (1 + 0.01f * this.snapColor[i])));
     }
 
     void fadeFrom(final int n) {
@@ -437,11 +433,15 @@ public class Medium {
         } while (++n2 < 8);
     }
 
+    void fadeFrom(List<Integer> fadeIntervall) {
+        IntStream.range(0, 8).forEach(i->this.fade[i] = fadeIntervall.get(0) * (i + 1));
+    }
+
     void follow(final Geometry geometry, final float n) {
         this.zy = 10;
         this.xz = -n;
-        this.positionX = geometry.x - (int) this.centerX + (int) (-(geometry.z - 800 - geometry.z) * this.sin(n));
-        this.positionZ = geometry.z - (int) this.centerZ + (int) ((geometry.z - 800 - geometry.z) * this.cos(n));
+        this.positionX = geometry.x - (int) this.centerX + (int) (800 * this.sin(n));
+        this.positionZ = geometry.z - (int) this.centerZ + (int) (-800 * this.cos(n));
         this.positionY = geometry.y - 250 - (int) this.centerY;
         if (this.trns != 1) {
             this.trns = 1;

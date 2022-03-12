@@ -1938,7 +1938,7 @@ public class Madness
         }
         this.point = focus;
         for (int n103 = 0; n103 < checkPoints.fn; ++n103) {
-            if (!checkPoints.roted[n103]) {
+            if (!checkPoints.rotated[n103]) {
                 if (Math.abs(geometry.z - checkPoints.fz[n103]) < 200 && this.py(geometry.x / 100, checkPoints.fx[n103] / 100, geometry.y / 100, checkPoints.fy[n103] / 100) < 30) {
                     if (geometry.dist == 0) {
                         geometry.fcnt = 8;

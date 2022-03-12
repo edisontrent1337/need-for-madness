@@ -465,7 +465,7 @@ public class Geometry {
 				this.trackers.zy[this.trackers.nt] = (int) (geometry.tzy[k] * this.medium.cos(a) + geometry.txy[k] * this.medium.sin(a));
 				int n = 0;
 				do {
-					this.trackers.objectColor[this.trackers.nt][n] = (int) (geometry.tc[k][n] + geometry.tc[k][n] * (this.medium.snap[n] / 100.0f));
+					this.trackers.objectColor[this.trackers.nt][n] = (int) (geometry.tc[k][n] + geometry.tc[k][n] * (this.medium.snapColor[n] / 100.0f));
 					if (this.trackers.objectColor[this.trackers.nt][n] > 255) {
 						this.trackers.objectColor[this.trackers.nt][n] = 255;
 					}
@@ -778,7 +778,7 @@ public class Geometry {
 				currentPlane.hsb[2] = 0.8f;
 				final Color hsbColor = Color.getHSBColor(currentPlane.hsb[0], currentPlane.hsb[1], currentPlane.hsb[2]);
 
-				int[] RGBs = snapRGBs(hsbColor.getRGB(), this.medium.snap);
+				int[] RGBs = snapRGBs(hsbColor.getRGB(), this.medium.snapColor);
 
 				Color.RGBtoHSB(RGBs[0], RGBs[1], RGBs[2], currentPlane.hsb);
 				currentPlane.flx = 1;
@@ -869,13 +869,13 @@ public class Geometry {
 			if (this.fcnt == 7) {
 				this.rot(xCoordinates, yCoordinates, this.xs(n5, n8), this.ys(n7, n8), -22, 8);
 			}
-			int r2 = (int) (191.0f + 191.0f * (this.medium.snap[0] / 200.0f));
+			int r2 = (int) (191.0f + 191.0f * (this.medium.snapColor[0] / 200.0f));
 			r2 = Util.clamp(r2, 0, 255);
 
-			int g2 = (int) (232.0f + 232.0f * (this.medium.snap[1] / 200.0f));
+			int g2 = (int) (232.0f + 232.0f * (this.medium.snapColor[1] / 200.0f));
 			g2 = Util.clamp(g2, 0, 255);
 
-			int b2 = (int) (255.0f + 255.0f * (this.medium.snap[2] / 200.0f));
+			int b2 = (int) (255.0f + 255.0f * (this.medium.snapColor[2] / 200.0f));
 			b2 = Util.clamp(b2, 0, 255);
 
 			graphics.setColor(new Color(r2, g2, b2));
@@ -897,13 +897,13 @@ public class Geometry {
 			xCoordinates[7] = this.xs((int) (n5 - abs / 2.4 - this.medium.random() * (abs / 9.6)), n8);
 			yCoordinates[7] = this.ys((int) (n7 - abs2 - this.medium.random() * (abs2 / 4)), n8);
 
-			int r3 = (int) (213.0f + 213.0f * (this.medium.snap[0] / 200.0f));
+			int r3 = (int) (213.0f + 213.0f * (this.medium.snapColor[0] / 200.0f));
 			r3 = Util.clamp(r3, 0, 255);
 
-			int g3 = (int) (239.0f + 239.0f * (this.medium.snap[1] / 200.0f));
+			int g3 = (int) (239.0f + 239.0f * (this.medium.snapColor[1] / 200.0f));
 			g3 = Util.clamp(g3, 0, 255);
 
-			int b3 = (int) (255.0f + 255.0f * (this.medium.snap[2] / 200.0f));
+			int b3 = (int) (255.0f + 255.0f * (this.medium.snapColor[2] / 200.0f));
 			b3 = Util.clamp(b3, 0, 255);
 
 			graphics.setColor(new Color(r3, g3, b3));
@@ -992,10 +992,10 @@ public class Geometry {
 			}
 			if (b) {
 				int n13 = 0;
-				int g = (int) (255.0f + 255.0f * (this.medium.snap[1] / 250.0f));
+				int g = (int) (255.0f + 255.0f * (this.medium.snapColor[1] / 250.0f));
 				g = Util.clamp(g, 0, 255);
 
-				int b2 = (int) (223.0f + 223.0f * (this.medium.snap[2] / 250.0f));
+				int b2 = (int) (223.0f + 223.0f * (this.medium.snapColor[2] / 250.0f));
 				b2 = Util.clamp(b2, 0, 255);
 
 				if (this.medium.trk) {
@@ -1009,10 +1009,10 @@ public class Geometry {
 				if (array3[0] >= 4000) {
 					continue;
 				}
-				int g2 = (int) (223.0f + 223.0f * (this.medium.snap[1] / 250.0f));
+				int g2 = (int) (223.0f + 223.0f * (this.medium.snapColor[1] / 250.0f));
 				g2 = Util.clamp(g2, 0, 255);
 
-				int b3 = (int) (255.0f + 255.0f * (this.medium.snap[2] / 250.0f));
+				int b3 = (int) (255.0f + 255.0f * (this.medium.snapColor[2] / 250.0f));
 				b3 = Util.clamp(b3, 0, 255);
 
 				graphics.setColor(new Color(n13, g2, b3));

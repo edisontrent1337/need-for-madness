@@ -6,8 +6,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.zip.ZipInputStream;
+
 
 class Util {
 
@@ -21,6 +26,18 @@ class Util {
 
 	static float clamp(float value, float min, float max) {
 		return Math.max(Math.min(value, max), min);
+	}
+
+	static float clampCol(float value) {
+		return clamp(value, 0, 255);
+	}
+
+	static int clampCol(int value) {
+		return clamp(value, 0, 255);
+	}
+
+	static double clampCol(double value) {
+		return clamp(value, 0, 255);
 	}
 
 	static ZipInputStream getInputStream(String path, Class callingClass) throws URISyntaxException, FileNotFoundException {
@@ -43,7 +60,12 @@ class Util {
 		return lineString.substring(5, lineString.length() - 1);
 	}
 
-	static List<Integer> getInt(String prefix, String lineString) {
-		lineString.
+	static List<Integer> getInts(String lineString) {
+		if(lineString.contains("(") && lineString.contains(")") && !lineString.contains("name")) {
+			String[] strings = lineString.split("[()]");
+			return Arrays.stream(strings[1].split(",")).map(Integer::parseInt).collect(Collectors.toList());
+		} else {
+			return new ArrayList<>();
+		}
 	}
 }
