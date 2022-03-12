@@ -26,8 +26,8 @@ public class GraphicsPanel extends Panel {
 	FontMetrics fontMetrics;
 	ImageObserver imageObserver;
 	Applet app;
-	int stateInt;
-	int oldfase;
+	GameState state;
+	GameState lastState;
 	int starcnt;
 	int unlocked;
 	int lockcnt;
@@ -186,8 +186,8 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public GraphicsPanel(final Medium medium, final Graphics graphics, final Applet app, final int n) {
-		this.stateInt = 7;
-		this.oldfase = 0;
+		this.state = GameState.CAR_SELECT;
+		this.lastState = GameState.GAMEPLAY;
 		this.starcnt = 0;
 		this.unlocked = 1;
 		this.lockcnt = 0;
@@ -583,7 +583,7 @@ public class GraphicsPanel extends Panel {
 			control.left = false;
 			control.handb = false;
 			control.enter = false;
-			this.stateInt = 1;
+			this.state = GameState.STAGE_PREVIEW;
 		}
 	}
 
@@ -645,8 +645,8 @@ public class GraphicsPanel extends Panel {
 			}
 			if (this.flipo == 5) {
 				this.flipo = 0;
-				this.stateInt = this.oldfase;
-				if (this.stateInt == -7) {
+				this.state = this.lastState;
+				if (this.state == GameState.GAME_PAUSED_2_BLURRED) {
 					graphics.drawImage(this.fleximg, 0, 0, null);
 				}
 			}
@@ -940,7 +940,7 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public void playsounds(final Madness madness, final Control control, final int n) {
-		if (this.stateInt == 0 && this.starcnt < 35 && this.cntwis != 8 && !this.isSoundMuted) {
+		if (this.state == GameState.GAMEPLAY && this.starcnt < 35 && this.cntwis != 8 && !this.isSoundMuted) {
 			boolean b = (control.up && madness.speed > 0.0f) || (control.down && madness.speed < 10.0f);
 			boolean b2 = (madness.skid == 1 && control.handb) || Math.abs(madness.scz[0] - (madness.scz[1] + madness.scz[0] + madness.scz[2] + madness.scz[3]) / 4.0f) > 1.0f || Math.abs(madness.scx[0] - (madness.scx[1] + madness.scx[0] + madness.scx[2] + madness.scx[3]) / 4.0f) > 1.0f;
 			boolean b3 = false;
@@ -1061,7 +1061,7 @@ public class GraphicsPanel extends Panel {
 		if (madness.newcar) {
 			this.cntwis = 0;
 		}
-		if (this.stateInt == 0 || this.stateInt == 6 || this.stateInt == -1 || this.stateInt == -2 || this.stateInt == -3 || this.stateInt == -4 || this.stateInt == -5) {
+		if (this.state == GameState.GAMEPLAY || this.state == GameState.LOADING_STAGE_COMPLETE || this.state == GameState.PLAY_REPLAY || this.state == GameState.GAME_HIGHLIGHT_1 || this.state == GameState.GAME_HIGHLIGHT_2 || this.state == GameState.END_RACE_ANIMATION || this.state == GameState.END_RACE_CONGRATS) {
 			if (this.isSoundMuted != control.sound_muted) {
 				this.isSoundMuted = control.sound_muted;
 			}
@@ -1378,9 +1378,9 @@ public class GraphicsPanel extends Panel {
 				this.soundTracks[n - 1].play();
 			}
 			this.app.setCursor(new Cursor(0));
-			this.stateInt = 6;
+			this.state = GameState.LOADING_STAGE_COMPLETE;
 		} else {
-			this.stateInt = 176;
+			this.state = GameState.LOADING_STAGE_2;
 		}
 		this.pcontin = 0;
 		this.isMusicMuted = false;
@@ -1453,24 +1453,24 @@ public class GraphicsPanel extends Panel {
 				if (this.loadedSoundTracks[n - 1] && !this.isMusicMuted) {
 					this.soundTracks[n - 1].resume();
 				}
-				this.stateInt = 0;
+				this.state = GameState.GAMEPLAY;
 			}
 			if (this.opselect == 1) {
 				if (record.caught >= 300) {
 					if (this.loadedSoundTracks[n - 1] && !this.isMusicMuted) {
 						this.soundTracks[n - 1].resume();
 					}
-					this.stateInt = -1;
+					this.state = GameState.PLAY_REPLAY;
 				} else {
-					this.stateInt = -8;
+					this.state = GameState.REPLAY_NOT_AVAILABLE;
 				}
 			}
 			if (this.opselect == 2) {
-				this.oldfase = -7;
-				this.stateInt = 11;
+				this.lastState = GameState.GAME_PAUSED_2_BLURRED;
+				this.state = GameState.GAME_INSTRUCTIONS;
 			}
 			if (this.opselect == 3) {
-				this.stateInt = 10;
+				this.state = GameState.MAIN_MENU;
 				this.opselect = 0;
 			}
 			control.enter = false;
@@ -1484,22 +1484,7 @@ public class GraphicsPanel extends Panel {
 			this.flipo = 1;
 		}
 		if (this.flipo == 1) {
-			graphics.setColor(new Color(0, 0, 0));
-			fillBlankScreen(graphics);
-			graphics.drawImage(this.radicalplay, 87, 110, null);
-			graphics.setFont(new Font("SansSerif", 1, 13));
-			this.fontMetrics = graphics.getFontMetrics();
-			this.drawCharacters(graphics, 150 + (int) (10.0f * this.medium.random()), "www.radicalplay.com", 112, 120, 143, 3);
-			graphics.setFont(new Font("SansSerif", 1, 11));
-			this.fontMetrics = graphics.getFontMetrics();
-			if (this.aflk) {
-				this.drawCharacters(graphics, 190, "And we are never going to find the new unless we get a little crazy...", 112, 120, 143, 3);
-				this.aflk = false;
-			} else {
-				this.drawCharacters(graphics, 192, "And we are never going to find the new unless we get a little crazy...", 150, 150, 150, 3);
-				this.aflk = true;
-			}
-			graphics.drawImage(this.rpro, 150, 240, null);
+			drawRadicalPlayScren(graphics);
 		}
 		if (this.flipo == 2) {
 			graphics.drawImage(this.bgmain, 0, 0, null);
@@ -1527,12 +1512,31 @@ public class GraphicsPanel extends Panel {
 			++this.flipo;
 			if (this.flipo == 4) {
 				this.flipo = 0;
-				this.stateInt = 10;
+				this.state = GameState.MAIN_MENU;
 			}
 			control.enter = false;
 			control.handb = false;
 			control.right = false;
 		}
+	}
+
+	public void drawRadicalPlayScren(Graphics graphics) {
+		graphics.setColor(new Color(0, 0, 0));
+		fillBlankScreen(graphics);
+		graphics.drawImage(this.radicalplay, 87, 110, null);
+		graphics.setFont(new Font("SansSerif", 1, 13));
+		this.fontMetrics = graphics.getFontMetrics();
+		this.drawCharacters(graphics, 150 + (int) (10.0f * this.medium.random()), "www.radicalplay.com", 112, 120, 143, 3);
+		graphics.setFont(new Font("SansSerif", 1, 11));
+		this.fontMetrics = graphics.getFontMetrics();
+		if (this.aflk) {
+			this.drawCharacters(graphics, 190, "And we are never going to find the new unless we get a little crazy...", 112, 120, 143, 3);
+			this.aflk = false;
+		} else {
+			this.drawCharacters(graphics, 192, "And we are never going to find the new unless we get a little crazy...", 150, 150, 150, 3);
+			this.aflk = true;
+		}
+		graphics.drawImage(this.rpro, 150, 240, null);
 	}
 
 	public void stat(final Madness madness, final CheckPoints checkPoints, final Control control, final boolean b, final Graphics graphics) {
@@ -1616,7 +1620,7 @@ public class GraphicsPanel extends Panel {
 		if (n != 0) {
 			++this.holdcnt;
 			if (control.enter || this.holdcnt > 250) {
-				this.stateInt = -2;
+				this.state = GameState.GAME_HIGHLIGHT_1;
 				control.enter = false;
 			}
 		} else {
@@ -1627,7 +1631,7 @@ public class GraphicsPanel extends Panel {
 				if (this.loadedSoundTracks[checkPoints.stage - 1]) {
 					this.soundTracks[checkPoints.stage - 1].stop();
 				}
-				this.stateInt = -6;
+				this.state = GameState.GAME_PAUSED;
 				control.enter = false;
 			}
 		}
@@ -2188,7 +2192,7 @@ public class GraphicsPanel extends Panel {
 		}
 		graphics.drawImage(this.contin2[this.pcontin], 230, 350 - this.pin, null);
 		if (control.enter || control.handb) {
-			this.stateInt = 10;
+			this.state = GameState.MAIN_MENU;
 			if (this.loadedSoundTracks[checkPoints.stage - 1]) {
 				this.soundTracks[checkPoints.stage - 1].stop();
 			}
@@ -2377,7 +2381,7 @@ public class GraphicsPanel extends Panel {
 		this.fontMetrics = graphics.getFontMetrics();
 		this.drawCharacters(graphics, 396, "Use keyboard Arrows and press Enter to continue", 0, 0, 0, 3);
 		if (control.handb || control.enter) {
-			this.stateInt = 5;
+			this.state = GameState.LOADING_STAGE_1;
 			this.medium.trk = false;
 			control.handb = false;
 			control.enter = false;
@@ -2386,17 +2390,17 @@ public class GraphicsPanel extends Panel {
 		if (control.right && checkPoints.stage != 11) {
 			if (checkPoints.stage != this.unlocked) {
 				++checkPoints.stage;
-				this.stateInt = 2;
+				this.state = GameState.LOADING_STAGE_PREVIEW;
 				control.right = false;
 			} else {
-				this.stateInt = 4;
+				this.state = GameState.STAGE_LOCKED_UNSAFE;
 				this.lockcnt = 70;
 				control.right = false;
 			}
 		}
 		if (control.left && checkPoints.stage != 1) {
 			--checkPoints.stage;
-			this.stateInt = 2;
+			this.state = GameState.LOADING_STAGE_PREVIEW;
 			control.left = false;
 		}
 	}
@@ -2691,19 +2695,19 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.opti, 181, 250, null);
 		if (control.enter || control.handb) {
 			if (this.opselect == 0) {
-				if (this.unlocked == 1 && this.oldfase == 0) {
-					this.oldfase = 7;
-					this.stateInt = 11;
+				if (this.unlocked == 1 && this.lastState == GameState.GAMEPLAY) {
+					this.lastState = GameState.CAR_SELECT;
+					this.state = GameState.GAME_INSTRUCTIONS;
 				} else {
-					this.stateInt = -9; //-9
+					this.state = GameState.UNKNOWN_STATE_1; //-9
 				}
 			}
 			if (this.opselect == 1) {
-				this.oldfase = 10;
-				this.stateInt = 11;
+				this.lastState = GameState.MAIN_MENU;
+				this.state = GameState.GAME_INSTRUCTIONS;
 			}
 			if (this.opselect == 2) {
-				this.stateInt = 8;
+				this.state = GameState.CREDITS;
 			}
 			this.flipo = 0;
 			control.enter = false;
@@ -2765,7 +2769,7 @@ public class GraphicsPanel extends Panel {
 			}
 		}
 		if (control.handb || control.enter) {
-			this.stateInt = 0;
+			this.state = GameState.GAMEPLAY;
 			control.handb = false;
 			control.enter = false;
 		}
@@ -2795,26 +2799,11 @@ public class GraphicsPanel extends Panel {
 		return image;
 	}
 
-	public void rad(final Graphics graphics, final int n) {
-		if (n == 0) {
+	public void rad(final Graphics graphics, final int frameCount) {
+		if (frameCount == 0) {
 			this.powerup.play();
 		}
-		graphics.setColor(new Color(0, 0, 0));
-		fillBlankScreen(graphics);
-		graphics.drawImage(this.radicalplay, 87, 110, null);
-		graphics.setFont(new Font("SansSerif", 1, 13));
-		this.fontMetrics = graphics.getFontMetrics();
-		this.drawCharacters(graphics, 150 + (int) (10.0f * this.medium.random()), "www.radicalplay.com", 112, 120, 143, 3);
-		graphics.setFont(new Font("SansSerif", 1, 11));
-		this.fontMetrics = graphics.getFontMetrics();
-		if (this.aflk) {
-			this.drawCharacters(graphics, 190, "And we are never going to find the new unless we get a little crazy...", 112, 120, 143, 3);
-			this.aflk = false;
-		} else {
-			this.drawCharacters(graphics, 192, "And we are never going to find the new unless we get a little crazy...", 150, 150, 150, 3);
-			this.aflk = true;
-		}
-		graphics.drawImage(this.rpro, 150, 240, null);
+		drawRadicalPlayScren(graphics);
 	}
 
 	public void skid(final int n, final float n2) {
@@ -3015,7 +3004,7 @@ public class GraphicsPanel extends Panel {
 		if (control.handb || control.enter) {
 			if (this.flipo == 0 && (this.sc[0] - 4) * 2 < this.unlocked) {
 				this.medium.crs = false;
-				this.stateInt = 2;
+				this.state = GameState.LOADING_STAGE_PREVIEW;
 			}
 			control.handb = false;
 			control.enter = false;
@@ -3023,7 +3012,7 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public void ctachm(final int mouseX, final int mouseY, final int n3, final Control control) {
-		if (this.stateInt == 1) {
+		if (this.state == GameState.STAGE_PREVIEW) {
 			if (n3 == 1) {
 				if (this.over(this.next[0], mouseX, mouseY, 440, 110)) {
 					this.pnext = 1;
@@ -3047,7 +3036,7 @@ public class GraphicsPanel extends Panel {
 				}
 			}
 		}
-		if (this.stateInt == 3) {
+		if (this.state == GameState.UNKNOWN_STATE_2) {
 			if (n3 == 1 && this.over(this.contin1[0], mouseX, mouseY, 232, 270)) {
 				this.pcontin = 1;
 			}
@@ -3056,7 +3045,7 @@ public class GraphicsPanel extends Panel {
 				this.pcontin = 0;
 			}
 		}
-		if (this.stateInt == 4) {
+		if (this.state == GameState.STAGE_LOCKED_UNSAFE) {
 			if (n3 == 1 && this.over(this.back[0], mouseX, mouseY, 245, 320)) {
 				this.pback = 1;
 			}
@@ -3065,7 +3054,7 @@ public class GraphicsPanel extends Panel {
 				this.pback = 0;
 			}
 		}
-		if (this.stateInt == 6) {
+		if (this.state == GameState.LOADING_STAGE_COMPLETE) {
 			if (n3 == 1 && this.over(this.star[0], mouseX, mouseY, 234, 280)) {
 				this.pstar = 2;
 			}
@@ -3074,7 +3063,7 @@ public class GraphicsPanel extends Panel {
 				this.pstar = 1;
 			}
 		}
-		if (this.stateInt == 7) {
+		if (this.state == GameState.CAR_SELECT) {
 			if (n3 == 1) {
 				if (this.over(this.next[0], mouseX, mouseY, 467, 276)) {
 					this.pnext = 2;
@@ -3099,7 +3088,7 @@ public class GraphicsPanel extends Panel {
 				}
 			}
 		}
-		if (this.stateInt == -5) {
+		if (this.state == GameState.END_RACE_CONGRATS) {
 			if (n3 == 1 && this.over(this.contin2[0], mouseX, mouseY, 230, 350 - this.pin)) {
 				this.pcontin = 1;
 			}
@@ -3108,7 +3097,7 @@ public class GraphicsPanel extends Panel {
 				this.pcontin = 0;
 			}
 		}
-		if (this.stateInt == -7) {
+		if (this.state == GameState.GAME_PAUSED_2_BLURRED) {
 			if (n3 == 1) {
 				if (this.overon(204, 143, 137, 22, mouseX, mouseY)) {
 					this.opselect = 0;
@@ -3132,7 +3121,7 @@ public class GraphicsPanel extends Panel {
 				this.shaded = false;
 			}
 		}
-		if (this.stateInt == 10) {
+		if (this.state == GameState.MAIN_MENU) {
 			if (n3 == 1) {
 				if (this.overon(218, 246, 110, 22, mouseX, mouseY)) {
 					this.opselect = 0;
@@ -3152,7 +3141,7 @@ public class GraphicsPanel extends Panel {
 				this.shaded = false;
 			}
 		}
-		if (this.stateInt == 11) {
+		if (this.state == GameState.GAME_INSTRUCTIONS) {
 			if (this.flipo == 1 || this.flipo == 3) {
 				if (n3 == 1 && this.over(this.next[0], mouseX, mouseY, 460, 370)) {
 					this.pnext = 1;
@@ -3172,7 +3161,7 @@ public class GraphicsPanel extends Panel {
 				}
 			}
 		}
-		if (this.stateInt == 8) {
+		if (this.state == GameState.CREDITS) {
 			if (n3 == 1 && this.over(this.next[0], mouseX, mouseY, 460, 370)) {
 				this.pnext = 1;
 			}
@@ -3236,7 +3225,7 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.br, 509, 0, null);
 		graphics.drawImage(this.bb, 0, 357, null);
 		if (control.handb || control.enter) {
-			this.stateInt = 2;
+			this.state = GameState.LOADING_STAGE_PREVIEW;
 			control.handb = false;
 			control.enter = false;
 		}
