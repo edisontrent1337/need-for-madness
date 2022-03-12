@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
+import static main.java.Util.getPixelArray;
 import static main.java.Util.snapRGBs;
 
 //
@@ -104,7 +105,7 @@ public class GraphicsPanel extends Panel {
 	int pstar;
 	Image[] orank;
 	Image[] rank;
-	Image[] ocntdn;
+	Image[] countDownImages;
 	Image[] cntdn;
 	int gocnt;
 	AudioClip[][] engs;
@@ -217,7 +218,7 @@ public class GraphicsPanel extends Panel {
 		this.pstar = 0;
 		this.orank = new Image[5];
 		this.rank = new Image[5];
-		this.ocntdn = new Image[4];
+		this.countDownImages = new Image[4];
 		this.cntdn = new Image[4];
 		this.gocnt = 0;
 		this.engs = new AudioClip[2][5];
@@ -1160,21 +1161,13 @@ public class GraphicsPanel extends Panel {
 	}
 
 	private Image pressed(final Image img) {
-		final int height = img.getHeight(this.imageObserver);
-		final int width = img.getWidth(this.imageObserver);
-		final int[] array = new int[width * height];
-		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, width, height, array, 0, width);
-		try {
-			pixelGrabber.grabPixels();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		for (int i = 0; i < width * height; ++i) {
-			if (array[i] != array[width * height - 1]) {
-				array[i] = 16777215;
+		final int[] pixels = Util.getPixelArray(img, imageObserver);
+		for (int i = 0; i < pixels.length; ++i) {
+			if (pixels[i] != pixels[pixels.length - 1]) {
+				pixels[i] = 0xFFFFFF;
 			}
 		}
-		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
+		return this.createImage(new MemoryImageSource(img.getWidth(imageObserver), img.getHeight(imageObserver), pixels, 0, img.getWidth(imageObserver)));
 	}
 
 	private ZipInputStream getInputStream(String path) throws URISyntaxException, FileNotFoundException {
@@ -2406,47 +2399,39 @@ public class GraphicsPanel extends Panel {
 	}
 
 	public void snap(final int n) {
-		this.dmg = this.loadsnap(this.odmg);
-		this.pwr = this.loadsnap(this.opwr);
-		this.was = this.loadsnap(this.owas);
-		this.lap = this.loadsnap(this.olap);
-		this.pos = this.loadsnap(this.opos);
+		this.dmg = this.createSnappedImage(this.odmg);
+		this.pwr = this.createSnappedImage(this.opwr);
+		this.was = this.createSnappedImage(this.owas);
+		this.lap = this.createSnappedImage(this.olap);
+		this.pos = this.createSnappedImage(this.opos);
 		int n2 = 0;
 		do {
-			this.rank[n2] = this.loadsnap(this.orank[n2]);
+			this.rank[n2] = this.createSnappedImage(this.orank[n2]);
 		} while (++n2 < 5);
 		int n3 = 0;
 		do {
-			this.cntdn[n3] = this.loadsnap(this.ocntdn[n3]);
+			this.cntdn[n3] = this.createSnappedImage(this.countDownImages[n3]);
 		} while (++n3 < 4);
-		this.yourwasted = this.loadsnap(this.oyourwasted);
-		this.youlost = this.loadsnap(this.oyoulost);
-		this.youwon = this.loadsnap(this.oyouwon);
-		this.youwastedem = this.loadsnap(this.oyouwastedem);
-		this.gameh = this.loadsnap(this.ogameh);
-		this.mdness = this.loadsnap(this.omdness);
+		this.yourwasted = this.createSnappedImage(this.oyourwasted);
+		this.youlost = this.createSnappedImage(this.oyoulost);
+		this.youwon = this.createSnappedImage(this.oyouwon);
+		this.youwastedem = this.createSnappedImage(this.oyouwastedem);
+		this.gameh = this.createSnappedImage(this.ogameh);
+		this.mdness = this.createSnappedImage(this.omdness);
 		this.loadingmusic = this.loadOpSnap(this.oloadingmusic, n);
 		this.star[0] = this.loadOpSnap(this.ostar[0], n);
 		this.star[1] = this.loadOpSnap(this.ostar[1], n);
 	}
 
-	private Image loadsnap(final Image img) {
-		final int height = img.getHeight(this.imageObserver);
-		final int width = img.getWidth(this.imageObserver);
-		final int[] array = new int[width * height];
-		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, width, height, array, 0, width);
-		try {
-			pixelGrabber.grabPixels();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		for (int i = 0; i < width * height; ++i) {
-			if (array[i] != array[width * height - 1]) {
-				int[] RGBs = snapRGBs(array[i], this.medium.snapColor);
-				array[i] = new Color(RGBs[0], RGBs[1], RGBs[2], 255).getRGB();
+	private Image createSnappedImage(final Image img) {
+		final int[] pixels = Util.getPixelArray(img, imageObserver);
+		for (int i = 0; i < pixels.length; ++i) {
+			if (pixels[i] != pixels[pixels.length - 1]) {
+				int[] RGBs = snapRGBs(pixels[i], medium.snapColor);
+				pixels[i] = new Color(RGBs[0], RGBs[1], RGBs[2], 255).getRGB();
 			}
 		}
-		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
+		return this.createImage(new MemoryImageSource(img.getWidth(imageObserver), img.getHeight(imageObserver), pixels, 0, img.getWidth(imageObserver)));
 	}
 
 	public void resetstat(final int n) {
@@ -2579,22 +2564,14 @@ public class GraphicsPanel extends Panel {
 	}
 
 	private Image getButtonPressedImage(final Image img) {
-		final int height = img.getHeight(this.imageObserver);
-		final int width = img.getWidth(this.imageObserver);
-		final int[] array = new int[width * height];
-		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, width, height, array, 0, width);
-		try {
-			pixelGrabber.grabPixels();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		final int[] pixels = Util.getPixelArray(img, imageObserver);
 		final Color color = new Color(206, 214, 255);
-		for (int i = 0; i < width * height; ++i) {
-			if (array[i] != array[width * height - 1]) {
-				array[i] = color.getRGB();
+		for (int i = 0; i < pixels.length; ++i) {
+			if (pixels[i] != pixels[pixels.length - 1]) {
+				pixels[i] = color.getRGB();
 			}
 		}
-		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
+		return this.createImage(new MemoryImageSource(img.getWidth(imageObserver), img.getHeight(imageObserver), pixels, 0, img.getWidth(imageObserver)));
 	}
 
 	public void loading(final Graphics graphics, final Applet applet) {
@@ -3180,18 +3157,10 @@ public class GraphicsPanel extends Panel {
 	}
 
 	private Image loadOpSnap(final Image img, final int n) {
-		final int height = img.getHeight(this.imageObserver);
-		final int width = img.getWidth(this.imageObserver);
-		final int[] array = new int[width * height];
-		final PixelGrabber pixelGrabber = new PixelGrabber(img, 0, 0, width, height, array, 0, width);
-		try {
-			pixelGrabber.grabPixels();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		for (int i = 0; i < width * height; ++i) {
-			if (array[i] != array[76]) {
-				final Color color = new Color(array[i]);
+		final int[] pixels = getPixelArray(img, imageObserver);
+		for (int i = 0; i < pixels.length; ++i) {
+			if (pixels[i] != pixels[76]) {
+				final Color color = new Color(pixels[i]);
 				int r, g ,b;
 				if (this.hipno[n - 1] != 0) {
 					r = (int) (color.getRed() - color.getRed() * (this.medium.snapColor[0] / (float) (50 * this.hipno[n - 1])));
@@ -3202,13 +3171,13 @@ public class GraphicsPanel extends Panel {
 					g = color.getGreen();
 					b = (int) (color.getBlue() - color.getBlue() * 0.25f);
 				}
-				r = Util.clamp(r, 0, 255);
-				g = Util.clamp(g, 0, 255);
-				b = Util.clamp(b, 0, 255);
-				array[i] = new Color(r, g, b).getRGB();
+				r = Util.clampCol(r);
+				g = Util.clampCol(g);
+				b = Util.clampCol(b);
+				pixels[i] = new Color(r, g, b).getRGB();
 			}
 		}
-		return this.createImage(new MemoryImageSource(width, height, array, 0, width));
+		return this.createImage(new MemoryImageSource(img.getWidth(imageObserver), img.getHeight(imageObserver), pixels, 0, img.getWidth(imageObserver)));
 	}
 
 	public void loadingFailed(final int i, final Control control, final Graphics graphics) {

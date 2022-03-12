@@ -92,8 +92,6 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
     public void loadBase(final Geometry[] availableGeometry, final Medium medium, final Trackers trackers) {
         final String[] array2 = {"2000tornados", "formula7", "canyenaro", "lescrab", "nimi", "maxrevenge", "leadoxide", "king", "radicalone", "drmonster", "road", "froad", "twister2", "twister1", "turn", "offroad", "bumproad", "offturn", "nroad", "nturn", "roblend", "noblend", "rnblend", "roadend", "offroadend", "hpground", "ramp30", "cramp35", "dramp15", "dhilo15", "slide10", "takeoff", "sramp22", "offbump", "offramp", "sofframp", "halfpipe", "spikes", "rail", "thewall", "checkpoint", "fixpoint", "offcheckpoint"};
         try {
-            //final DataInputStream in = new DataInputStream(new URL(this.getCodeBase(), "graphics/models.radq").openStream());
-            //final ZipInputStream zipInputStream = new ZipInputStream(in);
 
             URL resource = this.getClass().getResource("../../resources/graphics/models.zipo");
             File file = new File(resource.toURI());
@@ -1060,11 +1058,10 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             }
             if(graphicsPanel.state != this.lastState) {
                 this.lastState = graphicsPanel.state;
-                System.out.println("State Int: " + graphicsPanel.state);
+                System.out.println("Current State : " + graphicsPanel.state);
             }
-            this.graphics.setColor(new Color(255, 255, 255));
+            this.graphics.setColor(new Color(0, 0, 0));
             this.graphics.drawString("FPS:" + 1000 / frametime, 100, 100);
-            //System.out.println(frametime);
         }
     }
 

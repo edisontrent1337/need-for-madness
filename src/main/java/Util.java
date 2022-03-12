@@ -1,6 +1,8 @@
 package main.java;
 
 import java.awt.*;
+import java.awt.image.ImageObserver;
+import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -50,9 +52,9 @@ class Util {
 	static int[] snapRGBs(int rgba, int[] snap) {
 		final Color c = new Color(rgba, true);
 		int[] snappedRGBs = new int[3];
-		snappedRGBs[0] = Util.clamp(c.getRed() + c.getRed() * (snap[0] / 100), 0, 255);
-		snappedRGBs[1] = Util.clamp(c.getGreen() + c.getGreen() * (snap[1] / 100), 0, 255);
-		snappedRGBs[2] = Util.clamp(c.getBlue() + c.getBlue() * (snap[2] / 100), 0, 255);
+		snappedRGBs[0] = Util.clampCol(c.getRed() + c.getRed() * (snap[0] / 100));
+		snappedRGBs[1] = Util.clampCol(c.getGreen() + c.getGreen() * (snap[1] / 100));
+		snappedRGBs[2] = Util.clampCol(c.getBlue() + c.getBlue() * (snap[2] / 100));
 		return snappedRGBs;
 	}
 
@@ -67,5 +69,18 @@ class Util {
 		} else {
 			return new ArrayList<>();
 		}
+	}
+
+	static int[] getPixelArray(Image image, ImageObserver imageObserver) {
+		final int height = image.getHeight(imageObserver);
+		final int width = image.getWidth(imageObserver);
+		final int[] array = new int[width * height];
+		final PixelGrabber pixelGrabber = new PixelGrabber(image, 0, 0, width, height, array, 0, width);
+		try {
+			pixelGrabber.grabPixels();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return array;
 	}
 }

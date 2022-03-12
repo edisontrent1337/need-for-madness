@@ -105,25 +105,25 @@ public class ResourceLoader {
 					i -= read;
 				}
 				if (name.equals("0c.gif")) {
-					graphicsPanel.ocntdn[0] = this.loadImage(bytes, mediaTracker, defaultToolKit);
+					graphicsPanel.countDownImages[0] = this.loadImage(bytes, mediaTracker, defaultToolKit);
 				}
 				if (name.equals("1.gif")) {
-					graphicsPanel.orank[0] = this.loadImage(bytes, mediaTracker, defaultToolKit);
+					graphicsPanel.orank[0] = this.getImage("1");
 				}
 				if (name.equals("1c.gif")) {
-					graphicsPanel.ocntdn[1] = this.loadImage(bytes, mediaTracker, defaultToolKit);
+					graphicsPanel.countDownImages[1] = this.loadImage(bytes, mediaTracker, defaultToolKit);
 				}
 				if (name.equals("2.gif")) {
-					graphicsPanel.orank[1] = this.loadImage(bytes, mediaTracker, defaultToolKit);
+					graphicsPanel.orank[1] = this.getImage("2");
 				}
 				if (name.equals("2c.gif")) {
-					graphicsPanel.ocntdn[2] = this.loadImage(bytes, mediaTracker, defaultToolKit);
+					graphicsPanel.countDownImages[2] = this.loadImage(bytes, mediaTracker, defaultToolKit);
 				}
 				if (name.equals("3.gif")) {
 					graphicsPanel.orank[2] = this.loadImage(bytes, mediaTracker, defaultToolKit);
 				}
 				if (name.equals("3c.gif")) {
-					graphicsPanel.ocntdn[3] = this.loadImage(bytes, mediaTracker, defaultToolKit);
+					graphicsPanel.countDownImages[3] = this.loadImage(bytes, mediaTracker, defaultToolKit);
 				}
 				if (name.equals("4.gif")) {
 					graphicsPanel.orank[3] = this.loadImage(bytes, mediaTracker, defaultToolKit);
