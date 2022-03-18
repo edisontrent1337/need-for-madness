@@ -1,6 +1,4 @@
-package main.java;//
-// Decompiled by Procyon v0.5.36
-//
+package main.java;
 
 public class Control {
 	boolean left;
@@ -12,7 +10,7 @@ public class Control {
 	boolean arrace;
 	boolean music_muted;
 	boolean sound_muted;
-	Medium m;
+	Medium medium;
 	int pan;
 	int attack;
 	int acr;
@@ -123,7 +121,7 @@ public class Control {
 							this.skiplev = skiplev;
 						}
 					}
-					this.rampp = (int) (this.m.random() * 4.0f - 2.0f);
+					this.rampp = (int) (this.medium.random() * 4.0f - 2.0f);
 					if (madness.power == 98.0f) {
 						this.rampp = -1;
 					}
@@ -138,7 +136,7 @@ public class Control {
 					}
 					if (this.cntrn == 0) {
 						this.agressed = false;
-						this.turntyp = (int) (this.m.random() * 4.0f);
+						this.turntyp = (int) (this.medium.random() * 4.0f);
 						if ((checkPoints.stage == 3 || checkPoints.stage == 9) && madness.im == 4) {
 							this.turntyp = 1;
 							if (this.attack == 0) {
@@ -146,7 +144,7 @@ public class Control {
 							}
 						}
 						if (checkPoints.pos[0] - checkPoints.pos[madness.im] < 0) {
-							this.turntyp = (int) (this.m.random() * 2.0f);
+							this.turntyp = (int) (this.medium.random() * 2.0f);
 						}
 						if (checkPoints.stage == 10) {
 							this.turntyp = 2;
@@ -154,7 +152,7 @@ public class Control {
 						if (this.attack != 0) {
 							this.turntyp = 2;
 							if (checkPoints.stage == 9 || checkPoints.stage == 10 || checkPoints.stage == 11) {
-								this.turntyp = (int) (this.m.random() * 3.0f);
+								this.turntyp = (int) (this.medium.random() * 3.0f);
 							}
 						}
 						if (checkPoints.stage == 6) {
@@ -168,7 +166,7 @@ public class Control {
 					} else {
 						--this.cntrn;
 					}
-					this.saftey = (int) ((98.0f - madness.power) / 2.0f * (this.m.random() / 2.0f + 0.5));
+					this.saftey = (int) ((98.0f - madness.power) / 2.0f * (this.medium.random() / 2.0f + 0.5));
 					if (this.saftey > 20) {
 						this.saftey = 20;
 					}
@@ -182,7 +180,7 @@ public class Control {
 					if (checkPoints.stage == 4) {
 						n2 = 0.4f;
 					}
-					this.mustland = n2 + (float) (this.m.random() / 2.0f - 0.25);
+					this.mustland = n2 + (float) (this.medium.random() / 2.0f - 0.25);
 					float n3 = 1.0f;
 					if (checkPoints.stage == 1) {
 						n3 = 5.0f;
@@ -202,7 +200,7 @@ public class Control {
 					} else {
 						this.mustland -= 0.5f;
 					}
-					this.trickprf = (madness.power - 38.0f) / 50.0f - this.m.random() / 2.0f;
+					this.trickprf = (madness.power - 38.0f) / 50.0f - this.medium.random() / 2.0f;
 					if (madness.power < 60.0f) {
 						this.trickprf = -1.0f;
 					}
@@ -215,11 +213,11 @@ public class Control {
 					if (checkPoints.stage == 11) {
 						this.trickprf = -1.0f;
 					}
-					this.usebounce = this.m.random() > madness.power / 100.0f;
+					this.usebounce = this.medium.random() > madness.power / 100.0f;
 					if (checkPoints.stage == 9) {
 						this.usebounce = false;
 					}
-					this.perfection = !(this.m.random() > madness.currentDamage / (float) madness.maxDamage[madness.carIndex]);
+					this.perfection = !(this.medium.random() > madness.currentDamage / (float) madness.maxDamage[madness.carIndex]);
 					if (100.0f * madness.currentDamage / madness.maxDamage[madness.carIndex] > 60.0f) {
 						this.perfection = true;
 					}
@@ -344,16 +342,16 @@ public class Control {
 									if (checkPoints.stage == 9 && (checkPoints.pos[acr] == 4 || checkPoints.pos[acr] == 3)) {
 										n9 = 0.0f;
 									}
-									if (this.m.random() < n9) {
+									if (this.medium.random() < n9) {
 										this.attack = 40 * (Math.abs(checkPoints.clear[acr] - madness.clear) + 1);
 										if (this.attack > 500) {
 											this.attack = 500;
 										}
 										this.acr = acr;
-										this.turntyp = (int) (1.0f + this.m.random() * 2.0f);
+										this.turntyp = (int) (1.0f + this.medium.random() * 2.0f);
 									}
 								}
-								if (!afta || n6 <= 100 || this.py(geometry.x / 100, checkPoints.opx[acr] / 100, geometry.z / 100, checkPoints.opz[acr] / 100) >= 300 || this.m.random() <= 0.6 - checkPoints.pos[madness.im] / 10.0f) {
+								if (!afta || n6 <= 100 || this.py(geometry.x / 100, checkPoints.opx[acr] / 100, geometry.z / 100, checkPoints.opz[acr] / 100) >= 300 || this.medium.random() <= 0.6 - checkPoints.pos[madness.im] / 10.0f) {
 									continue;
 								}
 								this.clrnce = 0;
@@ -391,7 +389,7 @@ public class Control {
 						}
 					}
 					this.stcnt = 0;
-					this.statusque = (int) (20.0f * this.m.random());
+					this.statusque = (int) (20.0f * this.medium.random());
 				} else {
 					++this.stcnt;
 				}
@@ -437,7 +435,7 @@ public class Control {
 						if (this.rampp == -1 && checkPoints.typ[point] == -2 && ++point == checkPoints.n) {
 							point = 0;
 						}
-						if (this.m.random() > this.skiplev) {
+						if (this.medium.random() > this.skiplev) {
 							int n12 = point;
 							int n13 = 0;
 							if (checkPoints.typ[n12] > 0) {
@@ -465,7 +463,7 @@ public class Control {
 									n13 = ((madness.clear != n15 + madness.nlaps * checkPoints.nsp) ? 1 : 0);
 								}
 							}
-						} else if (this.m.random() > this.skiplev) {
+						} else if (this.medium.random() > this.skiplev) {
 							while (checkPoints.typ[point] == -1) {
 								if (++point == checkPoints.n) {
 									point = 0;
@@ -538,7 +536,7 @@ public class Control {
 						}
 						this.pan = (int) (90 + n20 + Math.atan((checkPoints.z[point] - geometry.z) / (double) (checkPoints.x[point] - geometry.x)) / 0.017453292519943295);
 						this.turncnt = 0;
-						this.randtcnt = (int) (this.acuracy * this.m.random());
+						this.randtcnt = (int) (this.acuracy * this.medium.random());
 					} else {
 						++this.turncnt;
 					}
@@ -645,7 +643,7 @@ public class Control {
 			} else {
 				if (this.trickfase == 0) {
 					final int n22 = (int) ((madness.scy[0] + madness.scy[1] + madness.scy[2] + madness.scy[3]) * (geometry.y - 300) / 4000.0f);
-					if (n22 > 9 && this.m.random() > this.trickprf / 3.0f) {
+					if (n22 > 9 && this.medium.random() > this.trickprf / 3.0f) {
 						this.oxy = madness.xyRotation;
 						this.ozy = madness.zyRotation;
 						this.flycnt = 0;
@@ -658,45 +656,45 @@ public class Control {
 							this.uddirect = -1;
 							this.udstart = 0;
 							this.udswt = false;
-						} else if (this.m.random() > this.m.random() || checkPoints.stage == 8) {
-							if (this.m.random() > this.m.random()) {
+						} else if (this.medium.random() > this.medium.random() || checkPoints.stage == 8) {
+							if (this.medium.random() > this.medium.random()) {
 								this.uddirect = -1;
 							} else {
 								this.uddirect = 1;
 							}
-							this.udstart = (int) (10.0f * this.m.random() * this.trickprf);
-							if (this.m.random() > 0.85) {
+							this.udstart = (int) (10.0f * this.medium.random() * this.trickprf);
+							if (this.medium.random() > 0.85) {
 								this.udswt = true;
 							}
-							if (this.m.random() > this.trickprf + 0.3f && checkPoints.stage != 8) {
-								if (this.m.random() > this.m.random()) {
+							if (this.medium.random() > this.trickprf + 0.3f && checkPoints.stage != 8) {
+								if (this.medium.random() > this.medium.random()) {
 									this.lrdirect = -1;
 								} else {
 									this.lrdirect = 1;
 								}
-								this.lrstart = (int) (30.0f * this.m.random());
-								if (this.m.random() > 0.75) {
+								this.lrstart = (int) (30.0f * this.medium.random());
+								if (this.medium.random() > 0.75) {
 									this.lrswt = true;
 								}
 							}
 						} else {
-							if (this.m.random() > this.m.random()) {
+							if (this.medium.random() > this.medium.random()) {
 								this.lrdirect = -1;
 							} else {
 								this.lrdirect = 1;
 							}
-							this.lrstart = (int) (10.0f * this.m.random() * this.trickprf);
-							if (this.m.random() > 0.75) {
+							this.lrstart = (int) (10.0f * this.medium.random() * this.trickprf);
+							if (this.medium.random() > 0.75) {
 								this.lrswt = true;
 							}
-							if (this.m.random() > this.trickprf + 0.3f) {
-								if (this.m.random() > this.m.random()) {
+							if (this.medium.random() > this.trickprf + 0.3f) {
+								if (this.medium.random() > this.medium.random()) {
 									this.uddirect = -1;
 								} else {
 									this.uddirect = 1;
 								}
-								this.udstart = (int) (30.0f * this.m.random());
-								if (this.m.random() > 0.85) {
+								this.udstart = (int) (30.0f * this.medium.random());
+								if (this.medium.random() > 0.85) {
 									this.udswt = true;
 								}
 							}
@@ -787,7 +785,7 @@ public class Control {
 							this.swat = 2;
 						}
 					} else if (this.swat == 2) {
-						if (madness.capsized && this.m.random() > this.mustland) {
+						if (madness.capsized && this.medium.random() > this.mustland) {
 							if (this.udbare) {
 								this.lrbare = true;
 								this.udbare = false;
@@ -831,7 +829,7 @@ public class Control {
 											this.down = true;
 										}
 									}
-								} else if (this.m.random() > this.mustland) {
+								} else if (this.medium.random() > this.mustland) {
 									this.up = true;
 								}
 								this.onced = true;
@@ -855,7 +853,7 @@ public class Control {
 										this.down = true;
 									}
 								}
-							} else if (this.m.random() > this.mustland) {
+							} else if (this.medium.random() > this.mustland) {
 								this.down = true;
 							}
 							this.onceu = true;
@@ -896,7 +894,7 @@ public class Control {
 											this.right = true;
 										}
 									}
-								} else if (this.m.random() > this.mustland) {
+								} else if (this.medium.random() > this.mustland) {
 									this.right = true;
 								}
 								this.oncel = true;
@@ -920,7 +918,7 @@ public class Control {
 										this.right = true;
 									}
 								}
-							} else if (this.m.random() > this.mustland) {
+							} else if (this.medium.random() > this.mustland) {
 								this.left = true;
 							}
 							this.oncer = true;
@@ -957,10 +955,10 @@ public class Control {
 				this.fpnt[k] += checkPoints.nsp;
 			}
 		}
-		this.falseo();
+		this.resetControls();
 	}
 
-	public Control(final Medium m) {
+	public Control(final Medium medium) {
 		this.left = false;
 		this.right = false;
 		this.up = false;
@@ -1022,10 +1020,10 @@ public class Control {
 		this.udswt = false;
 		this.actwait = 0;
 		this.cntrn = 0;
-		this.m = m;
+		this.medium = medium;
 	}
 
-	public void falseo() {
+	public void resetControls() {
 		this.left = false;
 		this.right = false;
 		this.up = false;

@@ -6,14 +6,17 @@ import java.awt.image.PixelGrabber;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
+import static main.java.Config.*;
 
 
 class Util {
@@ -82,5 +85,24 @@ class Util {
 			e.printStackTrace();
 		}
 		return array;
+	}
+
+	static byte[] readZipEntryBytes(ZipEntry zipEntry, ZipInputStream stream) throws IOException {
+		int size = (int) zipEntry.getSize();
+		final byte[] bytes = new byte[size];
+		int offset = 0;
+		while (size > 0) {
+			int read = stream.read(bytes, offset, size);
+			offset += read;
+			size -= read;
+		}
+		return bytes;
+	}
+
+	static int getGeometryIndex(ZipEntry zipEntry) {
+		for(int i = 0; i < modelNames.length; i++) {
+			if(zipEntry.getName().startsWith(modelNames[i] + ".rad")) return i;
+		}
+		return -1;
 	}
 }

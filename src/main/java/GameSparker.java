@@ -12,16 +12,11 @@ import java.io.FileInputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
-
-//
-// Decompiled by Procyon v0.5.36
-//
 
 public class GameSparker extends Applet implements Runnable, MouseListener, KeyListener {
+
     Graphics graphics;
-    Image offImage;
+    Image offscreenImage;
     Thread gamer;
     Control[] controls;
     int mouses;
@@ -40,7 +35,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
     CheckPoints checkPoints;
     Medium medium;
     Record record;
-    Geometry[] geometries;
+    Geometry[] models;
+    Geometry[] loadedModels;
     Madness[] cars;
 
     public GameSparker() {
@@ -69,73 +65,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
         if (!this.exwist) {
             this.isWindowFocusLost = true;
             this.mouses = 0;
-            this.controls[0].falseo();
+            this.controls[0].resetControls();
         }
         return false;
     }
 
-    /*public int readcookie(final String str) {
-        int intValue = -1;
-        try {
-            final JSObject window = JSObject.getWindow(this);
-            window.eval("drawShadow=GetCookie('" + str + "');");
-            intValue = Integer.valueOf(String.valueOf(String.valueOf(window.getMember("drawShadow"))));
-        }
-        catch (Exception ex) {}
-        return intValue;
-    }*/
-
     public void paint(final Graphics graphics) {
-        graphics.drawImage(this.offImage, 0, 0, this);
-    }
-
-    public void loadBase(final Geometry[] availableGeometry, final Medium medium, final Trackers trackers) {
-        final String[] array2 = {"2000tornados", "formula7", "canyenaro", "lescrab", "nimi", "maxrevenge", "leadoxide", "king", "radicalone", "drmonster", "road", "froad", "twister2", "twister1", "turn", "offroad", "bumproad", "offturn", "nroad", "nturn", "roblend", "noblend", "rnblend", "roadend", "offroadend", "hpground", "ramp30", "cramp35", "dramp15", "dhilo15", "slide10", "takeoff", "sramp22", "offbump", "offramp", "sofframp", "halfpipe", "spikes", "rail", "thewall", "checkpoint", "fixpoint", "offcheckpoint"};
-        try {
-
-            URL resource = this.getClass().getResource("../../resources/graphics/models.zipo");
-            File file = new File(resource.toURI());
-            final FileInputStream in = new FileInputStream(file);
-            final ZipInputStream zipInputStream = new ZipInputStream(in);
-
-            for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
-                int n = 0;
-                int n2 = 0;
-                do {
-                    if (zipEntry.getName().startsWith(array2[n2])) {
-                        n = n2;
-                    }
-                } while (++n2 < 43);
-                int i = (int) zipEntry.getSize();
-                final byte[] b = new byte[i];
-                int off = 0;
-                while (i > 0) {
-                    final int read = zipInputStream.read(b, off, i);
-                    off += read;
-                    i -= read;
-                }
-                availableGeometry[n] = new Geometry(b, medium, trackers);
-            }
-            in.close();
-            zipInputStream.close();
-        } catch (Exception obj) {
-            System.out.println("Error Reading Models: " + obj);
-        }
+        graphics.drawImage(this.offscreenImage, 0, 0, this);
     }
 
     public void update(final Graphics graphics) {
         this.paint(graphics);
-    }
-
-    public int sunytyp() {
-        final String property = System.getProperty("java.version");
-        if (!("" + this.getAppletContext()).startsWith("sun.")) {
-            return 0;
-        }
-        if (property.startsWith("1.3")) {
-            return 1;
-        }
-        return 2;
     }
 
     public void start() {
@@ -328,14 +268,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
         this.graphics.setColor(new Color(0, 0, 0));
         this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
         this.repaint();
-        int n = 5;
-        final int sunytyp = this.sunytyp();
-        if (sunytyp != 0) {
-            n = 15;
-        }
 
-        Geometry[] availableGeometries = new Geometry[43];
-        this.loadBase(availableGeometries, medium, trackers);
+        //Geometry[] this.models = new Geometry[43];
+        //this.loadModels(this.models, medium, trackers);
         graphicsPanel.dnload += 29;
         graphicsPanel.loading(this.graphics, this);
         int n2 = 0;
@@ -373,7 +308,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     this.mouses = 0;
                     this.isWindowFocusLost = false;
                 }
-            } else if (graphicsPanel.state == GameState.UNKNOWN_STATE_4) {
+            }
+            else if (graphicsPanel.state == GameState.UNKNOWN_STATE_4) {
                 if (n9 < 150) {
                     graphicsPanel.rad(this.graphics, n9);
                     ++n9;
@@ -381,9 +317,10 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     n9 = 0;
                     graphicsPanel.state = GameState.MAIN_MENU;
                     this.mouses = 0;
-                    this.controls[0].falseo();
+                    this.controls[0].resetControls();
                 }
-            } else if (graphicsPanel.state == GameState.UNKNOWN_STATE_1) {
+            }
+            else if (graphicsPanel.state == GameState.UNKNOWN_STATE_1) {
                 if (n9 < 5) {
                     this.graphics.setColor(new Color(255, 255, 255));
                     this.graphics.fillRect(0, 0, 550, 400);
@@ -393,7 +330,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     graphicsPanel.state = GameState.CAR_SELECT;
                     this.mouses = 0;
                 }
-            } else if (graphicsPanel.state == GameState.CREDITS) {
+            }
+            else if (graphicsPanel.state == GameState.CREDITS) {
                 graphicsPanel.credits(this.graphics, this.controls[0]);
                 graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
                 if (this.mouses == 2) {
@@ -402,7 +340,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (this.mouses == 1) {
                     this.mouses = 2;
                 }
-            } else if (graphicsPanel.state == GameState.MAIN_MENU) {
+            }
+            else if (graphicsPanel.state == GameState.MAIN_MENU) {
                 graphicsPanel.maini(this.graphics, this.controls[0]);
                 graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
                 if (this.mouses == 2) {
@@ -411,7 +350,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (this.mouses == 1) {
                     this.mouses = 2;
                 }
-            } else if (graphicsPanel.state == GameState.GAME_INSTRUCTIONS) {
+            }
+            else if (graphicsPanel.state == GameState.GAME_INSTRUCTIONS) {
                 graphicsPanel.inst(this.graphics, this.controls[0]);
                 graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
                 if (this.mouses == 2) {
@@ -420,8 +360,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (this.mouses == 1) {
                     this.mouses = 2;
                 }
-            } else if (graphicsPanel.state == GameState.END_RACE_CONGRATS) {
-                graphicsPanel.finish(checkPoints, availableGeometries, this.controls[0], this.graphics);
+            }
+            else if (graphicsPanel.state == GameState.END_RACE_CONGRATS) {
+                graphicsPanel.finish(checkPoints, this.models, this.controls[0], this.graphics);
                 if (n5 == 1) {
                     if (checkPoints.stage == graphicsPanel.unlocked && graphicsPanel.winner && graphicsPanel.unlocked != 11) {
                         this.saveCookie("unlocked", "" + (graphicsPanel.unlocked + 1));
@@ -437,8 +378,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (this.mouses == 1) {
                     this.mouses = 2;
                 }
-            } else if (graphicsPanel.state == GameState.CAR_SELECT) {
-                graphicsPanel.carselect(this.controls[0], availableGeometries, cars[0], this.graphics);
+            }
+            else if (graphicsPanel.state == GameState.CAR_SELECT) {
+                graphicsPanel.carselect(this.controls[0], this.models, cars[0], this.graphics);
                 graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
                 if (this.mouses == 2) {
                     this.mouses = 0;
@@ -446,7 +388,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (this.mouses == 1) {
                     this.mouses = 2;
                 }
-            } else if (graphicsPanel.state == GameState.LOADING_STAGE_COMPLETE) {
+            }
+            else if (graphicsPanel.state == GameState.LOADING_STAGE_COMPLETE) {
                 graphicsPanel.musicomp(checkPoints.stage, this.graphics, this.controls[0]);
                 graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
                 if (this.mouses == 2) {
@@ -455,13 +398,15 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (this.mouses == 1) {
                     this.mouses = 2;
                 }
-            } else if (graphicsPanel.state == GameState.LOADING_STAGE_1) {
+            }
+            else if (graphicsPanel.state == GameState.LOADING_STAGE_1) {
                 graphicsPanel.loadmusic(checkPoints.stage, n4, this.graphics);
                 if (n5 == 0) {
                     this.saveCookie("usercar", "" + graphicsPanel.sc[0]);
                     n5 = 1;
                 }
-            } else if (graphicsPanel.state == GameState.STAGE_LOCKED_UNSAFE) {
+            }
+            else if (graphicsPanel.state == GameState.STAGE_LOCKED_UNSAFE) {
                 graphicsPanel.cantgo(this.graphics, this.controls[0]);
                 graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
                 if (this.mouses == 2) {
@@ -470,7 +415,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (this.mouses == 1) {
                     this.mouses = 2;
                 }
-            } else if (graphicsPanel.state == GameState.UNKNOWN_STATE_2) {
+            }
+            else if (graphicsPanel.state == GameState.UNKNOWN_STATE_2) {
                 graphicsPanel.loadingFailed(checkPoints.stage, this.controls[0], this.graphics);
                 graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
                 if (this.mouses == 2) {
@@ -479,21 +425,23 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (this.mouses == 1) {
                     this.mouses = 2;
                 }
-            } else if (graphicsPanel.state == GameState.LOADING_STAGE_PREVIEW) {
+            }
+            else if (graphicsPanel.state == GameState.LOADING_STAGE_PREVIEW) {
                 graphicsPanel.loadingStage(checkPoints.stage, this.graphics);
-                this.loadStage(this.geometries, availableGeometries, medium, trackers, checkPoints, graphicsPanel, cars, record);
-                this.controls[0].falseo();
-            } else if (graphicsPanel.state == GameState.STAGE_PREVIEW) {
+                loadStage(loadedModels, models, medium, trackers, checkPoints, graphicsPanel, cars, record);
+                controls[0].resetControls();
+            }
+            else if (graphicsPanel.state == GameState.STAGE_PREVIEW) {
                 graphicsPanel.trackbg(this.graphics);
                 medium.circleAroundStage(checkPoints);
                 int n11 = 0;
                 final int[] array4 = new int[200];
                 for (int i = 5; i < this.notb; ++i) {
-                    if (this.geometries[i].dist != 0) {
+                    if (this.loadedModels[i].dist != 0) {
                         array4[n11] = i;
                         ++n11;
                     } else {
-                        this.geometries[i].draw(this.graphics);
+                        this.loadedModels[i].draw(this.graphics);
                     }
                 }
                 final int[] array5 = new int[n11];
@@ -502,8 +450,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
                 for (int k = 0; k < n11; ++k) {
                     for (int l = k + 1; l < n11; ++l) {
-                        if (this.geometries[array4[k]].dist != this.geometries[array4[l]].dist) {
-                            if (this.geometries[array4[k]].dist < this.geometries[array4[l]].dist) {
+                        if (this.loadedModels[array4[k]].dist != this.loadedModels[array4[l]].dist) {
+                            if (this.loadedModels[array4[k]].dist < this.loadedModels[array4[l]].dist) {
                                 ++array5[k];
                             } else {
                                 ++array5[l];
@@ -518,7 +466,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 for (int n16 = 0; n16 < n11; ++n16) {
                     for (int n17 = 0; n17 < n11; ++n17) {
                         if (array5[n17] == n16) {
-                            this.geometries[array4[n17]].draw(this.graphics);
+                            this.loadedModels[array4[n17]].draw(this.graphics);
                         }
                     }
                 }
@@ -530,16 +478,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     this.mouses = 2;
                 }
                 graphicsPanel.stageselect(this.graphics, checkPoints, this.controls[0]);
-            } else if (graphicsPanel.state == GameState.LOADING_STAGE_2) {
+            }
+            else if (graphicsPanel.state == GameState.LOADING_STAGE_2) {
                 medium.draw(this.graphics);
                 int n18 = 0;
                 final int[] array10 = new int[100];
                 for (int n19 = 0; n19 < this.nob; ++n19) {
-                    if (this.geometries[n19].dist != 0) {
+                    if (this.loadedModels[n19].dist != 0) {
                         array10[n18] = n19;
                         ++n18;
                     } else {
-                        this.geometries[n19].draw(this.graphics);
+                        this.loadedModels[n19].draw(this.graphics);
                     }
                 }
                 final int[] array11 = new int[n18];
@@ -548,8 +497,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
                 for (int n21 = 0; n21 < n18; ++n21) {
                     for (int n22 = n21 + 1; n22 < n18; ++n22) {
-                        if (this.geometries[array10[n21]].dist != this.geometries[array10[n22]].dist) {
-                            if (this.geometries[array10[n21]].dist < this.geometries[array10[n22]].dist) {
+                        if (this.loadedModels[array10[n21]].dist != this.loadedModels[array10[n22]].dist) {
+                            if (this.loadedModels[array10[n21]].dist < this.loadedModels[array10[n22]].dist) {
                                 ++array11[n21];
                             } else {
                                 ++array11[n22];
@@ -564,11 +513,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 for (int n27 = 0; n27 < n18; ++n27) {
                     for (int n28 = 0; n28 < n18; ++n28) {
                         if (array11[n28] == n27) {
-                            this.geometries[array10[n28]].draw(this.graphics);
+                            this.loadedModels[array10[n28]].draw(this.graphics);
                         }
                     }
                 }
-                medium.follow(this.geometries[0], 0);
+                medium.follow(this.loadedModels[0], 0);
                 graphicsPanel.framer(checkPoints.stage, this.graphics);
                 if (n4 != 0) {
                     --n4;
@@ -581,16 +530,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
                     graphicsPanel.state = GameState.LOADING_STAGE_COMPLETE;
                 }
-            } else if (graphicsPanel.state == GameState.GAMEPLAY) {
+            }
+            else if (graphicsPanel.state == GameState.GAMEPLAY) {
                 for (int i = 0; i < 5; i++) {
                     if (cars[i].newcar) {
-                        final int xz = this.geometries[i].xz;
-                        final int xy = this.geometries[i].xy;
-                        final int zy = this.geometries[i].zy;
-                        this.geometries[i] = new Geometry(availableGeometries[cars[i].carIndex], this.geometries[i].x, this.geometries[i].y, this.geometries[i].z, 0);
-                        this.geometries[i].xz = xz;
-                        this.geometries[i].xy = xy;
-                        this.geometries[i].zy = zy;
+                        final int xz = this.loadedModels[i].xz;
+                        final int xy = this.loadedModels[i].xy;
+                        final int zy = this.loadedModels[i].zy;
+                        this.loadedModels[i] = new Geometry(this.models[cars[i].carIndex], this.loadedModels[i].x, this.loadedModels[i].y, this.loadedModels[i].z, 0);
+                        this.loadedModels[i].xz = xz;
+                        this.loadedModels[i].xy = xy;
+                        this.loadedModels[i].zy = zy;
                         cars[i].newcar = false;
                     }
                 }
@@ -598,11 +548,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 int n30 = 0;
                 final int[] array16 = new int[100];
                 for (int n31 = 0; n31 < this.nob; ++n31) {
-                    if (this.geometries[n31].dist != 0) {
+                    if (this.loadedModels[n31].dist != 0) {
                         array16[n30] = n31;
                         ++n30;
                     } else {
-                        this.geometries[n31].draw(this.graphics);
+                        this.loadedModels[n31].draw(this.graphics);
                     }
                 }
                 final int[] array17 = new int[n30];
@@ -611,8 +561,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
                 for (int n33 = 0; n33 < n30; ++n33) {
                     for (int n34 = n33 + 1; n34 < n30; ++n34) {
-                        if (this.geometries[array16[n33]].dist != this.geometries[array16[n34]].dist) {
-                            if (this.geometries[array16[n33]].dist < this.geometries[array16[n34]].dist) {
+                        if (this.loadedModels[array16[n33]].dist != this.loadedModels[array16[n34]].dist) {
+                            if (this.loadedModels[array16[n33]].dist < this.loadedModels[array16[n34]].dist) {
                                 ++array17[n33];
                             } else {
                                 ++array17[n34];
@@ -627,7 +577,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 for (int n39 = 0; n39 < n30; ++n39) {
                     for (int n40 = 0; n40 < n30; ++n40) {
                         if (array17[n40] == n39) {
-                            this.geometries[array16[n40]].draw(this.graphics);
+                            this.loadedModels[array16[n40]].draw(this.graphics);
                         }
                     }
                 }
@@ -636,21 +586,21 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     do {
                         int j = 0;
                         do if (j != i) {
-                            cars[i].colide(this.geometries[i], cars[j], this.geometries[j]);
+                            cars[i].colide(this.loadedModels[i], cars[j], this.loadedModels[j]);
                         } while (++j < 5);
                     } while (++i < 5);
                     int n43 = 0;
                     do {
-                        cars[n43].drive(this.controls[n43], this.geometries[n43], trackers, checkPoints);
+                        cars[n43].drive(this.controls[n43], this.loadedModels[n43], trackers, checkPoints);
                     } while (++n43 < 5);
                     int n44 = 0;
                     do {
-                        record.rec(this.geometries[n44], n44, cars[n44].squash, cars[n44].lastcolido, cars[n44].cntdest);
+                        record.rec(this.loadedModels[n44], n44, cars[n44].squash, cars[n44].lastcolido, cars[n44].cntdest);
                     } while (++n44 < 5);
-                    checkPoints.checkstat(cars, this.geometries);
+                    checkPoints.checkstat(cars, this.loadedModels);
                     int n45 = 1;
                     do {
-                        this.controls[n45].preform(cars[n45], this.geometries[n45], checkPoints, trackers);
+                        this.controls[n45].preform(cars[n45], this.loadedModels[n45], checkPoints, trackers);
                     } while (++n45 < 5);
                 } else {
                     if (graphicsPanel.starcnt == 90) {
@@ -666,15 +616,15 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
                 if (graphicsPanel.starcnt < 35) {
                     if (this.view == 0) {
-                        medium.follow(this.geometries[0], cars[0].cxz);
+                        medium.follow(this.loadedModels[0], cars[0].cxz);
                         graphicsPanel.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
                     }
                     if (this.view == 1) {
-                        medium.circleAroundCar(this.geometries[0], false);
+                        medium.circleAroundCar(this.loadedModels[0], false);
                         graphicsPanel.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
                     }
                     if (this.view == 2) {
-                        medium.watchFromStationaryPoint(this.geometries[0], cars[0].mxz);
+                        medium.watchFromStationaryPoint(this.loadedModels[0], cars[0].mxz);
                         graphicsPanel.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
                     }
                     if (this.mouses == 1) {
@@ -682,7 +632,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         this.mouses = 0;
                     }
                 } else {
-                    medium.circleAroundCar(this.geometries[3], true);
+                    medium.circleAroundCar(this.loadedModels[3], true);
                     if (this.controls[0].enter || this.controls[0].handb) {
                         graphicsPanel.starcnt = 35;
                         this.controls[0].enter = false;
@@ -693,30 +643,31 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         medium.vert = false;
                         medium.adv = 900;
                         medium.circleAmount = 180;
-                        checkPoints.checkstat(cars, this.geometries);
-                        medium.follow(this.geometries[0], cars[0].cxz);
+                        checkPoints.checkstat(cars, this.loadedModels);
+                        medium.follow(this.loadedModels[0], cars[0].cxz);
                         graphicsPanel.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
                         this.graphics.setColor(new Color(255, 255, 255));
                         this.graphics.fillRect(0, 0, 550, 400);
                     }
                 }
-            } else if (graphicsPanel.state == GameState.PLAY_REPLAY) {
+            }
+            else if (graphicsPanel.state == GameState.PLAY_REPLAY) {
                 if (n8 == 0) {
                     int n46 = 0;
                     do {
-                        record.ocar[n46] = new Geometry(this.geometries[n46], 0, 0, 0, 0);
-                        this.geometries[n46] = new Geometry(record.car[0][n46], 0, 0, 0, 0);
+                        record.ocar[n46] = new Geometry(this.loadedModels[n46], 0, 0, 0, 0);
+                        this.loadedModels[n46] = new Geometry(record.car[0][n46], 0, 0, 0, 0);
                     } while (++n46 < 5);
                 }
                 medium.draw(this.graphics);
                 int n47 = 0;
                 final int[] array22 = new int[100];
                 for (int n48 = 0; n48 < this.nob; ++n48) {
-                    if (this.geometries[n48].dist != 0) {
+                    if (this.loadedModels[n48].dist != 0) {
                         array22[n47] = n48;
                         ++n47;
                     } else {
-                        this.geometries[n48].draw(this.graphics);
+                        this.loadedModels[n48].draw(this.graphics);
                     }
                 }
                 final int[] array23 = new int[n47];
@@ -725,8 +676,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
                 for (int n50 = 0; n50 < n47; ++n50) {
                     for (int n51 = n50 + 1; n51 < n47; ++n51) {
-                        if (this.geometries[array22[n50]].dist != this.geometries[array22[n51]].dist) {
-                            if (this.geometries[array22[n50]].dist < this.geometries[array22[n51]].dist) {
+                        if (this.loadedModels[array22[n50]].dist != this.loadedModels[array22[n51]].dist) {
+                            if (this.loadedModels[array22[n50]].dist < this.loadedModels[array22[n51]].dist) {
                                 ++array23[n50];
                             } else {
                                 ++array23[n51];
@@ -741,7 +692,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 for (int n56 = 0; n56 < n47; ++n56) {
                     for (int n57 = 0; n57 < n47; ++n57) {
                         if (array23[n57] == n56) {
-                            this.geometries[array22[n57]].draw(this.graphics);
+                            this.loadedModels[array22[n57]].draw(this.graphics);
                         }
                     }
                 }
@@ -754,20 +705,20 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 int n58 = 0;
                 do {
                     if (record.fix[n58] == n8) {
-                        if (this.geometries[n58].dist == 0) {
-                            this.geometries[n58].fcnt = 8;
+                        if (this.loadedModels[n58].dist == 0) {
+                            this.loadedModels[n58].fcnt = 8;
                         } else {
-                            this.geometries[n58].fix = true;
+                            this.loadedModels[n58].fix = true;
                         }
                     }
-                    if (this.geometries[n58].fcnt == 7 || this.geometries[n58].fcnt == 8) {
-                        this.geometries[n58] = new Geometry(availableGeometries[cars[n58].carIndex], 0, 0, 0, 0);
+                    if (this.loadedModels[n58].fcnt == 7 || this.loadedModels[n58].fcnt == 8) {
+                        this.loadedModels[n58] = new Geometry(this.models[cars[n58].carIndex], 0, 0, 0, 0);
                         record.cntdest[n58] = 0;
                     }
                     if (n8 == 299) {
-                        this.geometries[n58] = new Geometry(record.ocar[n58], 0, 0, 0, 0);
+                        this.loadedModels[n58] = new Geometry(record.ocar[n58], 0, 0, 0, 0);
                     }
-                    record.play(this.geometries[n58], cars[n58], n58, n8);
+                    record.play(this.loadedModels[n58], cars[n58], n58, n8);
                 } while (++n58 < 5);
                 if (++n8 == 300) {
                     n8 = 0;
@@ -778,8 +729,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 } else {
                     graphicsPanel.replyn(this.graphics);
                 }
-                medium.circleAroundCar(this.geometries[0], false);
-            } else if (graphicsPanel.state == GameState.GAME_HIGHLIGHT_1) {
+                medium.circleAroundCar(this.loadedModels[0], false);
+            }
+            else if (graphicsPanel.state == GameState.GAME_HIGHLIGHT_1) {
                 if (record.hcaught) {
                     medium.vert = !(medium.random() > 0.45);
                     medium.adv = (int) (900.0f * medium.random());
@@ -793,22 +745,23 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     n8 = -2;
                     graphicsPanel.state = GameState.END_RACE_ANIMATION;
                 }
-            } else if (graphicsPanel.state == GameState.GAME_HIGHLIGHT_2) {
+            }
+            else if (graphicsPanel.state == GameState.GAME_HIGHLIGHT_2) {
                 if (n8 == 0) {
                     int n59 = 0;
                     do {
-                        this.geometries[n59] = new Geometry(record.starcar[n59], 0, 0, 0, 0);
+                        this.loadedModels[n59] = new Geometry(record.starcar[n59], 0, 0, 0, 0);
                     } while (++n59 < 5);
                 }
                 medium.draw(this.graphics);
                 int n60 = 0;
                 final int[] array28 = new int[100];
                 for (int n61 = 0; n61 < this.nob; ++n61) {
-                    if (this.geometries[n61].dist != 0) {
+                    if (this.loadedModels[n61].dist != 0) {
                         array28[n60] = n61;
                         ++n60;
                     } else {
-                        this.geometries[n61].draw(this.graphics);
+                        this.loadedModels[n61].draw(this.graphics);
                     }
                 }
                 final int[] array29 = new int[n60];
@@ -817,8 +770,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
                 for (int n63 = 0; n63 < n60; ++n63) {
                     for (int n64 = n63 + 1; n64 < n60; ++n64) {
-                        if (this.geometries[array28[n63]].dist != this.geometries[array28[n64]].dist) {
-                            if (this.geometries[array28[n63]].dist < this.geometries[array28[n64]].dist) {
+                        if (this.loadedModels[array28[n63]].dist != this.loadedModels[array28[n64]].dist) {
+                            if (this.loadedModels[array28[n63]].dist < this.loadedModels[array28[n64]].dist) {
                                 ++array29[n63];
                             } else {
                                 ++array29[n64];
@@ -833,24 +786,24 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 for (int n69 = 0; n69 < n60; ++n69) {
                     for (int n70 = 0; n70 < n60; ++n70) {
                         if (array29[n70] == n69) {
-                            this.geometries[array28[n70]].draw(this.graphics);
+                            this.loadedModels[array28[n70]].draw(this.graphics);
                         }
                     }
                 }
                 int n71 = 0;
                 do {
                     if (record.hfix[n71] == n8) {
-                        if (this.geometries[n71].dist == 0) {
-                            this.geometries[n71].fcnt = 8;
+                        if (this.loadedModels[n71].dist == 0) {
+                            this.loadedModels[n71].fcnt = 8;
                         } else {
-                            this.geometries[n71].fix = true;
+                            this.loadedModels[n71].fix = true;
                         }
                     }
-                    if (this.geometries[n71].fcnt == 7 || this.geometries[n71].fcnt == 8) {
-                        this.geometries[n71] = new Geometry(availableGeometries[cars[n71].carIndex], 0, 0, 0, 0);
+                    if (this.loadedModels[n71].fcnt == 7 || this.loadedModels[n71].fcnt == 8) {
+                        this.loadedModels[n71] = new Geometry(this.models[cars[n71].carIndex], 0, 0, 0, 0);
                         record.cntdest[n71] = 0;
                     }
-                    record.playh(this.geometries[n71], cars[n71], n71, n8);
+                    record.playh(this.loadedModels[n71], cars[n71], n71, n8);
                 } while (++n71 < 5);
                 if (n10 == 2 && n8 == 299) {
                     this.controls[0].enter = true;
@@ -872,9 +825,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                             this.graphics.fillRect(0, 0, 550, 400);
                         }
                         if (n9 >= 10) {
-                            medium.circleAroundCar(this.geometries[record.wasted], false);
+                            medium.circleAroundCar(this.loadedModels[record.wasted], false);
                         } else {
-                            medium.circleAroundCar(this.geometries[0], false);
+                            medium.circleAroundCar(this.loadedModels[0], false);
                         }
                         if (n8 > record.whenwasted && n9 != 20) {
                             ++n9;
@@ -892,7 +845,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         if (n8 > record.whenwasted && n9 != 67) {
                             ++n9;
                         }
-                        medium.circleAroundCar(this.geometries[0], false);
+                        medium.circleAroundCar(this.loadedModels[0], false);
                         if ((n9 == 0 || n9 == 67) && ++n8 == 300) {
                             n8 = 0;
                             n9 = 0;
@@ -900,12 +853,13 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         }
                     }
                 }
-            } else if (graphicsPanel.state == GameState.END_RACE_ANIMATION) {
+            }
+            else if (graphicsPanel.state == GameState.END_RACE_ANIMATION) {
                 if (n8 <= 0) {
                     this.graphics.drawImage(graphicsPanel.mdness, 164, 330, null);
                 }
                 if (n8 >= 0) {
-                    graphicsPanel.flexImage(this.offImage, this.graphics, n8);
+                    graphicsPanel.flexImage(this.offscreenImage, this.graphics, n8);
                     if (n8 != 0) {
                         if (graphicsPanel.winner) {
                             if (checkPoints.stage == graphicsPanel.unlocked) {
@@ -925,11 +879,13 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (++n8 == 6) {
                     graphicsPanel.state = GameState.END_RACE_CONGRATS;
                 }
-            } else if (graphicsPanel.state == GameState.GAME_PAUSED) {
-                graphicsPanel.pauseimage(this.offImage, this.graphics);
+            }
+            else if (graphicsPanel.state == GameState.GAME_PAUSED) {
+                graphicsPanel.pauseimage(this.offscreenImage, this.graphics);
                 graphicsPanel.state = GameState.GAME_PAUSED_2_BLURRED;
                 this.mouses = 0;
-            } else if (graphicsPanel.state == GameState.GAME_PAUSED_2_BLURRED) {
+            }
+            else if (graphicsPanel.state == GameState.GAME_PAUSED_2_BLURRED) {
                 graphicsPanel.pausedgame(this.graphics, checkPoints.stage, this.controls[0], record);
                 if (n8 != 0) {
                     n8 = 0;
@@ -941,7 +897,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (this.mouses == 1) {
                     this.mouses = 2;
                 }
-            } else if (graphicsPanel.state == GameState.REPLAY_NOT_AVAILABLE) {
+            }
+            else if (graphicsPanel.state == GameState.REPLAY_NOT_AVAILABLE) {
                 graphicsPanel.cantreply(this.graphics);
                 if (++n8 == 150 || this.controls[0].enter || this.controls[0].handb || this.mouses == 1) {
                     this.graphics.drawImage(graphicsPanel.fleximg, 0, 0, null);
@@ -951,7 +908,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     this.controls[0].enter = false;
                     this.controls[0].handb = false;
                 }
-            } else if (this.isWindowFocusLost) {
+            }
+            else if (this.isWindowFocusLost) {
                 graphicsPanel.nofocus(this.graphics);
                 if (graphicsPanel.state == GameState.GAMEPLAY) {
                     this.controls[0].enter = true;
@@ -1047,10 +1005,6 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 this.gamer.stop();
                 this.gamer = null;
             }
-            long frametime = Math.round(a) - (time3 - time2);
-            if (frametime < n) {
-                frametime = n;
-            }
             try {
                 Thread.sleep(1000 / 23);
             } catch (InterruptedException e) {
@@ -1061,27 +1015,26 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 System.out.println("Current State : " + graphicsPanel.state);
             }
             this.graphics.setColor(new Color(0, 0, 0));
-            this.graphics.drawString("FPS:" + 1000 / frametime, 100, 100);
         }
     }
 
     public void init() {
-        this.offImage = this.createImage(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
-        if (this.offImage != null) {
-            this.graphics = this.offImage.getGraphics();
+        this.offscreenImage = this.createImage(Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+        if (this.offscreenImage != null) {
+            this.graphics = this.offscreenImage.getGraphics();
         }
 
         medium = new Medium();
         trackers = new Trackers();
         checkPoints = new CheckPoints();
-        graphicsPanel = new GraphicsPanel(medium, this.graphics, this, 1);
+        graphicsPanel = new GraphicsPanel(medium, this.graphics, this, 2);
         cars = new Madness[5];
         record = new Record(medium);
-        // TODO: USE ARRAYLIST INSTEAD?
-        geometries = new Geometry[210];
+        loadedModels = new Geometry[210];
 
-        ResourceLoader resourceLoader = new ResourceLoader(this, this.graphicsPanel);
-        resourceLoader.loadResources();
+        ResourceLoader resourceLoader = new ResourceLoader(this.graphicsPanel);
+        resourceLoader.loadImages();
+        models = resourceLoader.loadModels(medium, trackers);
 
     }
 

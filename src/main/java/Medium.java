@@ -4,9 +4,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.stream.IntStream;
 
-//
-// Decompiled by Procyon v0.5.36
-//
+
 
 public class Medium {
     int focusPoint;

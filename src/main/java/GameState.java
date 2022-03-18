@@ -31,7 +31,7 @@ public enum GameState {
 
     private int value;
 
-    private GameState(int value) {
+    GameState(int value) {
         this.value = value;
     }
 

@@ -1,6 +1,4 @@
-package main.java;//
-// Decompiled by Procyon v0.5.36
-//
+package main.java;
 
 public final class UlawUtils
 {

@@ -5,9 +5,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.zip.ZipInputStream;
 
-//
-// Decompiled by Procyon v0.5.36
-//
+
 
 public class Mod {
 

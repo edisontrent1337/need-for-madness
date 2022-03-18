@@ -2,9 +2,7 @@ package main.java;
 
 import java.awt.Color;
 
-//
-// Decompiled by Procyon v0.5.36
-//
+
 
 public class Record
 {

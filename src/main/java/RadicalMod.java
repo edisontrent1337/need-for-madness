@@ -2,11 +2,9 @@ package main.java;
 
 import java.applet.Applet;
 
-//import sun.audio.AudioPlayer;
+import sun.audio.AudioPlayer;
 
-//
-// Decompiled by Procyon v0.5.36
-//
+
 
 public class RadicalMod {
     SuperStream stream;
@@ -15,7 +13,7 @@ public class RadicalMod {
     public void stop() {
         if (this.playing) {
             try {
-//                AudioPlayer.player.stop(this.stream);
+                AudioPlayer.player.stop(this.stream);
             } catch (Exception ex) {
             }
             this.playing = false;
@@ -25,7 +23,7 @@ public class RadicalMod {
     protected void outwithit() {
         if (this.playing) {
             try {
-//                AudioPlayer.player.stop(this.stream);
+                AudioPlayer.player.stop(this.stream);
             } catch (Exception ex) {
             }
             this.playing = false;
@@ -52,7 +50,7 @@ public class RadicalMod {
     public void resume() {
         if (!this.playing) {
             try {
-                //AudioPlayer.player.start(this.stream);
+                AudioPlayer.player.start(this.stream);
             } catch (Exception ex) {
             }
             this.playing = true;
@@ -65,7 +63,7 @@ public class RadicalMod {
                 this.stream.reset();
             }
             try {
-//                AudioPlayer.player.start(this.stream);
+                AudioPlayer.player.start(this.stream);
             } catch (Exception ex) {
             }
             this.playing = true;

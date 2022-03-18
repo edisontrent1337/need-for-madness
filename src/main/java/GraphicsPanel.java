@@ -18,9 +18,7 @@ import java.util.zip.ZipInputStream;
 import static main.java.Util.getPixelArray;
 import static main.java.Util.snapRGBs;
 
-//
-// Decompiled by Procyon v0.5.36
-//
+
 
 public class GraphicsPanel extends Panel {
 	Medium medium;
@@ -295,7 +293,7 @@ public class GraphicsPanel extends Panel {
 
 		this.medium = medium;
 		this.app = app;
-		this.resourceLoader = new ResourceLoader(this.app, this);
+		this.resourceLoader = new ResourceLoader(this);
 
 		Toolkit.getDefaultToolkit();
 		final MediaTracker mediaTracker = new MediaTracker(this.app);
@@ -326,7 +324,7 @@ public class GraphicsPanel extends Panel {
 
 		this.dnload += 44;
 		this.loading(graphics, this.app);
-		this.images = this.resourceLoader.loadResources();
+		this.images = this.resourceLoader.loadImages();
 		this.resourceLoader.loadTextures();
 
 		this.dnload += 47;

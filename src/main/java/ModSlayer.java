@@ -2,9 +2,7 @@ package main.java;
 
 import java.io.IOException;
 
-//
-// Decompiled by Procyon v0.5.36
-//
+
 
 public class ModSlayer {
 	static final String VERSION = "1.0";

@@ -3,9 +3,7 @@ package main.java;
 import java.awt.Graphics;
 import java.awt.Color;
 
-//
-// Decompiled by Procyon v0.5.36
-//
+
 
 public class Plane {
 	Medium m;

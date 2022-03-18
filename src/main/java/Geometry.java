@@ -8,9 +8,7 @@ import java.util.Arrays;
 
 import static main.java.Util.snapRGBs;
 
-//
-// Decompiled by Procyon v0.5.36
-//
+
 
 public class Geometry {
 	Medium medium;
