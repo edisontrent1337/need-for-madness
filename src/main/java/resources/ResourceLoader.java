@@ -29,7 +29,9 @@ import static main.java.Config.modelNames;
 
 public class ResourceLoader {
 
-	private static final String GRAPHICS_PATH = "../../../resources/graphics";
+	private static final String RESOURCE_PATH ="../../../resources/";
+	private static final String GRAPHICS_PATH = RESOURCE_PATH + "graphics/";
+	private static final String SOUND_PATH = RESOURCE_PATH + "sounds/default/";
 
 	private GraphicsPanel graphicsPanel;
 	private Map<String, Image> images = new HashMap<>();
@@ -100,7 +102,7 @@ public class ResourceLoader {
 	public Geometry[] loadModels(Medium medium, Trackers trackers) {
 		Geometry[] availableGeometry = new Geometry[modelNames.length];
 		try {
-			URL resource = this.getClass().getResource("../../../resources/graphics/models.zip");
+			URL resource = this.getClass().getResource(GRAPHICS_PATH + "models.zip");
 			File file = new File(resource.toURI());
 			final FileInputStream inputStream = new FileInputStream(file);
 			final ZipInputStream zipStream = new ZipInputStream(inputStream);
@@ -121,7 +123,7 @@ public class ResourceLoader {
 
 	public void loadTextures() {
 		try {
-			String path = "../../../resources/graphics/images.zipo";
+			String path = GRAPHICS_PATH + "images.zipo";
 			ZipInputStream zipInputStream = Util.getInputStream(path, this.getClass());
 			for (ZipEntry zipEntry = zipInputStream.getNextEntry(); zipEntry != null; zipEntry = zipInputStream.getNextEntry()) {
 				int i = (int) zipEntry.getSize();
@@ -304,7 +306,7 @@ public class ResourceLoader {
 		sparker.view = 0;
 		String string = "";
 		try {
-			URL resource = this.getClass().getResource("../../../resources/stages/" + checkPoints.stage + ".txt");
+			URL resource = this.getClass().getResource(RESOURCE_PATH + "stages/" + checkPoints.stage + ".txt");
 			File file = new File(resource.toURI());
 			final DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
 			String line;
@@ -479,7 +481,7 @@ public class ResourceLoader {
 		}
 		graphicsPanel.airSoundEffects[5] = getSound("air5");
 
-		for (int i = 1; i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
 			graphicsPanel.crashSoundEffects[i] = getSound("crash" + i);
 			graphicsPanel.lowCrashSoundEffects[i] = getSound("lowcrash" + i);
 		}
@@ -502,16 +504,12 @@ public class ResourceLoader {
 	}
 
 	AudioClip getSound(final String name) {
-		String location = "../../../resources/sounds/default/";
-		AudioClip audioClip;
-        String fileName = location + name + ".au";
+		String fileName = SOUND_PATH + name + ".au";
         URL resource = this.getClass().getResource(fileName);
 		if (resource == null) {
-			System.out.println(fileName);
-
+			throw new IllegalArgumentException("Failed to load sound file of name " + fileName);
 		}
-		audioClip = Applet.newAudioClip(resource);
-		return audioClip;
+		return Applet.newAudioClip(resource);
 	}
 
 }
