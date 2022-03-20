@@ -653,7 +653,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             }
             this.repaint();
             graphicsPanel.setFont(new Font("SansSerif", Font.BOLD, 12));
-            String print = "hipno: " + Arrays.toString(graphicsPanel.hipno);
+            String print = "flipo: " + graphicsPanel.flipo;
             graphicsPanel.drawCharacters(graphics, 50, print, 255, 0, 255, 3);
 
             graphicsPanel.playSounds(cars[0], this.controls[0], checkPoints.stage);

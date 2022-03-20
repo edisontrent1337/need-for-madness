@@ -339,8 +339,7 @@ public class GraphicsPanel extends Panel {
             b = 201;
         }
 
-        graphics.setColor(new Color(r, g, b));
-        fillBlankScreen(graphics);
+        fillBlankScreen(graphics, new Color(r, g, b));
         int xPos = Config.SCREEN_WIDTH / 2 - this.loadingmusic.getWidth(null) / 2;
         int yPos = Config.SCREEN_HEIGHT / 2 - this.loadingmusic.getHeight(null) / 2;
         graphics.drawImage(this.loadingmusic, xPos, yPos, null);
@@ -373,7 +372,8 @@ public class GraphicsPanel extends Panel {
         return "";
     }
 
-    private void fillBlankScreen(Graphics graphics) {
+    private void fillBlankScreen(Graphics graphics, Color c) {
+        graphics.setColor(c);
         graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
     }
 
@@ -429,21 +429,18 @@ public class GraphicsPanel extends Panel {
 
     public void inst(final Graphics graphics, final Control control) {
         if (this.flipo == 0) {
-            graphics.setColor(new Color(214, 218, 252));
-            fillBlankScreen(graphics);
-            graphics.drawImage(this.inst1, 0, 0, null);
+            fillBlankScreen(graphics,new Color(214, 218, 252));
+            graphics.drawImage(this.inst1, 0, 0,  Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT, null);
             this.flipo = 1;
         }
         if (this.flipo == 2) {
-            graphics.setColor(new Color(214, 218, 252));
-            fillBlankScreen(graphics);
-            graphics.drawImage(this.inst2, 0, 0, null);
+            fillBlankScreen(graphics, new Color(214, 218, 252));
+            graphics.drawImage(this.inst2, 0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT,null);
             this.flipo = 3;
         }
         if (this.flipo == 4) {
-            graphics.setColor(new Color(214, 218, 252));
-            fillBlankScreen(graphics);
-            graphics.drawImage(this.inst3, 0, 0, null);
+            fillBlankScreen(graphics, new Color(214, 218, 252));
+            graphics.drawImage(this.inst3, 0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT,null);
             this.flipo = 5;
         }
         if (this.flipo == 1 || this.flipo == 3) {
@@ -982,8 +979,7 @@ public class GraphicsPanel extends Panel {
             b = 201;
         }
 
-        graphics.setColor(new Color(r, g, b));
-        fillBlankScreen(graphics);
+        fillBlankScreen(graphics, new Color(r, g, b));
         int xPos = Config.SCREEN_WIDTH / 2 - this.loadingmusic.getWidth(null) / 2;
         int yPos = Config.SCREEN_HEIGHT / 2 - this.loadingmusic.getHeight(null) / 2;
         graphics.drawImage(this.loadingmusic, xPos, yPos, null);
@@ -1171,7 +1167,7 @@ public class GraphicsPanel extends Panel {
         }
         if (this.flipo == 2) {
             graphics.drawImage(this.bgmain, 0, 0, null);
-            graphics.drawImage(this.omdness, Config.SCREEN_WIDTH / 2 - this.mdness.getWidth(null) / 2, 7, null);
+            graphics.drawImage(this.omdness, Config.SCREEN_WIDTH / 2 - this.omdness.getWidth(null) / 2, 7, null);
             graphics.setFont(new Font("SansSerif", Font.BOLD, 13));
             this.fontMetrics = graphics.getFontMetrics();
             this.drawCharacters(graphics, 65, "At Radicalplay.com", 0, 0, 0, 3);
@@ -1204,8 +1200,7 @@ public class GraphicsPanel extends Panel {
     }
 
     public void drawRadicalPlayScren(Graphics graphics) {
-        graphics.setColor(new Color(0, 0, 0));
-        fillBlankScreen(graphics);
+        fillBlankScreen(graphics, Color.BLACK);
         graphics.drawImage(this.radicalplay, 87, 110, null);
         graphics.setFont(new Font("SansSerif", Font.BOLD, 13));
         this.fontMetrics = graphics.getFontMetrics();
@@ -2244,8 +2239,7 @@ public class GraphicsPanel extends Panel {
     }
 
     public void loading(final Graphics graphics, final Applet applet) {
-        graphics.setColor(new Color(0, 0, 0));
-        fillBlankScreen(graphics);
+        fillBlankScreen(graphics, Color.BLACK);
         graphics.drawImage(this.sign, 237, 10, this);
         graphics.drawImage(this.hello, 0, 80, this);
         graphics.setColor(new Color(198, 214, 255));
@@ -2370,8 +2364,7 @@ public class GraphicsPanel extends Panel {
             b = 201;
         }
 
-        graphics.setColor(new Color(r, g, b));
-        fillBlankScreen(graphics);
+        fillBlankScreen(graphics, new Color(r, g, b));
         int xPos = Config.SCREEN_WIDTH / 2 - this.loadingmusic.getWidth(null) / 2;
         int yPos = Config.SCREEN_HEIGHT / 2 - this.loadingmusic.getHeight(null) / 2;
         graphics.drawImage(this.loadingmusic, xPos, yPos, null);
