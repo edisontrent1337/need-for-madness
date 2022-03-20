@@ -312,9 +312,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             else if (graphicsPanel.state == GameState.GAMEPLAY) {
                 for (int i = 0; i < 5; i++) {
                     if (cars[i].newcar) {
-                        final int xz = this.loadedModels[i].xz;
-                        final int xy = this.loadedModels[i].xy;
-                        final int zy = this.loadedModels[i].zy;
+                        final float xz = this.loadedModels[i].xz;
+                        final float xy = this.loadedModels[i].xy;
+                        final float zy = this.loadedModels[i].zy;
                         this.loadedModels[i] = new Geometry(this.models[cars[i].carIndex], this.loadedModels[i].x, this.loadedModels[i].y, this.loadedModels[i].z, 0);
                         this.loadedModels[i].xz = xz;
                         this.loadedModels[i].xy = xy;
@@ -634,7 +634,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             }
             else if (graphicsPanel.state == GameState.END_RACE_ANIMATION) {
                 if (n8 <= 0) {
-                    this.graphics.drawImage(graphicsPanel.mdness, 164, 330, null);
+                    this.graphics.drawImage(graphicsPanel.mdness, Config.SCREEN_WIDTH / 2 - graphicsPanel.mdness.getWidth(null) / 2, Config.SCREEN_HEIGHT - 70, null);
                 }
                 if (n8 >= 0) {
                     graphicsPanel.flexImage(this.offscreenImage, this.graphics, n8);
@@ -706,8 +706,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
             }
             this.repaint();
-            graphicsPanel.setFont(new Font("SansSerif", Font.BOLD, 11));
-            graphicsPanel.drawCharacters(graphics, 25, "aflk: " + graphicsPanel.aflk, 0, 255, 0, 3);
+            graphicsPanel.setFont(new Font("SansSerif", Font.BOLD, 12));
+            String print = "hit:" + medium.hit + ", circleAmount:" + medium.circleAmount + ", zy:" + medium.zy + ", xz:" + medium.xz;
+            graphicsPanel.drawCharacters(graphics, 50, print, 0, 0, 0, 3);
 
             graphicsPanel.playsounds(cars[0], this.controls[0], checkPoints.stage);
             if (graphicsPanel.state == GameState.GAMEPLAY || graphicsPanel.state == GameState.PLAY_REPLAY || graphicsPanel.state == GameState.GAME_HIGHLIGHT_2) {

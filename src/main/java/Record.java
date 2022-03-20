@@ -19,11 +19,11 @@ public class Record
     int[][] x;
     int[][] y;
     int[][] z;
-    int[][] xy;
-    int[][] zy;
-    int[][] xz;
-    int[][] wxz;
-    int[][] wzy;
+    float[][] xy;
+    float[][] zy;
+    float[][] xz;
+    float[][] wxz;
+    float[][] wzy;
     int[][] ns;
     int[][][] sspark;
     int[][][] sx;
@@ -53,11 +53,11 @@ public class Record
     int[][] hx;
     int[][] hy;
     int[][] hz;
-    int[][] hxy;
-    int[][] hzy;
-    int[][] hxz;
-    int[][] hwxz;
-    int[][] hwzy;
+    float[][] hxy;
+    float[][] hzy;
+    float[][] hxz;
+    float[][] hwxz;
+    float[][] hwzy;
     int[][] hns;
     int[][][] hsspark;
     int[][][] hsx;
@@ -85,8 +85,8 @@ public class Record
             n2 -= 100.0f;
             int n3 = 0;
             int n4 = 0;
-            int i = geometry.zy;
-            int j = geometry.xy;
+            float i = geometry.zy;
+            float j = geometry.xy;
             while (i < 360) {
                 i += 360;
             }
@@ -263,11 +263,11 @@ public class Record
         this.x = new int[300][5];
         this.y = new int[300][5];
         this.z = new int[300][5];
-        this.xy = new int[300][5];
-        this.zy = new int[300][5];
-        this.xz = new int[300][5];
-        this.wxz = new int[300][5];
-        this.wzy = new int[300][5];
+        this.xy = new float[300][5];
+        this.zy = new float[300][5];
+        this.xz = new float[300][5];
+        this.wxz = new float[300][5];
+        this.wzy = new float[300][5];
         this.ns = new int[5][4];
         this.sspark = new int[5][4][30];
         this.sx = new int[5][4][30];
@@ -297,11 +297,11 @@ public class Record
         this.hx = new int[300][5];
         this.hy = new int[300][5];
         this.hz = new int[300][5];
-        this.hxy = new int[300][5];
-        this.hzy = new int[300][5];
-        this.hxz = new int[300][5];
-        this.hwxz = new int[300][5];
-        this.hwzy = new int[300][5];
+        this.hxy = new float[300][5];
+        this.hzy = new float[300][5];
+        this.hxz = new float[300][5];
+        this.hwxz = new float[300][5];
+        this.hwzy = new float[300][5];
         this.hns = new int[5][4];
         this.hsspark = new int[5][4][30];
         this.hsx = new int[5][4][30];

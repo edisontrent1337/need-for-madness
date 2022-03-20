@@ -155,8 +155,8 @@ public class Medium {
             float n2 = this.fade[n];
             float ground = this.ground;
             if (this.zy != 0) {
-                ground = this.centerY + (int) ((this.ground - this.centerY) * this.cos(this.zy) - (this.fade[n] - this.centerZ) * this.sin(this.zy));
-                n2 = this.centerZ + (int) ((this.ground - this.centerY) * this.sin(this.zy) + (this.fade[n] - this.centerZ) * this.cos(this.zy));
+                ground = this.centerY + ((this.ground - this.centerY) * this.cos(this.zy) - (this.fade[n] - this.centerZ) * this.sin(this.zy));
+                n2 = this.centerZ + ((this.ground - this.centerY) * this.sin(this.zy) + (this.fade[n] - this.centerZ) * this.cos(this.zy));
             }
             array2[array[0] = 0] = (int) this.ys(ground, n2);
             if (array2[0] < 0) {
@@ -305,8 +305,8 @@ public class Medium {
         if (this.positionY > 10) {
             this.vert = false;
         }
-        this.positionX = geometry.x + (int) ((-n) * this.cos(this.circleAmount));
-        this.positionZ = geometry.z + (int) ((-n) * this.sin(this.circleAmount));
+        this.positionX = (int) (geometry.x +  ((-n) * this.cos(this.circleAmount)));
+        this.positionZ = (int) (geometry.z +  ((-n) * this.sin(this.circleAmount)));
         if (isStartAnimation) {
             this.circleAmount += 4;
         } else {
@@ -320,10 +320,10 @@ public class Medium {
         if (geometry.y - y - this.centerY < 0) {
             n2 = -180;
         }
-        int n3 = (int) (90 + n2 - Math.atan((int) Math.sqrt((geometry.z - this.positionZ + this.centerZ) * (geometry.z - this.positionZ + this.centerZ) + (geometry.x - this.positionX - this.centerX) * (geometry.x - this.positionX - this.centerX)) / (double) (geometry.y - y - this.centerY)) / 0.017453292519943295);
+        int n3 = (int) (90 + n2 - Math.atan( Math.sqrt((geometry.z - this.positionZ + this.centerZ) * (geometry.z - this.positionZ + this.centerZ) + (geometry.x - this.positionX - this.centerX) * (geometry.x - this.positionX - this.centerX)) / (double) (geometry.y - y - this.centerY)) / 0.017453292519943295);
         this.xz = -this.circleAmount + 90;
         if (isStartAnimation) {
-            n3 -= 15;
+            n3 -= 5;
         }
         this.zy += (n3 - this.zy) / 10;
         if (this.trns != 5) {
@@ -399,7 +399,7 @@ public class Medium {
         if (-this.positionY - this.centerY < 0) {
             n = -180;
         }
-        final float n2 = (float) Math.sqrt((double) ((this.trz - this.positionZ + this.centerZ) * (this.trz - this.positionZ + this.centerZ) + (this.trx - this.positionX - this.centerX) * (this.trx - this.positionX - this.centerX)));
+        final float n2 = (float) Math.sqrt((this.trz - this.positionZ + this.centerZ) * (this.trz - this.positionZ + this.centerZ) + (this.trx - this.positionX - this.centerX) * (this.trx - this.positionX - this.centerX));
         if (this.zy < 30 && this.hit != 57000) {
             if (this.zy > 9) {
                 --this.zy;

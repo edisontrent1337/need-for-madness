@@ -1283,7 +1283,7 @@ public class GraphicsPanel extends Panel {
 		}
 		if (this.flipo == 2) {
 			graphics.drawImage(this.bgmain, 0, 0, null);
-			graphics.drawImage(this.omdness, Config.SCREEN_WIDTH / 2 - this.mdness.getWidth(null), 7, null);
+			graphics.drawImage(this.omdness, Config.SCREEN_WIDTH / 2 - this.mdness.getWidth(null) / 2, 7, null);
 			graphics.setFont(new Font("SansSerif", 1, 13));
 			this.fontMetrics = graphics.getFontMetrics();
 			this.drawCharacters(graphics, 65, "At Radicalplay.com", 0, 0, 0, 3);

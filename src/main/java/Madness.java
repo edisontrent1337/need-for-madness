@@ -49,8 +49,8 @@ public class Madness
     boolean wtouch;
     int cntouch;
     boolean capsized;
-    int txz;
-    int fxz;
+    float txz;
+    float fxz;
     int pmlt;
     int nmlt;
     int dcnt;
@@ -66,7 +66,7 @@ public class Madness
     float dcomp;
     float lcomp;
     float rcomp;
-    int lxz;
+    float lxz;
     int travxy;
     int travzy;
     int travxz;
@@ -109,8 +109,8 @@ public class Madness
             n2 -= 100.0f;
             int n3 = 0;
             int n4 = 0;
-            int i = geometry.zy;
-            int j = geometry.xy;
+            float i = geometry.zy;
+            float j = geometry.xy;
 
             i = i % 360;
 
@@ -398,6 +398,17 @@ public class Madness
                         plane2.gr -= (int)Math.abs(n2 * 1.5);
                     }
                 }
+            }
+        }
+    }
+
+    public void rot(final float[] array, final float[] array2, final float n, final float n2, final float n3, final float n4) {
+        if (n3 != 0) {
+            for (int i = 0; i < n4; ++i) {
+                final float n5 = array[i];
+                final float n6 = array2[i];
+                array[i] = n + ((n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3));
+                array2[i] = n2 + ((n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3));
             }
         }
     }
@@ -1648,7 +1659,7 @@ public class Madness
             }
         }
         if (b2) {
-            int abs;
+            float abs;
             abs = Math.abs(geometry.xz + 45);
             while (abs > 180) {
                 abs -= 360;
@@ -1659,7 +1670,7 @@ public class Madness
             else {
                 this.pmlt = -1;
             }
-            int abs2;
+            float abs2;
             abs2 = Math.abs(geometry.xz - 45);
             while (abs2 > 180) {
                 abs2 -= 360;

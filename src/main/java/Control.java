@@ -262,7 +262,7 @@ public class Control {
 						int acr = 0;
 						do {
 							if (acr != madness.im && checkPoints.clear[acr] != -1) {
-								int i = geometry.xz;
+								float i = geometry.xz;
 								if (this.zyinv) {
 									i += 180;
 								}
@@ -284,7 +284,7 @@ public class Control {
 								while (j > 180) {
 									j -= 360;
 								}
-								int n6 = Math.abs(i - j);
+								float n6 = Math.abs(i - j);
 								if (n6 > 180) {
 									n6 = Math.abs(n6 - 360);
 								}
@@ -552,7 +552,7 @@ public class Control {
 						this.attack = 0;
 					}
 				}
-				int xz = geometry.xz;
+				float xz = geometry.xz;
 				if (this.zyinv) {
 					xz += 180;
 				}

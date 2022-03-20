@@ -18,11 +18,11 @@ public class Geometry {
 	int x;
 	int y;
 	int z;
-	int xz;
-	int xy;
-	int zy;
-	int wxz;
-	int wzy;
+	float xz;
+	float xy;
+	float zy;
+	float wxz;
+	float wzy;
 	int dist;
 	int maxR;
 	int disp;
@@ -499,9 +499,9 @@ public class Geometry {
 		if (this.dist != 0) {
 			this.dist = 0;
 		}
-		final float n = this.medium.centerX + (int) ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.cos(this.medium.xz) - (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.sin(this.medium.xz));
-		final float n2 = this.medium.centerZ + (int) ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.sin(this.medium.xz) + (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.cos(this.medium.xz));
-		final float n3 = this.medium.centerZ + (int) ((this.y - this.medium.positionY - this.medium.centerY) * this.medium.sin(this.medium.zy) + (n2 - this.medium.centerZ) * this.medium.cos(this.medium.zy));
+		final float n = this.medium.centerX +  ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.cos(this.medium.xz) - (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.sin(this.medium.xz));
+		final float n2 = this.medium.centerZ + ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.sin(this.medium.xz) + (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.cos(this.medium.xz));
+		final float n3 = this.medium.centerZ + ((this.y - this.medium.positionY - this.medium.centerY) * this.medium.sin(this.medium.zy) + (n2 - this.medium.centerZ) * this.medium.cos(this.medium.zy));
 		if (this.xs(n + this.maxR, n3) > 0 && this.xs(n - this.maxR, n3) < this.medium.width && n3 > -this.maxR && (n3 < this.medium.fade[this.disline] + this.maxR || this.medium.trk) && (this.xs(n + this.maxR, n3) - this.xs(n - this.maxR, n3) > this.disp || this.medium.trk)) {
 			if (this.shadow) {
 				if (!this.medium.crs) {
@@ -518,8 +518,8 @@ public class Geometry {
 								this.planes[j].drawShadow(graphics, this.x - this.medium.positionX, this.y - this.medium.positionY, this.z - this.medium.positionZ, this.xz, this.xy, this.zy, 0);
 							}
 						} else {
-							final float n4 = this.medium.centerY + (int) ((this.medium.ground - this.medium.centerY) * this.medium.cos(this.medium.zy) - (n2 - this.medium.centerZ) * this.medium.sin(this.medium.zy));
-							final float n5 = this.medium.centerZ + (int) ((this.medium.ground - this.medium.centerY) * this.medium.sin(this.medium.zy) + (n2 - this.medium.centerZ) * this.medium.cos(this.medium.zy));
+							final float n4 = this.medium.centerY + ((this.medium.ground - this.medium.centerY) * this.medium.cos(this.medium.zy) - (n2 - this.medium.centerZ) * this.medium.sin(this.medium.zy));
+							final float n5 = this.medium.centerZ + ((this.medium.ground - this.medium.centerY) * this.medium.sin(this.medium.zy) + (n2 - this.medium.centerZ) * this.medium.cos(this.medium.zy));
 							if (this.ys(n4 + this.maxR, n5) > 0 && this.ys(n4 - this.maxR, n5) < this.medium.height) {
 								for (int k = 0; k < this.numberOfPlanes; ++k) {
 									this.planes[k].drawShadow(graphics, this.x - this.medium.positionX, this.y - this.medium.positionY, this.z - this.medium.positionZ, this.xz, this.xy, this.zy, 1);
@@ -612,8 +612,19 @@ public class Geometry {
 			for (int i = 0; i < n4; ++i) {
 				final int n5 = array[i];
 				final int n6 = array2[i];
-				array[i] = (int) (n + (n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3));
-				array2[i] = (int) (n2 + (n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3));
+				array[i] = (int) (n + ((n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3)));
+				array2[i] = (int) (n2 + ((n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3)));
+			}
+		}
+	}
+
+	public void rot(final float[] array, final float[] array2, final float n, final float n2, final float n3, final int n4) {
+		if (n3 != 0) {
+			for (int i = 0; i < n4; ++i) {
+				final float n5 = array[i];
+				final float n6 = array2[i];
+				array[i] = (n + (n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3));
+				array2[i] = (n2 + (n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3));
 			}
 		}
 	}
@@ -670,11 +681,11 @@ public class Geometry {
 	}
 
 	public void lowshadow(final Graphics graphics, final int n) {
-		final int[] array = new int[4];
-		final int[] array2 = new int[4];
-		final int[] array3 = new int[4];
+		final float[] array = new float[4];
+		final float[] array2 = new float[4];
+		final float[] array3 = new float[4];
 		int n2 = 1;
-		int i;
+		float i;
 		i = Math.abs(this.zy);
 		while (i > 270) {
 			i -= 360;
@@ -682,14 +693,14 @@ public class Geometry {
 		if (Math.abs(i) > 90) {
 			n2 = -1;
 		}
-		array[0] = (int) (this.keyx[0] * 1.2 + this.x - this.medium.positionX);
-		array3[0] = (int) (this.keyz[0] * n2 * 1.4 + this.z - this.medium.positionZ);
-		array[1] = (int) (this.keyx[1] * 1.2 + this.x - this.medium.positionX);
-		array3[1] = (int) (this.keyz[1] * n2 * 1.4 + this.z - this.medium.positionZ);
-		array[2] = (int) (this.keyx[3] * 1.2 + this.x - this.medium.positionX);
-		array3[2] = (int) (this.keyz[3] * n2 * 1.4 + this.z - this.medium.positionZ);
-		array[3] = (int) (this.keyx[2] * 1.2 + this.x - this.medium.positionX);
-		array3[3] = (int) (this.keyz[2] * n2 * 1.4 + this.z - this.medium.positionZ);
+		array[0] = (float) (this.keyx[0] * 1.2 + this.x - this.medium.positionX);
+		array3[0] = (float) (this.keyz[0] * n2 * 1.4 + this.z - this.medium.positionZ);
+		array[1] = (float) (this.keyx[1] * 1.2 + this.x - this.medium.positionX);
+		array3[1] = (float) (this.keyz[1] * n2 * 1.4 + this.z - this.medium.positionZ);
+		array[2] = (float) (this.keyx[3] * 1.2 + this.x - this.medium.positionX);
+		array3[2] = (float) (this.keyz[3] * n2 * 1.4 + this.z - this.medium.positionZ);
+		array[3] = (float) (this.keyx[2] * 1.2 + this.x - this.medium.positionX);
+		array3[3] = (float) (this.keyz[2] * n2 * 1.4 + this.z - this.medium.positionZ);
 		this.rot(array, array3, this.x - this.medium.positionX, this.z - this.medium.positionZ, this.xz, 4);
 		int r = (int) ((float) this.medium.groundColor[0] / 1.5);
 		int g = (int) ((float) this.medium.groundColor[1] / 1.5);
@@ -760,7 +771,15 @@ public class Geometry {
 				}
 			} while (++n14 < 8);
 			graphics.setColor(new Color(r, g, b));
-			graphics.fillPolygon(array, array2, 4);
+			int[] arrayy = new int[array.length];
+			for (int i1 = 0; i1 < array.length; i1++) {
+				arrayy[i1] = (int) array[i1];
+			}
+			int[] arrayy2 = new int[array2.length];
+			for (int i1 = 0; i1 < array2.length; i1++) {
+				arrayy2[i1] = (int) array2[i1];
+			}
+			graphics.fillPolygon(arrayy, arrayy2, 4);
 		}
 	}
 
