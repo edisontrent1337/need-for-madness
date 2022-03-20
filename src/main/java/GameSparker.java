@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Arrays;
 
 public class GameSparker extends Applet implements Runnable, MouseListener, KeyListener {
 
@@ -21,8 +22,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
     public int mouseY;
     public boolean isWindowFocusLost;
     public boolean exwist;
-    public int nob;
-    public int notb;
+    public int numberOfObjects;
+    public int numberOfTrackObjects;
     public int view;
 
     GameState lastState;
@@ -43,8 +44,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
         this.mouseY = 0;
         this.isWindowFocusLost = false;
         this.exwist = true;
-        this.nob = 0;
-        this.notb = 0;
+        this.numberOfObjects = 0;
+        this.numberOfTrackObjects = 0;
         this.view = 0;
         addMouseListener(this);
         addKeyListener(this);
@@ -117,7 +118,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 processMouseClick();
             }
             else if (graphicsPanel.state == GameState.MAIN_MENU) {
-                graphicsPanel.maini(this.graphics, this.controls[0]);
+                graphicsPanel.mainMenu(this.graphics, this.controls[0]);
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
                 processMouseClick();
             }
@@ -156,7 +157,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
             }
             else if (graphicsPanel.state == GameState.STAGE_LOCKED_UNSAFE) {
-                graphicsPanel.cantgo(this.graphics, this.controls[0]);
+                graphicsPanel.cantGo(this.graphics, this.controls[0]);
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
                 processMouseClick();
             }
@@ -175,7 +176,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 medium.circleAroundStage(checkPoints);
                 int n11 = 0;
                 final int[] array4 = new int[200];
-                for (int i = 5; i < this.notb; ++i) {
+                for (int i = 5; i < this.numberOfTrackObjects; ++i) {
                     if (this.loadedModels[i].distance != 0) {
                         array4[n11] = i;
                         ++n11;
@@ -202,10 +203,10 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         }
                     }
                 }
-                for (int n16 = 0; n16 < n11; ++n16) {
-                    for (int n17 = 0; n17 < n11; ++n17) {
-                        if (array5[n17] == n16) {
-                            this.loadedModels[array4[n17]].draw(this.graphics);
+                for (int i = 0; i < n11; ++i) {
+                    for (int j = 0; j < n11; ++j) {
+                        if (array5[j] == i) {
+                            this.loadedModels[array4[j]].draw(this.graphics);
                         }
                     }
                 }
@@ -216,8 +217,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             else if (graphicsPanel.state == GameState.LOADING_SOUNDTRACK_2) {
                 medium.draw(this.graphics);
                 int count = 0;
-                final int[] array10 = new int[100];
-                for (int i = 0; i < this.nob; ++i) {
+                final int[] array10 = new int[200];
+                for (int i = 0; i < this.numberOfObjects; ++i) {
                     if (this.loadedModels[i].distance != 0) {
                         array10[count] = i;
                         ++count;
@@ -280,8 +281,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
                 medium.draw(this.graphics);
                 int n30 = 0;
-                final int[] array16 = new int[100];
-                for (int i = 0; i < this.nob; ++i) {
+                final int[] array16 = new int[200];
+                for (int i = 0; i < this.numberOfObjects; ++i) {
                     if (this.loadedModels[i].distance != 0) {
                         array16[n30] = i;
                         ++n30;
@@ -315,7 +316,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         }
                     }
                 }
-                if (graphicsPanel.starcnt == 0) {
+                if (graphicsPanel.startCount == 0) {
                     int i = 0;
                     do {
                         int j = 0;
@@ -337,18 +338,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         this.controls[n45].preform(cars[n45], this.loadedModels[n45], checkPoints, trackers);
                     } while (++n45 < 5);
                 } else {
-                    if (graphicsPanel.starcnt == 90) {
+                    if (graphicsPanel.startCount == 90) {
                         medium.adv = 1900;
                         medium.zy = 40;
                         medium.circleAmount = 70;
-                        this.graphics.setColor(new Color(255, 255, 255));
-                        this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+                        fillScreen(Color.WHITE);
                     }
-                    if (graphicsPanel.starcnt != 0) {
-                        --graphicsPanel.starcnt;
+                    if (graphicsPanel.startCount != 0) {
+                        --graphicsPanel.startCount;
                     }
                 }
-                if (graphicsPanel.starcnt < 35) {
+                if (graphicsPanel.startCount < 35) {
                     if (this.view == 0) {
                         medium.follow(this.loadedModels[0], cars[0].cxz);
                         graphicsPanel.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
@@ -368,11 +368,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 } else {
                     medium.circleAroundCar(this.loadedModels[3], true);
                     if (this.controls[0].enter || this.controls[0].handb) {
-                        graphicsPanel.starcnt = 35;
+                        graphicsPanel.startCount = 35;
                         this.controls[0].enter = false;
                         this.controls[0].handb = false;
                     }
-                    if (graphicsPanel.starcnt == 35) {
+                    if (graphicsPanel.startCount == 35) {
                         this.mouseClick = 0;
                         medium.vert = false;
                         medium.adv = 900;
@@ -380,8 +380,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         checkPoints.checkstat(cars, this.loadedModels);
                         medium.follow(this.loadedModels[0], cars[0].cxz);
                         graphicsPanel.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
-                        this.graphics.setColor(new Color(255, 255, 255));
-                        this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+                        fillScreen(Color.WHITE);
                     }
                 }
             }
@@ -395,7 +394,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 medium.draw(this.graphics);
                 int n47 = 0;
                 final int[] array22 = new int[100];
-                for (int i = 0; i < this.nob; ++i) {
+                for (int i = 0; i < this.numberOfObjects; ++i) {
                     if (this.loadedModels[i].distance != 0) {
                         array22[n47] = i;
                         ++n47;
@@ -460,7 +459,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     }
                     graphicsPanel.state = GameState.GAME_PAUSED;
                 } else {
-                    graphicsPanel.replyn(this.graphics);
+                    graphicsPanel.replay(this.graphics);
                 }
                 medium.circleAroundCar(this.loadedModels[0], false);
             }
@@ -488,7 +487,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 medium.draw(this.graphics);
                 int numberOfModelsInRange = 0;
                 final int[] array28 = new int[100];
-                for (int i = 0; i < this.nob; ++i) {
+                for (int i = 0; i < this.numberOfObjects; ++i) {
                     if (this.loadedModels[i].distance != 0) {
                         array28[numberOfModelsInRange] = i;
                         ++numberOfModelsInRange;
@@ -618,10 +617,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 this.mouseClick = 0;
             }
             else if (graphicsPanel.state == GameState.GAME_PAUSED_2_BLURRED) {
-                graphicsPanel.pausedgame(this.graphics, checkPoints.stage, this.controls[0], record);
-                if (n8 != 0) {
-                    n8 = 0;
-                }
+                graphicsPanel.gamePaused(this.graphics, checkPoints.stage, this.controls[0], record);
+                n8 = 0;
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
                 processMouseClick();
             }
@@ -629,7 +626,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 graphicsPanel.cantreply(this.graphics);
                 if (++n8 == 150 || this.controls[0].enter || this.controls[0].handb || this.mouseClick == 1) {
                     this.graphics.drawImage(graphicsPanel.fleximg, 0, 0, null);
-                    this.graphics.drawImage(graphicsPanel.paused, 156, 106, null);
+                    this.graphics.drawImage(graphicsPanel.paused, Config.SCREEN_WIDTH / 2 - graphicsPanel.paused.getWidth(null) / 2, 106, null);
                     graphicsPanel.state = GameState.GAME_PAUSED_2_BLURRED;
                     this.mouseClick = 0;
                     this.controls[0].enter = false;
@@ -656,19 +653,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             }
             this.repaint();
             graphicsPanel.setFont(new Font("SansSerif", Font.BOLD, 12));
-            String print = "hit:" + medium.hit + ", circleAmount:" + medium.circleAmount + ", zy:" + medium.zy + ", xz:" + medium.xz
-
-                    + "Flex: " + medium.flex;
+            String print = "hipno: " + Arrays.toString(graphicsPanel.hipno);
             graphicsPanel.drawCharacters(graphics, 50, print, 255, 0, 255, 3);
 
-            graphicsPanel.playsounds(cars[0], this.controls[0], checkPoints.stage);
+            graphicsPanel.playSounds(cars[0], this.controls[0], checkPoints.stage);
             if (graphicsPanel.state == GameState.GAMEPLAY || graphicsPanel.state == GameState.PLAY_REPLAY || graphicsPanel.state == GameState.GAME_HIGHLIGHT_2) {
                 if (n6 == 0) {
                     n6 = 1;
                     n7 = 0;
                 }
                 if (n7 == 10) {
-                    if (graphicsPanel.starcnt == 0) {
+                    if (graphicsPanel.startCount == 0) {
                         // TODO: find out how this fade stuff works
                         //medium.adjustFade(a);
                     }

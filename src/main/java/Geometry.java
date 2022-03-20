@@ -28,7 +28,7 @@ public class Geometry {
 	public int disp;
 	public int disline;
 	public boolean shadow;
-	public boolean noline;
+	public boolean drawLines;
 	public float grounded;
 	public int grat;
 	public int[] keyx;
@@ -73,7 +73,7 @@ public class Geometry {
 			int r = (this.medium.groundColor[0] * n3 + this.medium.fadeColor[0] * 2 + this.medium.skyColor[0]) / (3 + n3);
 			int g = (this.medium.groundColor[1] * n3 + this.medium.fadeColor[0] * 2 + this.medium.skyColor[1]) / (3 + n3);
 			int b = (this.medium.groundColor[2] * n3 + this.medium.fadeColor[0] * 2 + this.medium.skyColor[2]) / (3 + n3);
-			for (int i = 0; i < this.trackers.nt; ++i) {
+			for (int i = 0; i < this.trackers.numberOfTracks; ++i) {
 				if (Math.abs(this.trackers.zy[i]) != 90 && Math.abs(this.trackers.xy[i]) != 90 && Math.abs(this.sx[n] - this.trackers.x[i]) < this.trackers.radx[i] && Math.abs(this.sz[n] - this.trackers.z[i]) < this.trackers.radz[i]) {
 					if (this.trackers.skd[i] == 0) {
 						n3 = this.stg[n] * this.stg[n] * this.stg[n] + 2;
@@ -86,10 +86,10 @@ public class Geometry {
 			if (this.sy[n] > 250) {
 				this.sy[n] = 250;
 			}
-			final float n5 = this.medium.centerX + (int) ((this.sx[n] - this.medium.positionX - this.medium.centerX) * this.medium.cos(this.medium.xz) - (this.sz[n] - this.medium.positionZ - this.medium.centerZ) * this.medium.sin(this.medium.xz));
-			final float n6 = this.medium.centerZ + (int) ((this.sx[n] - this.medium.positionX - this.medium.centerX) * this.medium.sin(this.medium.xz) + (this.sz[n] - this.medium.positionZ - this.medium.centerZ) * this.medium.cos(this.medium.xz));
-			final float n7 = this.medium.centerY + (int) ((this.sy[n] - this.medium.positionY - this.medium.centerY) * this.medium.cos(this.medium.zy) - (n6 - this.medium.centerZ) * this.medium.sin(this.medium.zy));
-			final float n8 = this.medium.centerZ + (int) ((this.sy[n] - this.medium.positionY - this.medium.centerY) * this.medium.sin(this.medium.zy) + (n6 - this.medium.centerZ) * this.medium.cos(this.medium.zy));
+			final float n5 = this.medium.centerX + (int) ((this.sx[n] - this.medium.positionX - this.medium.centerX) * Util.cos(this.medium.xz) - (this.sz[n] - this.medium.positionZ - this.medium.centerZ) * Util.sin(this.medium.xz));
+			final float n6 = this.medium.centerZ + (int) ((this.sx[n] - this.medium.positionX - this.medium.centerX) * Util.sin(this.medium.xz) + (this.sz[n] - this.medium.positionZ - this.medium.centerZ) * Util.cos(this.medium.xz));
+			final float n7 = this.medium.centerY + (int) ((this.sy[n] - this.medium.positionY - this.medium.centerY) * Util.cos(this.medium.zy) - (n6 - this.medium.centerZ) * Util.sin(this.medium.zy));
+			final float n8 = this.medium.centerZ + (int) ((this.sy[n] - this.medium.positionY - this.medium.centerY) * Util.sin(this.medium.zy) + (n6 - this.medium.centerZ) * Util.cos(this.medium.zy));
 			final float n9 = (int) Math.sqrt((this.medium.centerY - n7) * (this.medium.centerY - n7) + (this.medium.centerX - n5) * (this.medium.centerX - n5) + n8 * n8);
 			int n10 = 0;
 			do {
@@ -113,8 +113,8 @@ public class Geometry {
 			final int[] array = new int[8];
 			final int[] array2 = new int[8];
 			final int n11 = this.stg[n] - 3;
-			array[0] = this.xs((int) (n5 - (18.0f + this.medium.random() * 18.0f + n11 * 6) * this.smag[n]), (int) n8);
-			array2[0] = this.ys((int) (n7 - (7.5 + this.medium.random() * 7.5 + n11 * 2.5) * this.smag[n]), (int) n8);
+			array[0] = (int) this.xs((float)(n5 - (18.0f + this.medium.random() * 18.0f + n11 * 6) * this.smag[n]), n8);
+			array2[0] = (int) this.ys((float)(n7 - (7.5 + this.medium.random() * 7.5 + n11 * 2.5) * this.smag[n]), n8);
 			if (array2[0] < 45 && this.medium.flex != 0) {
 				this.medium.flex = 0;
 			}
@@ -189,7 +189,7 @@ public class Geometry {
 		return ((n2 - this.medium.focusPoint) * (this.medium.centerY - n) / n2 + n);
 	}
 
-	public Geometry(final byte[] array, final Medium medium, final Trackers trackers) {
+	public Geometry(final byte[] modelBytes, final Medium medium, final Trackers trackers) {
 		this.numberOfPlanes = 0;
 		this.x = 0;
 		this.y = 0;
@@ -204,7 +204,7 @@ public class Geometry {
 		this.disp = 0;
 		this.disline = 7;
 		this.shadow = false;
-		this.noline = false;
+		this.drawLines = true;
 		this.grounded = 1.0f;
 		this.grat = 0;
 		this.keyx = new int[4];
@@ -229,7 +229,6 @@ public class Geometry {
 		this.medium = medium;
 		this.trackers = trackers;
 		this.planes = new Plane[120];
-		String string = "";
 		int n = 0;
 		int n2 = 0;
 		int n3 = 0;
@@ -237,14 +236,16 @@ public class Geometry {
 		final int[] array2 = new int[100];
 		final int[] array3 = new int[100];
 		final int[] array4 = new int[100];
-		final int[] array5 = new int[3];
-		boolean b = false;
+		final int[] color = new int[3];
+		boolean isGlass = false;
 		boolean b2 = false;
 		final Wheels wheels = new Wheels();
 		int n5 = 0;
 		int getvalue = 1;
+
+		String string = "";
 		try {
-			final DataInputStream dataInputStream = new DataInputStream(new ByteArrayInputStream(array));
+			final DataInputStream dataInputStream = new DataInputStream(new ByteArrayInputStream(modelBytes));
 			String line;
 			while ((line = dataInputStream.readLine()) != null) {
 				string = "" + line.trim();
@@ -258,13 +259,13 @@ public class Geometry {
 						getvalue = this.getvalue("gr", string, 0);
 					}
 					if (string.startsWith("c")) {
-						b = false;
-						array5[0] = this.getvalue("c", string, 0);
-						array5[1] = this.getvalue("c", string, 1);
-						array5[2] = this.getvalue("c", string, 2);
+						isGlass = false;
+						color[0] = this.getvalue("c", string, 0);
+						color[1] = this.getvalue("c", string, 1);
+						color[2] = this.getvalue("c", string, 2);
 					}
 					if (string.startsWith("glass")) {
-						b = true;
+						isGlass = true;
 					}
 					if (string.startsWith("p")) {
 						array2[n3] = (int) (this.getvalue("p", string, 0) * n4);
@@ -278,7 +279,7 @@ public class Geometry {
 					}
 				}
 				if (string.startsWith("</p>")) {
-					this.planes[this.numberOfPlanes] = new Plane(this.medium, this.trackers, array2, array4, array3, n3, array5, b, getvalue, 0, 0, 0, this.disline, 0, b2);
+					this.planes[this.numberOfPlanes] = new Plane(this.medium, this.trackers, array2, array4, array3, n3, color, isGlass, getvalue, 0, 0, 0, this.disline, 0, b2);
 					++this.numberOfPlanes;
 					n = 0;
 				}
@@ -370,7 +371,7 @@ public class Geometry {
 					this.shadow = true;
 				}
 				if (string.startsWith("stonecold")) {
-					this.noline = true;
+					this.drawLines = false;
 				}
 				if (string.startsWith("road")) {
 					b2 = true;
@@ -388,7 +389,7 @@ public class Geometry {
 			dataInputStream.close();
 		} catch (Exception obj) {
 			System.out.println("ContO Loading Error: " + obj);
-			System.out.println("At File: " + Arrays.toString(array) + ".rad");
+			System.out.println("At File: " + Arrays.toString(modelBytes) + ".rad");
 			System.out.println("At Line: " + string);
 			System.out.println("--------------------");
 		}
@@ -410,7 +411,7 @@ public class Geometry {
 		this.disp = 0;
 		this.disline = 7;
 		this.shadow = false;
-		this.noline = false;
+		this.drawLines = true;
 		this.grounded = 1.0f;
 		this.grat = 0;
 		this.keyx = new int[4];
@@ -438,13 +439,13 @@ public class Geometry {
 		this.maxR = geometry.maxR;
 		this.disp = geometry.disp;
 		this.disline = geometry.disline;
-		this.noline = geometry.noline;
+		this.drawLines = geometry.drawLines;
 		this.shadow = geometry.shadow;
 		this.grounded = geometry.grounded;
 		this.grat = geometry.grat;
 		this.planes = new Plane[geometry.numberOfPlanes];
 		for (int i = 0; i < this.numberOfPlanes; ++i) {
-			this.planes[i] = new Plane(this.medium, this.trackers, geometry.planes[i].ox, geometry.planes[i].oz, geometry.planes[i].oy, geometry.planes[i].n, geometry.planes[i].oc, geometry.planes[i].isGlass, geometry.planes[i].gr, geometry.planes[i].wx, geometry.planes[i].wy, geometry.planes[i].wz, geometry.disline, geometry.planes[i].bfase, geometry.planes[i].isRoad);
+			this.planes[i] = new Plane(this.medium, this.trackers, geometry.planes[i].ox, geometry.planes[i].oz, geometry.planes[i].oy, geometry.planes[i].numberOfPoints, geometry.planes[i].oc, geometry.planes[i].isGlass, geometry.planes[i].gr, geometry.planes[i].wx, geometry.planes[i].wy, geometry.planes[i].wz, geometry.disline, geometry.planes[i].bfase, geometry.planes[i].isRoad);
 		}
 		this.x = x;
 		this.y = y;
@@ -454,37 +455,37 @@ public class Geometry {
 		this.zy = 0;
 		for (int j = 0; j < this.numberOfPlanes; ++j) {
 			this.planes[j].master = geometry.planes[j].master;
-			this.planes[j].rot(this.planes[j].ox, this.planes[j].oz, 0, 0, a, this.planes[j].n);
+			this.planes[j].rot(this.planes[j].ox, this.planes[j].oz, 0, 0, a, this.planes[j].numberOfPoints);
 			this.planes[j].loadprojf();
 		}
 		if (geometry.tnt != 0) {
 			for (int k = 0; k < geometry.tnt; ++k) {
-				this.trackers.xy[this.trackers.nt] = (int) (geometry.txy[k] * this.medium.cos(a) - geometry.tzy[k] * this.medium.sin(a));
-				this.trackers.zy[this.trackers.nt] = (int) (geometry.tzy[k] * this.medium.cos(a) + geometry.txy[k] * this.medium.sin(a));
+				this.trackers.xy[this.trackers.numberOfTracks] = (geometry.txy[k] * Util.cos(a) - geometry.tzy[k] * Util.sin(a));
+				this.trackers.zy[this.trackers.numberOfTracks] = (geometry.tzy[k] * Util.cos(a) + geometry.txy[k] * Util.sin(a));
 				int n = 0;
 				do {
-					this.trackers.objectColor[this.trackers.nt][n] = (int) (geometry.tc[k][n] + geometry.tc[k][n] * (this.medium.snapColor[n] / 100.0f));
-					if (this.trackers.objectColor[this.trackers.nt][n] > 255) {
-						this.trackers.objectColor[this.trackers.nt][n] = 255;
+					this.trackers.objectColor[this.trackers.numberOfTracks][n] = (int) (geometry.tc[k][n] + geometry.tc[k][n] * (this.medium.snapColor[n] / 100.0f));
+					if (this.trackers.objectColor[this.trackers.numberOfTracks][n] > 255) {
+						this.trackers.objectColor[this.trackers.numberOfTracks][n] = 255;
 					}
-					if (this.trackers.objectColor[this.trackers.nt][n] < 0) {
-						this.trackers.objectColor[this.trackers.nt][n] = 0;
+					if (this.trackers.objectColor[this.trackers.numberOfTracks][n] < 0) {
+						this.trackers.objectColor[this.trackers.numberOfTracks][n] = 0;
 					}
 				} while (++n < 3);
-				this.trackers.x[this.trackers.nt] = (int) (this.x + geometry.tx[k] * this.medium.cos(a) - geometry.tz[k] * this.medium.sin(a));
-				this.trackers.z[this.trackers.nt] = (int) (this.z + geometry.tz[k] * this.medium.cos(a) + geometry.tx[k] * this.medium.sin(a));
-				this.trackers.y[this.trackers.nt] = this.y + geometry.ty[k];
-				this.trackers.skd[this.trackers.nt] = geometry.skd[k];
-				this.trackers.dam[this.trackers.nt] = geometry.dam[k];
+				this.trackers.x[this.trackers.numberOfTracks] = (int) (this.x + geometry.tx[k] * Util.cos(a) - geometry.tz[k] * Util.sin(a));
+				this.trackers.z[this.trackers.numberOfTracks] = (int) (this.z + geometry.tz[k] * Util.cos(a) + geometry.tx[k] * Util.sin(a));
+				this.trackers.y[this.trackers.numberOfTracks] = this.y + geometry.ty[k];
+				this.trackers.skd[this.trackers.numberOfTracks] = geometry.skd[k];
+				this.trackers.dam[this.trackers.numberOfTracks] = geometry.dam[k];
 				int abs = Math.abs(a);
 				if (abs == 180) {
 					abs = 0;
 				}
-				this.trackers.radx[this.trackers.nt] = (int) (geometry.tradx[k] * this.medium.cos(abs) + geometry.tradz[k] * this.medium.sin(abs));
-				this.trackers.radz[this.trackers.nt] = (int) (geometry.tradx[k] * this.medium.sin(abs) + geometry.tradz[k] * this.medium.cos(abs));
-				this.trackers.rady[this.trackers.nt] = geometry.trady[k];
+				this.trackers.radx[this.trackers.numberOfTracks] = (int) (geometry.tradx[k] * Util.cos(abs) + geometry.tradz[k] * Util.sin(abs));
+				this.trackers.radz[this.trackers.numberOfTracks] = (int) (geometry.tradx[k] * Util.sin(abs) + geometry.tradz[k] * Util.cos(abs));
+				this.trackers.rady[this.trackers.numberOfTracks] = geometry.trady[k];
 				final Trackers t = this.trackers;
-				++t.nt;
+				++t.numberOfTracks;
 			}
 		}
 		int n2 = 0;
@@ -499,15 +500,15 @@ public class Geometry {
 		if (this.distance != 0) {
 			this.distance = 0;
 		}
-		final float n = this.medium.centerX +  ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.cos(this.medium.xz) - (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.sin(this.medium.xz));
-		final float n2 = this.medium.centerZ + ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.sin(this.medium.xz) + (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.cos(this.medium.xz));
-		final float n3 = this.medium.centerZ + ((this.y - this.medium.positionY - this.medium.centerY) * this.medium.sin(this.medium.zy) + (n2 - this.medium.centerZ) * this.medium.cos(this.medium.zy));
+		final float n = this.medium.centerX +  ((this.x - this.medium.positionX - this.medium.centerX) * Util.cos(this.medium.xz) - (this.z - this.medium.positionZ - this.medium.centerZ) * Util.sin(this.medium.xz));
+		final float n2 = this.medium.centerZ + ((this.x - this.medium.positionX - this.medium.centerX) * Util.sin(this.medium.xz) + (this.z - this.medium.positionZ - this.medium.centerZ) * Util.cos(this.medium.xz));
+		final float n3 = this.medium.centerZ + ((this.y - this.medium.positionY - this.medium.centerY) * Util.sin(this.medium.zy) + (n2 - this.medium.centerZ) * Util.cos(this.medium.zy));
 		if (this.xs(n + this.maxR, n3) > 0 && this.xs(n - this.maxR, n3) < this.medium.width && n3 > -this.maxR && (n3 < this.medium.fade[this.disline] + this.maxR || this.medium.trk) && (this.xs(n + this.maxR, n3) - this.xs(n - this.maxR, n3) > this.disp || this.medium.trk)) {
 			if (this.shadow) {
 				if (!this.medium.crs) {
 					if (n3 < 5000) {
 						boolean b = false;
-						for (int i = this.trackers.nt - 1; i >= 0; --i) {
+						for (int i = this.trackers.numberOfTracks - 1; i >= 0; --i) {
 							if (Math.abs(this.trackers.zy[i]) != 90 && Math.abs(this.trackers.xy[i]) != 90 && Math.abs(this.x - this.trackers.x[i]) < this.trackers.radx[i] + this.maxR && Math.abs(this.z - this.trackers.z[i]) < this.trackers.radz[i] + this.maxR) {
 								b = true;
 								break;
@@ -518,8 +519,8 @@ public class Geometry {
 								this.planes[j].drawShadow(graphics, this.x - this.medium.positionX, this.y - this.medium.positionY, this.z - this.medium.positionZ, this.xz, this.xy, this.zy, 0);
 							}
 						} else {
-							final float n4 = this.medium.centerY + ((this.medium.ground - this.medium.centerY) * this.medium.cos(this.medium.zy) - (n2 - this.medium.centerZ) * this.medium.sin(this.medium.zy));
-							final float n5 = this.medium.centerZ + ((this.medium.ground - this.medium.centerY) * this.medium.sin(this.medium.zy) + (n2 - this.medium.centerZ) * this.medium.cos(this.medium.zy));
+							final float n4 = this.medium.centerY + ((this.medium.ground - this.medium.centerY) * Util.cos(this.medium.zy) - (n2 - this.medium.centerZ) * Util.sin(this.medium.zy));
+							final float n5 = this.medium.centerZ + ((this.medium.ground - this.medium.centerY) * Util.sin(this.medium.zy) + (n2 - this.medium.centerZ) * Util.cos(this.medium.zy));
 							if (this.ys(n4 + this.maxR, n5) > 0 && this.ys(n4 - this.maxR, n5) < this.medium.height) {
 								for (int k = 0; k < this.numberOfPlanes; ++k) {
 									this.planes[k].drawShadow(graphics, this.x - this.medium.positionX, this.y - this.medium.positionY, this.z - this.medium.positionZ, this.xz, this.xy, this.zy, 1);
@@ -528,7 +529,7 @@ public class Geometry {
 						}
 						this.medium.addsp(this.x - this.medium.positionX, this.z - this.medium.positionZ, (int) (this.maxR * 0.8));
 					} else {
-						this.lowshadow(graphics, (int) n3);
+						this.lowPolyShadow(graphics, (int) n3);
 					}
 				} else {
 					for (int l = 0; l < this.numberOfPlanes; ++l) {
@@ -536,7 +537,7 @@ public class Geometry {
 					}
 				}
 			}
-			final float n6 = this.medium.centerY + (int) ((this.y - this.medium.positionY - this.medium.centerY) * this.medium.cos(this.medium.zy) - (n2 - this.medium.centerZ) * this.medium.sin(this.medium.zy));
+			final float n6 = this.medium.centerY + ((this.y - this.medium.positionY - this.medium.centerY) * Util.cos(this.medium.zy) - (n2 - this.medium.centerZ) * Util.sin(this.medium.zy));
 			if (this.ys(n6 + this.maxR, n3) > 0 && this.ys(n6 - this.maxR, n3) < this.medium.height) {
 				if (this.elec) {
 					this.electrify(graphics);
@@ -572,7 +573,7 @@ public class Geometry {
 				for (int i = 0; i < this.numberOfPlanes; ++i) {
 					for (int j = 0; j < this.numberOfPlanes; ++j) {
 						if (array[j] == i) {
-							this.planes[j].draw(graphics, this.x - this.medium.positionX, this.y - this.medium.positionY, this.z - this.medium.positionZ, this.xz, this.xy, this.zy, this.wxz, this.wzy, this.noline);
+							this.planes[j].draw(graphics, this.x - this.medium.positionX, this.y - this.medium.positionY, this.z - this.medium.positionZ, this.xz, this.xy, this.zy, this.wxz, this.wzy, this.drawLines);
 							if (this.planes[j].master != 0 && this.stg[this.planes[j].master - 1] != 0) {
 								this.pdust(this.planes[j].master - 1, graphics, 1);
 							}
@@ -601,8 +602,8 @@ public class Geometry {
 			for (int i = 0; i < n4; ++i) {
 				final int n5 = array[i];
 				final int n6 = array2[i];
-				array[i] = n + (int) ((n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3));
-				array2[i] = n2 + (int) ((n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3));
+				array[i] = n + (int) ((n5 - n) * Util.cos(n3) - (n6 - n2) * Util.sin(n3));
+				array2[i] = n2 + (int) ((n5 - n) * Util.sin(n3) + (n6 - n2) * Util.cos(n3));
 			}
 		}
 	}
@@ -612,19 +613,8 @@ public class Geometry {
 			for (int i = 0; i < n4; ++i) {
 				final int n5 = array[i];
 				final int n6 = array2[i];
-				array[i] = (int) (n + ((n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3)));
-				array2[i] = (int) (n2 + ((n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3)));
-			}
-		}
-	}
-
-	public void rot(final float[] array, final float[] array2, final float n, final float n2, final float n3, final int n4) {
-		if (n3 != 0) {
-			for (int i = 0; i < n4; ++i) {
-				final float n5 = array[i];
-				final float n6 = array2[i];
-				array[i] = (n + (n5 - n) * this.medium.cos(n3) - (n6 - n2) * this.medium.sin(n3));
-				array2[i] = (n2 + (n5 - n) * this.medium.sin(n3) + (n6 - n2) * this.medium.cos(n3));
+				array[i] = (int) (n + ((n5 - n) * Util.cos(n3) - (n6 - n2) * Util.sin(n3)));
+				array2[i] = (int) (n2 + ((n5 - n) * Util.sin(n3) + (n6 - n2) * Util.cos(n3)));
 			}
 		}
 	}
@@ -680,52 +670,48 @@ public class Geometry {
 		return (n2 - this.medium.focusPoint) * (this.medium.centerX - n) / n2 + n;
 	}
 
-	public void lowshadow(final Graphics graphics, final int n) {
-		final float[] array = new float[4];
-		final float[] array2 = new float[4];
-		final float[] array3 = new float[4];
+	public void lowPolyShadow(final Graphics graphics, final int n) {
+		final int[] xPoints = new int[4];
+		final int[] yPoints = new int[4];
+		final int[] zPoints = new int[4];
 		int n2 = 1;
-		float i;
-		i = Math.abs(this.zy);
-		while (i > 270) {
-			i -= 360;
-		}
+		float i = Math.abs(this.zy) % 360;
 		if (Math.abs(i) > 90) {
 			n2 = -1;
 		}
-		array[0] = (float) (this.keyx[0] * 1.2 + this.x - this.medium.positionX);
-		array3[0] = (float) (this.keyz[0] * n2 * 1.4 + this.z - this.medium.positionZ);
-		array[1] = (float) (this.keyx[1] * 1.2 + this.x - this.medium.positionX);
-		array3[1] = (float) (this.keyz[1] * n2 * 1.4 + this.z - this.medium.positionZ);
-		array[2] = (float) (this.keyx[3] * 1.2 + this.x - this.medium.positionX);
-		array3[2] = (float) (this.keyz[3] * n2 * 1.4 + this.z - this.medium.positionZ);
-		array[3] = (float) (this.keyx[2] * 1.2 + this.x - this.medium.positionX);
-		array3[3] = (float) (this.keyz[2] * n2 * 1.4 + this.z - this.medium.positionZ);
-		this.rot(array, array3, this.x - this.medium.positionX, this.z - this.medium.positionZ, this.xz, 4);
-		int r = (int) ((float) this.medium.groundColor[0] / 1.5);
-		int g = (int) ((float) this.medium.groundColor[1] / 1.5);
-		int b = (int) ((float) this.medium.groundColor[2] / 1.5);
+		xPoints[0] = (int) (this.keyx[0] * 1.2 + this.x - this.medium.positionX);
+		zPoints[0] = (int) (this.keyz[0] * n2 * 1.4 + this.z - this.medium.positionZ);
+		xPoints[1] = (int) (this.keyx[1] * 1.2 + this.x - this.medium.positionX);
+		zPoints[1] = (int) (this.keyz[1] * n2 * 1.4 + this.z - this.medium.positionZ);
+		xPoints[2] = (int) (this.keyx[3] * 1.2 + this.x - this.medium.positionX);
+		zPoints[2] = (int) (this.keyz[3] * n2 * 1.4 + this.z - this.medium.positionZ);
+		xPoints[3] = (int) (this.keyx[2] * 1.2 + this.x - this.medium.positionX);
+		zPoints[3] = (int) (this.keyz[2] * n2 * 1.4 + this.z - this.medium.positionZ);
+		this.rot(xPoints, zPoints, this.x - this.medium.positionX, this.z - this.medium.positionZ, this.xz, 4);
+		int r = (int) (this.medium.groundColor[0] / 1.5);
+		int g = (int) (this.medium.groundColor[1] / 1.5);
+		int b = (int) (this.medium.groundColor[2] / 1.5);
 		int n3 = 0;
 		do {
-			array2[n3] = (int) this.medium.ground;
+			yPoints[n3] = (int) this.medium.ground;
 		} while (++n3 < 4);
-		for (int j = this.trackers.nt - 1; j >= 0; --j) {
+		for (int j = this.trackers.numberOfTracks - 1; j >= 0; --j) {
 			int n4 = 0;
 			int n5 = 0;
 			do {
-				if (Math.abs(this.trackers.zy[j]) != 90 && Math.abs(this.trackers.xy[j]) != 90 && Math.abs(array[n5] - (this.trackers.x[j] - this.medium.positionX)) < this.trackers.radx[j] && Math.abs(array3[n5] - (this.trackers.z[j] - this.medium.positionZ)) < this.trackers.radz[j]) {
+				if (Math.abs(this.trackers.zy[j]) != 90 && Math.abs(this.trackers.xy[j]) != 90 && Math.abs(xPoints[n5] - (this.trackers.x[j] - this.medium.positionX)) < this.trackers.radx[j] && Math.abs(zPoints[n5] - (this.trackers.z[j] - this.medium.positionZ)) < this.trackers.radz[j]) {
 					++n4;
 				}
 			} while (++n5 < 4);
 			if (n4 > 2) {
 				int n6 = 0;
 				do {
-					array2[n6] = this.trackers.y[j] - this.medium.positionY;
+					yPoints[n6] = this.trackers.y[j] - this.medium.positionY;
 					if (this.trackers.zy[j] != 0) {
-						array2[n6] += (int) ((array3[n6] - (this.trackers.z[j] - this.medium.positionZ - this.trackers.radz[j])) * this.medium.sin(this.trackers.zy[j]) / this.medium.sin(90 - this.trackers.zy[j]) - this.trackers.radz[j] * this.medium.sin(this.trackers.zy[j]) / this.medium.sin(90 - this.trackers.zy[j]));
+						yPoints[n6] += (int) ((zPoints[n6] - (this.trackers.z[j] - this.medium.positionZ - this.trackers.radz[j])) * Util.sin(this.trackers.zy[j]) / Util.sin(90 - this.trackers.zy[j]) - this.trackers.radz[j] * Util.sin(this.trackers.zy[j]) / Util.sin(90 - this.trackers.zy[j]));
 					}
 					if (this.trackers.xy[j] != 0) {
-						array2[n6] += (int) ((array[n6] - (this.trackers.x[j] - this.medium.positionX - this.trackers.radx[j])) * this.medium.sin(this.trackers.xy[j]) / this.medium.sin(90 - this.trackers.xy[j]) - this.trackers.radx[j] * this.medium.sin(this.trackers.xy[j]) / this.medium.sin(90 - this.trackers.xy[j]));
+						yPoints[n6] += (int) ((xPoints[n6] - (this.trackers.x[j] - this.medium.positionX - this.trackers.radx[j])) * Util.sin(this.trackers.xy[j]) / Util.sin(90 - this.trackers.xy[j]) - this.trackers.radx[j] * Util.sin(this.trackers.xy[j]) / Util.sin(90 - this.trackers.xy[j]));
 					}
 				} while (++n6 < 4);
 				r = (int) ((float) this.trackers.objectColor[j][0] / 1.5);
@@ -734,8 +720,8 @@ public class Geometry {
 				break;
 			}
 		}
-		this.rot(array, array3, this.medium.centerX, this.medium.centerZ, this.medium.xz, 4);
-		this.rot(array2, array3, this.medium.centerY, this.medium.centerZ, this.medium.zy, 4);
+		this.rot(xPoints, zPoints, this.medium.centerX, this.medium.centerZ, this.medium.xz, 4);
+		this.rot(yPoints, zPoints, this.medium.centerY, this.medium.centerZ, this.medium.zy, 4);
 		boolean b2 = true;
 		int n9 = 0;
 		int n10 = 0;
@@ -743,18 +729,18 @@ public class Geometry {
 		int n12 = 0;
 		int n13 = 0;
 		do {
-			array[n13] = this.xs(array[n13], array3[n13]);
-			array2[n13] = this.ys(array2[n13], array3[n13]);
-			if (array2[n13] < 0 || array3[n13] < 10) {
+			xPoints[n13] = this.xs(xPoints[n13], zPoints[n13]);
+			yPoints[n13] = this.ys(yPoints[n13], zPoints[n13]);
+			if (yPoints[n13] < 0 || zPoints[n13] < 10) {
 				++n9;
 			}
-			if (array2[n13] > this.medium.height || array3[n13] < 10) {
+			if (yPoints[n13] > this.medium.height || zPoints[n13] < 10) {
 				++n10;
 			}
-			if (array[n13] < 0 || array3[n13] < 10) {
+			if (xPoints[n13] < 0 || zPoints[n13] < 10) {
 				++n11;
 			}
-			if (array[n13] > this.medium.width || array3[n13] < 10) {
+			if (xPoints[n13] > this.medium.width || zPoints[n13] < 10) {
 				++n12;
 			}
 		} while (++n13 < 4);
@@ -762,24 +748,15 @@ public class Geometry {
 			b2 = false;
 		}
 		if (b2) {
-			int n14 = 0;
-			do {
-				if (n > this.medium.fade[n14]) {
+			for(int j = 0; j < 8; j++) {
+				if (n > this.medium.fade[j]) {
 					r = (r * 3 + this.medium.fadeColor[0]) / 4;
 					g = (g * 3 + this.medium.fadeColor[1]) / 4;
 					b = (b * 3 + this.medium.fadeColor[2]) / 4;
 				}
-			} while (++n14 < 8);
+			}
 			graphics.setColor(new Color(r, g, b));
-			int[] arrayy = new int[array.length];
-			for (int i1 = 0; i1 < array.length; i1++) {
-				arrayy[i1] = (int) array[i1];
-			}
-			int[] arrayy2 = new int[array2.length];
-			for (int i1 = 0; i1 < array2.length; i1++) {
-				arrayy2[i1] = (int) array2[i1];
-			}
-			graphics.fillPolygon(arrayy, arrayy2, 4);
+			graphics.fillPolygon(xPoints, yPoints, 4);
 		}
 	}
 
@@ -851,26 +828,26 @@ public class Geometry {
 			if (abs2 < n4) {
 				abs2 = n4;
 			}
-			final int n5 = (int) this.medium.centerX + (int) ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.cos(this.medium.xz) - (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.sin(this.medium.xz));
-			final int n6 = (int) this.medium.centerZ + (int) ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.sin(this.medium.xz) + (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.cos(this.medium.xz));
-			final int n7 = (int) this.medium.centerY + (int) ((this.y - this.medium.positionY - this.medium.centerY) * this.medium.cos(this.medium.zy) - (n6 - this.medium.centerZ) * this.medium.sin(this.medium.zy));
-			final int n8 = (int) this.medium.centerZ + (int) ((this.y - this.medium.positionY - this.medium.centerY) * this.medium.sin(this.medium.zy) + (n6 - this.medium.centerZ) * this.medium.cos(this.medium.zy));
-			xCoordinates[0] = this.xs((int) (n5 - abs / 0.8 - this.medium.random() * (abs / 2.4)), n8);
-			yCoordinates[0] = this.ys((int) (n7 - abs2 / 1.92 - this.medium.random() * (abs2 / 5.67)), n8);
-			xCoordinates[1] = this.xs((int) (n5 - abs / 0.8 - this.medium.random() * (abs / 2.4)), n8);
-			yCoordinates[1] = this.ys((int) (n7 + abs2 / 1.92 + this.medium.random() * (abs2 / 5.67)), n8);
-			xCoordinates[2] = this.xs((int) (n5 - abs / 1.92 - this.medium.random() * (abs / 5.67)), n8);
-			yCoordinates[2] = this.ys((int) (n7 + abs2 / 0.8 + this.medium.random() * (abs2 / 2.4)), n8);
-			xCoordinates[3] = this.xs((int) (n5 + abs / 1.92 + this.medium.random() * (abs / 5.67)), n8);
-			yCoordinates[3] = this.ys((int) (n7 + abs2 / 0.8 + this.medium.random() * (abs2 / 2.4)), n8);
-			xCoordinates[4] = this.xs((int) (n5 + abs / 0.8 + this.medium.random() * (abs / 2.4)), n8);
-			yCoordinates[4] = this.ys((int) (n7 + abs2 / 1.92 + this.medium.random() * (abs2 / 5.67)), n8);
-			xCoordinates[5] = this.xs((int) (n5 + abs / 0.8 + this.medium.random() * (abs / 2.4)), n8);
-			yCoordinates[5] = this.ys((int) (n7 - abs2 / 1.92 - this.medium.random() * (abs2 / 5.67)), n8);
-			xCoordinates[6] = this.xs((int) (n5 + abs / 1.92 + this.medium.random() * (abs / 5.67)), n8);
-			yCoordinates[6] = this.ys((int) (n7 - abs2 / 0.8 - this.medium.random() * (abs2 / 2.4)), n8);
-			xCoordinates[7] = this.xs((int) (n5 - abs / 1.92 - this.medium.random() * (abs / 5.67)), n8);
-			yCoordinates[7] = this.ys((int) (n7 - abs2 / 0.8 - this.medium.random() * (abs2 / 2.4)), n8);
+			final float n5 = this.medium.centerX + (int) ((this.x - this.medium.positionX - this.medium.centerX) * Util.cos(this.medium.xz) - (this.z - this.medium.positionZ - this.medium.centerZ) * Util.sin(this.medium.xz));
+			final float n6 = this.medium.centerZ + (int) ((this.x - this.medium.positionX - this.medium.centerX) * Util.sin(this.medium.xz) + (this.z - this.medium.positionZ - this.medium.centerZ) * Util.cos(this.medium.xz));
+			final float n7 = this.medium.centerY + (int) ((this.y - this.medium.positionY - this.medium.centerY) * Util.cos(this.medium.zy) - (n6 - this.medium.centerZ) * Util.sin(this.medium.zy));
+			final float n8 = this.medium.centerZ + (int) ((this.y - this.medium.positionY - this.medium.centerY) * Util.sin(this.medium.zy) + (n6 - this.medium.centerZ) * Util.cos(this.medium.zy));
+			xCoordinates[0] = (int) this.xs((float)(n5 - abs / 0.8 - this.medium.random() * (abs / 2.4)), n8);
+			yCoordinates[0] = (int) this.ys((float) (n7 - abs2 / 1.92 - this.medium.random() * (abs2 / 5.67)), n8);
+			xCoordinates[1] = (int) this.xs((float) (n5 - abs / 0.8 - this.medium.random() * (abs / 2.4)), n8);
+			yCoordinates[1] = (int) this.ys((float) (n7 + abs2 / 1.92 + this.medium.random() * (abs2 / 5.67)), n8);
+			xCoordinates[2] = (int) this.xs((float) (n5 - abs / 1.92 - this.medium.random() * (abs / 5.67)), n8);
+			yCoordinates[2] = (int) this.ys((float) (n7 + abs2 / 0.8 + this.medium.random() * (abs2 / 2.4)), n8);
+			xCoordinates[3] = (int) this.xs((float) (n5 + abs / 1.92 + this.medium.random() * (abs / 5.67)), n8);
+			yCoordinates[3] = (int) this.ys((float) (n7 + abs2 / 0.8 + this.medium.random() * (abs2 / 2.4)), n8);
+			xCoordinates[4] = (int) this.xs((float) (n5 + abs / 0.8 + this.medium.random() * (abs / 2.4)), n8);
+			yCoordinates[4] = (int) this.ys((float) (n7 + abs2 / 1.92 + this.medium.random() * (abs2 / 5.67)), n8);
+			xCoordinates[5] = (int) this.xs((float) (n5 + abs / 0.8 + this.medium.random() * (abs / 2.4)), n8);
+			yCoordinates[5] = (int) this.ys((float) (n7 - abs2 / 1.92 - this.medium.random() * (abs2 / 5.67)), n8);
+			xCoordinates[6] = (int) this.xs((float) (n5 + abs / 1.92 + this.medium.random() * (abs / 5.67)), n8);
+			yCoordinates[6] = (int) this.ys((float) (n7 - abs2 / 0.8 - this.medium.random() * (abs2 / 2.4)), n8);
+			xCoordinates[7] = (int) this.xs((float) (n5 - abs / 1.92 - this.medium.random() * (abs / 5.67)), n8);
+			yCoordinates[7] = (int) this.ys((float) (n7 - abs2 / 0.8 - this.medium.random() * (abs2 / 2.4)), n8);
 			if (this.fcnt == 3) {
 				this.rot(xCoordinates, yCoordinates, this.xs(n5, n8), this.ys(n7, n8), 22, 8);
 			}
@@ -897,22 +874,22 @@ public class Geometry {
 
 			graphics.setColor(new Color(r2, g2, b2));
 			graphics.fillPolygon(xCoordinates, yCoordinates, 8);
-			xCoordinates[0] = this.xs((int) (n5 - abs - this.medium.random() * (abs / 4)), n8);
-			yCoordinates[0] = this.ys((int) (n7 - abs2 / 2.4 - this.medium.random() * (abs2 / 9.6)), n8);
-			xCoordinates[1] = this.xs((int) (n5 - abs - this.medium.random() * (abs / 4)), n8);
-			yCoordinates[1] = this.ys((int) (n7 + abs2 / 2.4 + this.medium.random() * (abs2 / 9.6)), n8);
-			xCoordinates[2] = this.xs((int) (n5 - abs / 2.4 - this.medium.random() * (abs / 9.6)), n8);
-			yCoordinates[2] = this.ys((int) (n7 + abs2 + this.medium.random() * (abs2 / 4)), n8);
-			xCoordinates[3] = this.xs((int) (n5 + abs / 2.4 + this.medium.random() * (abs / 9.6)), n8);
-			yCoordinates[3] = this.ys((int) (n7 + abs2 + this.medium.random() * (abs2 / 4)), n8);
-			xCoordinates[4] = this.xs((int) (n5 + abs + this.medium.random() * (abs / 4)), n8);
-			yCoordinates[4] = this.ys((int) (n7 + abs2 / 2.4 + this.medium.random() * (abs2 / 9.6)), n8);
-			xCoordinates[5] = this.xs((int) (n5 + abs + this.medium.random() * (abs / 4)), n8);
-			yCoordinates[5] = this.ys((int) (n7 - abs2 / 2.4 - this.medium.random() * (abs2 / 9.6)), n8);
-			xCoordinates[6] = this.xs((int) (n5 + abs / 2.4 + this.medium.random() * (abs / 9.6)), n8);
-			yCoordinates[6] = this.ys((int) (n7 - abs2 - this.medium.random() * (abs2 / 4)), n8);
-			xCoordinates[7] = this.xs((int) (n5 - abs / 2.4 - this.medium.random() * (abs / 9.6)), n8);
-			yCoordinates[7] = this.ys((int) (n7 - abs2 - this.medium.random() * (abs2 / 4)), n8);
+			xCoordinates[0] = (int) this.xs(n5 - abs - this.medium.random() * (abs / 4), n8);
+			yCoordinates[0] = (int) this.ys((float) (n7 - abs2 / 2.4 - this.medium.random() * (abs2 / 9.6)), n8);
+			xCoordinates[1] = (int) this.xs(n5 - abs - this.medium.random() * (abs / 4), n8);
+			yCoordinates[1] = (int) this.ys((float) (n7 + abs2 / 2.4 + this.medium.random() * (abs2 / 9.6)), n8);
+			xCoordinates[2] = (int) this.xs((float) (n5 - abs / 2.4 - this.medium.random() * (abs / 9.6)), n8);
+			yCoordinates[2] = (int) this.ys(n7 + abs2 + this.medium.random() * (abs2 / 4), n8);
+			xCoordinates[3] = (int) this.xs((float) (n5 + abs / 2.4 + this.medium.random() * (abs / 9.6)), n8);
+			yCoordinates[3] = (int) this.ys(n7 + abs2 + this.medium.random() * (abs2 / 4), n8);
+			xCoordinates[4] = (int) this.xs(n5 + abs + this.medium.random() * (abs / 4), n8);
+			yCoordinates[4] = (int) this.ys((float) (n7 + abs2 / 2.4 + this.medium.random() * (abs2 / 9.6)), n8);
+			xCoordinates[5] = (int) this.xs(n5 + abs + this.medium.random() * (abs / 4), n8);
+			yCoordinates[5] = (int) this.ys((float) (n7 - abs2 / 2.4 - this.medium.random() * (abs2 / 9.6)), n8);
+			xCoordinates[6] = (int) this.xs((float) (n5 + abs / 2.4 + this.medium.random() * (abs / 9.6)), n8);
+			yCoordinates[6] = (int) this.ys(n7 - abs2 - this.medium.random() * (abs2 / 4), n8);
+			xCoordinates[7] = (int) this.xs((float) (n5 - abs / 2.4 - this.medium.random() * (abs / 9.6)), n8);
+			yCoordinates[7] = (int) this.ys(n7 - abs2 - this.medium.random() * (abs2 / 4), n8);
 
 			int r3 = (int) (213.0f + 213.0f * (this.medium.snapColor[0] / 200.0f));
 			r3 = Util.clamp(r3, 0, 255);

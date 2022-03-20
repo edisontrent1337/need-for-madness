@@ -139,28 +139,28 @@ public class ResourceLoader {
 					graphicsPanel.countDownImages[0] = this.getImage("0C");
 				}
 				if (name.equals("1.gif")) {
-					graphicsPanel.orank[0] = this.getImage("1");
+					graphicsPanel.rankImages[0] = this.getImage("1");
 				}
 				if (name.equals("1c.gif")) {
 					graphicsPanel.countDownImages[1] = this.getImage("1C");
 				}
 				if (name.equals("2.gif")) {
-					graphicsPanel.orank[1] = this.getImage("2");
+					graphicsPanel.rankImages[1] = this.getImage("2");
 				}
 				if (name.equals("2c.gif")) {
 					graphicsPanel.countDownImages[2] = this.getImage("2C");
 				}
 				if (name.equals("3.gif")) {
-					graphicsPanel.orank[2] = this.getImage("3");
+					graphicsPanel.rankImages[2] = this.getImage("3");
 				}
 				if (name.equals("3c.gif")) {
 					graphicsPanel.countDownImages[3] = this.getImage("3C");
 				}
 				if (name.equals("4.gif")) {
-					graphicsPanel.orank[3] = this.getImage("4");
+					graphicsPanel.rankImages[3] = this.getImage("4");
 				}
 				if (name.equals("5.gif")) {
-					graphicsPanel.orank[4] = this.getImage("5");
+					graphicsPanel.rankImages[4] = this.getImage("5");
 				}
 				if (name.equals("back.gif")) {
 					graphicsPanel.back[0] = this.getImage("BACK");
@@ -294,9 +294,9 @@ public class ResourceLoader {
 	}
 
 	public void loadStage(GameSparker sparker, Geometry[] stageGeometry, Geometry[] availableGeometry, Medium medium, Trackers trackers, CheckPoints checkPoints, GraphicsPanel graphicsPanel, Madness[] cars, Record record) {
-		trackers.nt = 0;
-		sparker.nob = 5;
-		sparker.notb = 0;
+		trackers.numberOfTracks = 0;
+		sparker.numberOfObjects = 5;
+		sparker.numberOfTrackObjects = 0;
 		checkPoints.n = 0;
 		checkPoints.nsp = 0;
 		checkPoints.fn = 0;
@@ -318,7 +318,7 @@ public class ResourceLoader {
 				}
 				if (string.startsWith("sky")) {
 					medium.setSky(integerList);
-					graphicsPanel.snap(checkPoints.stage);
+					graphicsPanel.snapImages(checkPoints.stage);
 				}
 				if (string.startsWith("ground")) {
 					medium.setGround(integerList);
@@ -332,7 +332,7 @@ public class ResourceLoader {
 				}
 				if (string.startsWith("set")) {
 					final int geometryIndex = integerList.get(0);
-					stageGeometry[sparker.nob] = new Geometry(availableGeometry[geometryIndex], integerList.get(1), (int) medium.ground - availableGeometry[geometryIndex].grat, integerList.get(2), integerList.get(3));
+					stageGeometry[sparker.numberOfObjects] = new Geometry(availableGeometry[geometryIndex], integerList.get(1), (int) medium.ground - availableGeometry[geometryIndex].grat, integerList.get(2), integerList.get(3));
 					if (string.contains(")p")) {
 						checkPoints.x[checkPoints.n] = integerList.get(1);
 						checkPoints.z[checkPoints.n] = integerList.get(2);
@@ -353,13 +353,13 @@ public class ResourceLoader {
 							checkPoints.typ[checkPoints.n] = -4;
 						}
 						++checkPoints.n;
-						sparker.notb = sparker.nob + 1;
+						sparker.numberOfTrackObjects = sparker.numberOfObjects + 1;
 					}
-					++sparker.nob;
+					++sparker.numberOfObjects;
 				}
 				if (string.startsWith("chk")) {
 					final int checkpointIndex = integerList.get(0);
-					stageGeometry[sparker.nob] = new Geometry(availableGeometry[checkpointIndex], integerList.get(1), (int) medium.ground - availableGeometry[checkpointIndex].grat, integerList.get(2), integerList.get(3));
+					stageGeometry[sparker.numberOfObjects] = new Geometry(availableGeometry[checkpointIndex], integerList.get(1), (int) medium.ground - availableGeometry[checkpointIndex].grat, integerList.get(2), integerList.get(3));
 					checkPoints.x[checkPoints.n] = integerList.get(1);
 					checkPoints.z[checkPoints.n] = integerList.get(2);
 					checkPoints.y[checkPoints.n] = (int) medium.ground - availableGeometry[checkpointIndex].grat;
@@ -369,23 +369,23 @@ public class ResourceLoader {
 
 					checkPoints.n++;
 					checkPoints.nsp++;
-					sparker.nob++;
-					sparker.notb = sparker.nob;
+					sparker.numberOfObjects++;
+					sparker.numberOfTrackObjects = sparker.numberOfObjects;
 				}
 				if (string.startsWith("fix")) {
-					stageGeometry[sparker.nob] = new Geometry(availableGeometry[integerList.get(0)], integerList.get(1), integerList.get(3), integerList.get(2), integerList.get(4));
+					stageGeometry[sparker.numberOfObjects] = new Geometry(availableGeometry[integerList.get(0)], integerList.get(1), integerList.get(3), integerList.get(2), integerList.get(4));
 					checkPoints.fx[checkPoints.fn] = integerList.get(1);
 					checkPoints.fz[checkPoints.fn] = integerList.get(2);
 					checkPoints.fy[checkPoints.fn] = integerList.get(3);
 
-					stageGeometry[sparker.nob].elec = true;
+					stageGeometry[sparker.numberOfObjects].elec = true;
 					checkPoints.rotated[checkPoints.fn] = integerList.get(4) != 0;
-					stageGeometry[sparker.nob].roted = checkPoints.rotated[checkPoints.fn];
+					stageGeometry[sparker.numberOfObjects].roted = checkPoints.rotated[checkPoints.fn];
 
 					checkPoints.special[checkPoints.fn] = string.contains(")drawShadow");
 					++checkPoints.fn;
-					++sparker.nob;
-					sparker.notb = sparker.nob;
+					++sparker.numberOfObjects;
+					sparker.numberOfTrackObjects = sparker.numberOfObjects;
 				}
 				if (string.startsWith("nlaps")) {
 					checkPoints.nlaps = integerList.get(0);
@@ -394,41 +394,41 @@ public class ResourceLoader {
 					checkPoints.name = Util.getName(string).replace('|', ',');
 				}
 				if (string.startsWith("max")) {
-					final int angle, sign, xy, zy;
+					final int angle, sign;
 					angle = (string.startsWith("maxr") || string.startsWith("maxl")) ? 0 : 90;
 					sign = (string.startsWith("maxr") || string.startsWith("maxt")) ? 1 : -1;
 
 					for (int i = 0; i < integerList.get(0); ++i) {
 						int xPos = (string.startsWith("maxr") || string.startsWith("maxl")) ? integerList.get(1) : integerList.get(2) + i * 4800;
 						int zPos = (string.startsWith("maxr") || string.startsWith("maxl")) ? integerList.get(2) + i * 4800 : integerList.get(1);
-						stageGeometry[sparker.nob] = new Geometry(availableGeometry[39], xPos, (int) medium.ground - availableGeometry[39].grat, zPos, angle);
-						++sparker.nob;
+						stageGeometry[sparker.numberOfObjects] = new Geometry(availableGeometry[39], xPos, (int) medium.ground - availableGeometry[39].grat, zPos, angle);
+						++sparker.numberOfObjects;
 					}
 
-					trackers.y[trackers.nt] = -5000;
-					trackers.rady[trackers.nt] = 7100;
-					trackers.dam[trackers.nt] = 1;
+					trackers.y[trackers.numberOfTracks] = -5000;
+					trackers.rady[trackers.numberOfTracks] = 7100;
+					trackers.dam[trackers.numberOfTracks] = 1;
 
 					if (string.startsWith("maxr") || string.contains("maxl")) {
-						trackers.x[trackers.nt] = integerList.get(1) + (sign * 500);
-						trackers.z[trackers.nt] = integerList.get(0) * 4800 / 2 + integerList.get(2) - 2400;
-						trackers.radx[trackers.nt] = 600;
-						trackers.radz[trackers.nt] = integerList.get(0) * 4800 / 2;
-						trackers.xy[trackers.nt] = sign * 90;
-						trackers.zy[trackers.nt] = 0;
+						trackers.x[trackers.numberOfTracks] = integerList.get(1) + (sign * 500);
+						trackers.z[trackers.numberOfTracks] = integerList.get(0) * 4800 / 2 + integerList.get(2) - 2400;
+						trackers.radx[trackers.numberOfTracks] = 600;
+						trackers.radz[trackers.numberOfTracks] = integerList.get(0) * 4800 / 2;
+						trackers.xy[trackers.numberOfTracks] = sign * 90;
+						trackers.zy[trackers.numberOfTracks] = 0;
 					} else {
-						trackers.x[trackers.nt] = integerList.get(0) * 4800 / 2 + integerList.get(2) - 2400;
-						trackers.z[trackers.nt] = integerList.get(1) + (sign * 500);
-						trackers.radx[trackers.nt] = integerList.get(0) * 4800 / 2;
-						trackers.radz[trackers.nt] = 600;
-						trackers.xy[trackers.nt] = 0;
-						trackers.zy[trackers.nt] = sign * 90;
+						trackers.x[trackers.numberOfTracks] = integerList.get(0) * 4800 / 2 + integerList.get(2) - 2400;
+						trackers.z[trackers.numberOfTracks] = integerList.get(1) + (sign * 500);
+						trackers.radx[trackers.numberOfTracks] = integerList.get(0) * 4800 / 2;
+						trackers.radz[trackers.numberOfTracks] = 600;
+						trackers.xy[trackers.numberOfTracks] = 0;
+						trackers.zy[trackers.numberOfTracks] = sign * 90;
 					}
 
-					trackers.y[trackers.nt] = -5000;
-					trackers.rady[trackers.nt] = 7100;
-					trackers.dam[trackers.nt] = 1;
-					++trackers.nt;
+					trackers.y[trackers.numberOfTracks] = -5000;
+					trackers.rady[trackers.numberOfTracks] = 7100;
+					trackers.dam[trackers.numberOfTracks] = 1;
+					++trackers.numberOfTracks;
 				}
 			}
 			dataInputStream.close();
@@ -442,11 +442,11 @@ public class ResourceLoader {
 		if (graphicsPanel.state == GameState.LOADING_STAGE) {
 			medium.trx = 0L;
 			medium.trz = 0L;
-			if (trackers.nt >= 4) {
+			if (trackers.numberOfTracks >= 4) {
 				int n = 4;
 				do {
-					medium.trx += trackers.x[trackers.nt - n];
-					medium.trz += trackers.z[trackers.nt - n];
+					medium.trx += trackers.x[trackers.numberOfTracks - n];
+					medium.trz += trackers.z[trackers.numberOfTracks - n];
 				} while (--n > 0);
 			}
 			medium.trx /= 4L;

@@ -155,8 +155,8 @@ public class Medium {
             float n2 = this.fade[n];
             float ground = this.ground;
             if (this.zy != 0) {
-                ground = this.centerY + ((this.ground - this.centerY) * this.cos(this.zy) - (this.fade[n] - this.centerZ) * this.sin(this.zy));
-                n2 = this.centerZ + ((this.ground - this.centerY) * this.sin(this.zy) + (this.fade[n] - this.centerZ) * this.cos(this.zy));
+                ground = this.centerY + ((this.ground - this.centerY) * Util.cos(this.zy) - (this.fade[n] - this.centerZ) * Util.sin(this.zy));
+                n2 = this.centerZ + ((this.ground - this.centerY) * Util.sin(this.zy) + (this.fade[n] - this.centerZ) * Util.cos(this.zy));
             }
             array2[array[0] = 0] = (int) this.ys(ground, n2);
             if (array2[0] < 0) {
@@ -199,8 +199,8 @@ public class Medium {
             int n8 = this.fade[n7];
             int skyline = this.skyline;
             if (this.zy != 0) {
-                skyline = (int) this.centerY + (int) ((this.skyline - this.centerY) * this.cos(this.zy) - (this.fade[n7] - this.centerZ) * this.sin(this.zy));
-                n8 = (int) this.centerZ + (int) ((this.skyline - this.centerY) * this.sin(this.zy) + (this.fade[n7] - this.centerZ) * this.cos(this.zy));
+                skyline = (int) this.centerY + (int) ((this.skyline - this.centerY) * Util.cos(this.zy) - (this.fade[n7] - this.centerZ) * Util.sin(this.zy));
+                n8 = (int) this.centerZ + (int) ((this.skyline - this.centerY) * Util.sin(this.zy) + (this.fade[n7] - this.centerZ) * Util.cos(this.zy));
             }
             array2[array[0] = 0] = this.ys(skyline, n8);
             if (array2[0] > this.height) {
@@ -245,8 +245,8 @@ public class Medium {
         }
         if (this.td) {
             this.positionY = (int) (geometry.y - 300 - 1100.0f * this.random());
-            this.positionX = geometry.x + (int) ((geometry.x + 400 - geometry.x) * this.cos(n) - (geometry.z + 5000 - geometry.z) * this.sin(n));
-            this.positionZ = geometry.z + (int) ((geometry.x + 400 - geometry.x) * this.sin(n) + (geometry.z + 5000 - geometry.z) * this.cos(n));
+            this.positionX = geometry.x + (int) ((geometry.x + 400 - geometry.x) * Util.cos(n) - (geometry.z + 5000 - geometry.z) * Util.sin(n));
+            this.positionZ = geometry.z + (int) ((geometry.x + 400 - geometry.x) * Util.sin(n) + (geometry.z + 5000 - geometry.z) * Util.cos(n));
             this.td = false;
         }
         int n2 = 0;
@@ -305,8 +305,8 @@ public class Medium {
         if (this.positionY > 10) {
             this.vert = false;
         }
-        this.positionX = (int) (geometry.x +  ((-n) * this.cos(this.circleAmount)));
-        this.positionZ = (int) (geometry.z +  ((-n) * this.sin(this.circleAmount)));
+        this.positionX = (int) (geometry.x +  ((-n) * Util.cos(this.circleAmount)));
+        this.positionZ = (int) (geometry.z +  ((-n) * Util.sin(this.circleAmount)));
         if (isStartAnimation) {
             this.circleAmount += 4;
         } else {
@@ -372,8 +372,8 @@ public class Medium {
             this.flex = 0;
         }
         this.positionY = -this.hit;
-        this.positionX = (int) this.centerX + (int) this.trx + (int) (12000.0f * this.cos(this.circleAmount));
-        this.positionZ = (int) this.trz + (int) (12000.0f * this.sin(this.circleAmount));
+        this.positionX = (int) this.centerX + (int) this.trx + (int) (12000.0f * Util.cos(this.circleAmount));
+        this.positionZ = (int) this.trz + (int) (12000.0f * Util.sin(this.circleAmount));
         this.hit -= 3000;
         if (this.hit < 5000) {
             this.hit = 5000;
@@ -407,7 +407,7 @@ public class Medium {
                 this.zy = 9;
             }
         } else {
-            this.zy = (float) (90 + n - Math.atan(n2 / (double) (-this.positionY - this.centerY)) / 0.017453292519943295);
+            this.zy = (float) (90 + n - Math.atan(n2 / (-this.positionY - this.centerY)) / 0.017453292519943295);
         }
     }
 
@@ -439,27 +439,11 @@ public class Medium {
     void follow(final Geometry geometry, final float n) {
         this.zy = 10;
         this.xz = -n;
-        this.positionX = geometry.x - (int) this.centerX + (int) (800 * this.sin(n));
-        this.positionZ = geometry.z - (int) this.centerZ + (int) (-800 * this.cos(n));
+        this.positionX = geometry.x - (int) this.centerX + (int) (800 * Util.sin(n));
+        this.positionZ = geometry.z - (int) this.centerZ + (int) (-800 * Util.cos(n));
         this.positionY = geometry.y - 250 - (int) this.centerY;
         if (this.trns != 1) {
             this.trns = 1;
         }
-    }
-
-    float cos(int i) {
-        return (float) (Math.cos(i * 2 * Math.PI / 360));
-    }
-
-    float cos(float i) {
-        return (float) (Math.cos(i * 2 * Math.PI / 360));
-    }
-
-    public float sin(int i) {
-        return (float) (Math.sin(i * 2 * Math.PI / 360));
-    }
-
-    public float sin(float i) {
-        return (float) (Math.sin(i * 2 * Math.PI / 360));
     }
 }

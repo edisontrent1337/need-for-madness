@@ -114,13 +114,13 @@ public class Record
             if (n4 * n3 == 0 || b) {
                 for (int k = 0; k < geometry.numberOfPlanes; ++k) {
                     float n5 = 0.0f;
-                    for (int l = 0; l < geometry.planes[k].n; ++l) {
+                    for (int l = 0; l < geometry.planes[k].numberOfPoints; ++l) {
                         if (geometry.planes[k].wz == 0 && this.py(geometry.keyx[n], geometry.planes[k].ox[l], geometry.keyz[n], geometry.planes[k].oz[l]) < madness.clrad[madness.carIndex]) {
                             n5 = n2 / 20.0f * this.m.random();
                             final int[] oz = geometry.planes[k].oz;
-                            oz[l] += (int)(n5 * this.m.sin(i));
+                            oz[l] += (int)(n5 * Util.sin(i));
                             final int[] ox = geometry.planes[k].ox;
-                            ox[l] -= (int)(n5 * this.m.sin(j));
+                            ox[l] -= (int)(n5 * Util.sin(j));
                         }
                     }
                     if (n5 != 0.0f) {
@@ -155,11 +155,11 @@ public class Record
                             }
                             final Plane plane = geometry.planes[k];
                             plane.bfase += (int)n5;
-                            new Color(geometry.planes[k].c[0], geometry.planes[k].c[1], geometry.planes[k].c[2]);
+                            new Color(geometry.planes[k].color[0], geometry.planes[k].color[1], geometry.planes[k].color[2]);
                             final Color hsbColor = Color.getHSBColor(geometry.planes[k].hsb[0], geometry.planes[k].hsb[1], geometry.planes[k].hsb[2]);
-                            geometry.planes[k].c[0] = hsbColor.getRed();
-                            geometry.planes[k].c[1] = hsbColor.getGreen();
-                            geometry.planes[k].c[2] = hsbColor.getBlue();
+                            geometry.planes[k].color[0] = hsbColor.getRed();
+                            geometry.planes[k].color[1] = hsbColor.getGreen();
+                            geometry.planes[k].color[2] = hsbColor.getBlue();
                         }
                         if (geometry.planes[k].isGlass) {
                             final Plane plane2 = geometry.planes[k];
@@ -173,7 +173,7 @@ public class Record
                 int n9 = 1;
                 for (int n10 = 0; n10 < geometry.numberOfPlanes; ++n10) {
                     float n11 = 0.0f;
-                    for (int n12 = 0; n12 < geometry.planes[n10].n; ++n12) {
+                    for (int n12 = 0; n12 < geometry.planes[n10].numberOfPoints; ++n12) {
                         if (geometry.planes[n10].wz == 0) {
                             n11 = n2 / 15.0f * this.m.random();
                             if ((Math.abs(geometry.planes[n10].oy[n12] - madness.flipy[madness.carIndex] - this.squash[0][madness.im]) < madness.msquash[madness.carIndex] * 3 || geometry.planes[n10].oy[n12] < madness.flipy[madness.carIndex] + this.squash[0][madness.im]) && this.squash[0][madness.im] < madness.msquash[madness.carIndex]) {
@@ -410,7 +410,7 @@ public class Record
             }
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
-                for (int j = 0; j < geometry.planes[i].n; ++j) {
+                for (int j = 0; j < geometry.planes[i].numberOfPoints; ++j) {
                     if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.carIndex]) {
                         n2 = a / 20.0f * this.m.random();
                     }
@@ -433,13 +433,13 @@ public class Record
             }
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float a2 = 0.0f;
-                for (int j = 0; j < geometry.planes[i].n; ++j) {
+                for (int j = 0; j < geometry.planes[i].numberOfPoints; ++j) {
                     if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.carIndex]) {
                         a2 = a / 20.0f * this.m.random();
                         final int[] oz = geometry.planes[i].oz;
-                        oz[j] += (int)(a2 * this.m.cos(geometry.xz) * this.m.cos(geometry.zy));
+                        oz[j] += (int)(a2 * Util.cos(geometry.xz) * Util.cos(geometry.zy));
                         final int[] ox = geometry.planes[i].ox;
-                        ox[j] += (int)(a2 * this.m.sin(geometry.xz) * this.m.cos(geometry.xy));
+                        ox[j] += (int)(a2 * Util.sin(geometry.xz) * Util.cos(geometry.xy));
                     }
                 }
                 if (a2 != 0.0f) {
@@ -474,11 +474,11 @@ public class Record
                         }
                         final Plane plane = geometry.planes[i];
                         plane.bfase += (int)Math.abs(a2);
-                        new Color(geometry.planes[i].c[0], geometry.planes[i].c[1], geometry.planes[i].c[2]);
+                        new Color(geometry.planes[i].color[0], geometry.planes[i].color[1], geometry.planes[i].color[2]);
                         final Color hsbColor = Color.getHSBColor(geometry.planes[i].hsb[0], geometry.planes[i].hsb[1], geometry.planes[i].hsb[2]);
-                        geometry.planes[i].c[0] = hsbColor.getRed();
-                        geometry.planes[i].c[1] = hsbColor.getGreen();
-                        geometry.planes[i].c[2] = hsbColor.getBlue();
+                        geometry.planes[i].color[0] = hsbColor.getRed();
+                        geometry.planes[i].color[1] = hsbColor.getGreen();
+                        geometry.planes[i].color[2] = hsbColor.getBlue();
                     }
                     if (geometry.planes[i].isGlass) {
                         final Plane plane2 = geometry.planes[i];
@@ -739,7 +739,7 @@ public class Record
             }
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float n2 = 0.0f;
-                for (int j = 0; j < geometry.planes[i].n; ++j) {
+                for (int j = 0; j < geometry.planes[i].numberOfPoints; ++j) {
                     if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.carIndex]) {
                         n2 = a / 20.0f * this.m.random();
                     }
@@ -762,13 +762,13 @@ public class Record
             }
             for (int i = 0; i < geometry.numberOfPlanes; ++i) {
                 float a2 = 0.0f;
-                for (int j = 0; j < geometry.planes[i].n; ++j) {
+                for (int j = 0; j < geometry.planes[i].numberOfPoints; ++j) {
                     if (geometry.planes[i].wz == 0 && this.py(geometry.keyx[n], geometry.planes[i].ox[j], geometry.keyz[n], geometry.planes[i].oz[j]) < madness.clrad[madness.carIndex]) {
                         a2 = a / 20.0f * this.m.random();
                         final int[] oz = geometry.planes[i].oz;
-                        oz[j] -= (int)(a2 * this.m.sin(geometry.xz) * this.m.cos(geometry.zy));
+                        oz[j] -= (int)(a2 * Util.sin(geometry.xz) * Util.cos(geometry.zy));
                         final int[] ox = geometry.planes[i].ox;
-                        ox[j] += (int)(a2 * this.m.cos(geometry.xz) * this.m.cos(geometry.xy));
+                        ox[j] += (int)(a2 * Util.cos(geometry.xz) * Util.cos(geometry.xy));
                     }
                 }
                 if (a2 != 0.0f) {
@@ -803,11 +803,11 @@ public class Record
                         }
                         final Plane plane = geometry.planes[i];
                         plane.bfase += (int)Math.abs(a2);
-                        new Color(geometry.planes[i].c[0], geometry.planes[i].c[1], geometry.planes[i].c[2]);
+                        new Color(geometry.planes[i].color[0], geometry.planes[i].color[1], geometry.planes[i].color[2]);
                         final Color hsbColor = Color.getHSBColor(geometry.planes[i].hsb[0], geometry.planes[i].hsb[1], geometry.planes[i].hsb[2]);
-                        geometry.planes[i].c[0] = hsbColor.getRed();
-                        geometry.planes[i].c[1] = hsbColor.getGreen();
-                        geometry.planes[i].c[2] = hsbColor.getBlue();
+                        geometry.planes[i].color[0] = hsbColor.getRed();
+                        geometry.planes[i].color[1] = hsbColor.getGreen();
+                        geometry.planes[i].color[2] = hsbColor.getBlue();
                     }
                     if (geometry.planes[i].isGlass) {
                         final Plane plane2 = geometry.planes[i];

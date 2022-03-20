@@ -105,4 +105,20 @@ public class Util {
         }
         return -1;
     }
+
+    public static float cos(int i) {
+        return (float) (Math.cos(i * 2 * Math.PI / 360));
+    }
+
+    public static float cos(float i) {
+        return (float) (Math.cos(i * 2 * Math.PI / 360));
+    }
+
+    public static float sin(int i) {
+        return (float) (Math.sin(i * 2 * Math.PI / 360));
+    }
+
+    public static float sin(float i) {
+        return (float) (Math.sin(i * 2 * Math.PI / 360));
+    }
 }
