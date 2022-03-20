@@ -1,6 +1,5 @@
 package main.java;
 
-import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -113,32 +112,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             else if (graphicsPanel.state == GameState.CREDITS) {
                 graphicsPanel.credits(this.graphics, this.controls[0]);
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
             }
             else if (graphicsPanel.state == GameState.MAIN_MENU) {
                 graphicsPanel.maini(this.graphics, this.controls[0]);
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
             }
             else if (graphicsPanel.state == GameState.GAME_INSTRUCTIONS) {
                 graphicsPanel.inst(this.graphics, this.controls[0]);
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
             }
             else if (graphicsPanel.state == GameState.END_RACE_CONGRATS) {
                 graphicsPanel.finish(checkPoints, this.models, this.controls[0], this.graphics);
@@ -150,32 +134,17 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     n5 = 0;
                 }
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
             }
             else if (graphicsPanel.state == GameState.CAR_SELECT) {
                 graphicsPanel.carselect(this.controls[0], this.models, cars[0], this.graphics);
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
             }
             else if (graphicsPanel.state == GameState.LOADING_SOUNDTRACK_COMPLETE) {
                 graphicsPanel.loadingMusicComplete(checkPoints.stage, this.graphics, this.controls[0]);
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
             }
             else if (graphicsPanel.state == GameState.LOADING_SOUNDTRACK_1) {
                 graphicsPanel.loadingMusicScreen(checkPoints.stage, n4, this.graphics);
@@ -187,22 +156,12 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             else if (graphicsPanel.state == GameState.STAGE_LOCKED_UNSAFE) {
                 graphicsPanel.cantgo(this.graphics, this.controls[0]);
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
             }
             else if (graphicsPanel.state == GameState.LOADING_STAGE_FAILED) {
                 graphicsPanel.loadingFailed(checkPoints.stage, this.controls[0], this.graphics);
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
             }
             else if (graphicsPanel.state == GameState.LOADING_STAGE) {
                 graphicsPanel.loadingStage(checkPoints.stage, this.graphics);
@@ -215,7 +174,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 int n11 = 0;
                 final int[] array4 = new int[200];
                 for (int i = 5; i < this.notb; ++i) {
-                    if (this.loadedModels[i].dist != 0) {
+                    if (this.loadedModels[i].distance != 0) {
                         array4[n11] = i;
                         ++n11;
                     } else {
@@ -228,8 +187,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
                 for (int k = 0; k < n11; ++k) {
                     for (int l = k + 1; l < n11; ++l) {
-                        if (this.loadedModels[array4[k]].dist != this.loadedModels[array4[l]].dist) {
-                            if (this.loadedModels[array4[k]].dist < this.loadedModels[array4[l]].dist) {
+                        if (this.loadedModels[array4[k]].distance != this.loadedModels[array4[l]].distance) {
+                            if (this.loadedModels[array4[k]].distance < this.loadedModels[array4[l]].distance) {
                                 ++array5[k];
                             } else {
                                 ++array5[l];
@@ -249,12 +208,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     }
                 }
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
                 graphicsPanel.stageSelect(this.graphics, checkPoints, this.controls[0]);
             }
             else if (graphicsPanel.state == GameState.LOADING_SOUNDTRACK_2) {
@@ -262,7 +216,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 int count = 0;
                 final int[] array10 = new int[100];
                 for (int i = 0; i < this.nob; ++i) {
-                    if (this.loadedModels[i].dist != 0) {
+                    if (this.loadedModels[i].distance != 0) {
                         array10[count] = i;
                         ++count;
                     } else {
@@ -275,8 +229,8 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
                 for (int i = 0; i < count; ++i) {
                     for (int j = i + 1; j < count; ++j) {
-                        if (this.loadedModels[array10[i]].dist != this.loadedModels[array10[j]].dist) {
-                            if (this.loadedModels[array10[i]].dist < this.loadedModels[array10[j]].dist) {
+                        if (this.loadedModels[array10[i]].distance != this.loadedModels[array10[j]].distance) {
+                            if (this.loadedModels[array10[i]].distance < this.loadedModels[array10[j]].distance) {
                                 ++array11[i];
                             } else {
                                 ++array11[j];
@@ -325,30 +279,30 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 medium.draw(this.graphics);
                 int n30 = 0;
                 final int[] array16 = new int[100];
-                for (int n31 = 0; n31 < this.nob; ++n31) {
-                    if (this.loadedModels[n31].dist != 0) {
-                        array16[n30] = n31;
+                for (int i = 0; i < this.nob; ++i) {
+                    if (this.loadedModels[i].distance != 0) {
+                        array16[n30] = i;
                         ++n30;
                     } else {
-                        this.loadedModels[n31].draw(this.graphics);
+                        this.loadedModels[i].draw(this.graphics);
                     }
                 }
                 final int[] array17 = new int[n30];
                 for (int n32 = 0; n32 < n30; ++n32) {
                     array17[n32] = 0;
                 }
-                for (int n33 = 0; n33 < n30; ++n33) {
-                    for (int n34 = n33 + 1; n34 < n30; ++n34) {
-                        if (this.loadedModels[array16[n33]].dist != this.loadedModels[array16[n34]].dist) {
-                            if (this.loadedModels[array16[n33]].dist < this.loadedModels[array16[n34]].dist) {
-                                ++array17[n33];
+                for (int i = 0; i < n30; ++i) {
+                    for (int j = i + 1; j < n30; ++j) {
+                        if (this.loadedModels[array16[i]].distance != this.loadedModels[array16[j]].distance) {
+                            if (this.loadedModels[array16[i]].distance < this.loadedModels[array16[j]].distance) {
+                                ++array17[i];
                             } else {
-                                ++array17[n34];
+                                ++array17[j];
                             }
-                        } else if (n34 > n33) {
-                            ++array17[n33];
+                        } else if (j > i) {
+                            ++array17[i];
                         } else {
-                            ++array17[n34];
+                            ++array17[j];
                         }
                     }
                 }
@@ -431,46 +385,45 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             }
             else if (graphicsPanel.state == GameState.PLAY_REPLAY) {
                 if (n8 == 0) {
-                    int n46 = 0;
-                    do {
-                        record.ocar[n46] = new Geometry(this.loadedModels[n46], 0, 0, 0, 0);
-                        this.loadedModels[n46] = new Geometry(record.car[0][n46], 0, 0, 0, 0);
-                    } while (++n46 < 5);
+                    for(int i = 0; i < 5; i++) {
+                        record.ocar[i] = new Geometry(this.loadedModels[i], 0, 0, 0, 0);
+                        this.loadedModels[i] = new Geometry(record.car[0][i], 0, 0, 0, 0);
+                    }
                 }
                 medium.draw(this.graphics);
                 int n47 = 0;
                 final int[] array22 = new int[100];
-                for (int n48 = 0; n48 < this.nob; ++n48) {
-                    if (this.loadedModels[n48].dist != 0) {
-                        array22[n47] = n48;
+                for (int i = 0; i < this.nob; ++i) {
+                    if (this.loadedModels[i].distance != 0) {
+                        array22[n47] = i;
                         ++n47;
                     } else {
-                        this.loadedModels[n48].draw(this.graphics);
+                        this.loadedModels[i].draw(this.graphics);
                     }
                 }
                 final int[] array23 = new int[n47];
                 for (int n49 = 0; n49 < n47; ++n49) {
                     array23[n49] = 0;
                 }
-                for (int n50 = 0; n50 < n47; ++n50) {
-                    for (int n51 = n50 + 1; n51 < n47; ++n51) {
-                        if (this.loadedModels[array22[n50]].dist != this.loadedModels[array22[n51]].dist) {
-                            if (this.loadedModels[array22[n50]].dist < this.loadedModels[array22[n51]].dist) {
-                                ++array23[n50];
+                for (int i = 0; i < n47; ++i) {
+                    for (int j = i + 1; j < n47; ++j) {
+                        if (this.loadedModels[array22[i]].distance != this.loadedModels[array22[j]].distance) {
+                            if (this.loadedModels[array22[i]].distance < this.loadedModels[array22[j]].distance) {
+                                ++array23[i];
                             } else {
-                                ++array23[n51];
+                                ++array23[j];
                             }
-                        } else if (n51 > n50) {
-                            ++array23[n50];
+                        } else if (j > i) {
+                            ++array23[i];
                         } else {
-                            ++array23[n51];
+                            ++array23[j];
                         }
                     }
                 }
-                for (int n56 = 0; n56 < n47; ++n56) {
-                    for (int n57 = 0; n57 < n47; ++n57) {
-                        if (array23[n57] == n56) {
-                            this.loadedModels[array22[n57]].draw(this.graphics);
+                for (int i = 0; i < n47; ++i) {
+                    for (int j = 0; j < n47; ++j) {
+                        if (array23[j] == i) {
+                            this.loadedModels[array22[j]].draw(this.graphics);
                         }
                     }
                 }
@@ -483,7 +436,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 int n58 = 0;
                 do {
                     if (record.fix[n58] == n8) {
-                        if (this.loadedModels[n58].dist == 0) {
+                        if (this.loadedModels[n58].distance == 0) {
                             this.loadedModels[n58].fcnt = 8;
                         } else {
                             this.loadedModels[n58].fix = true;
@@ -510,7 +463,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 medium.circleAroundCar(this.loadedModels[0], false);
             }
             else if (graphicsPanel.state == GameState.GAME_HIGHLIGHT_1) {
-                if (record.hcaught) {
+                if (record.highlightExists) {
                     medium.vert = !(medium.random() > 0.45);
                     medium.adv = (int) (900.0f * medium.random());
                     medium.circleAmount = 180;
@@ -526,52 +479,51 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             }
             else if (graphicsPanel.state == GameState.GAME_HIGHLIGHT_2) {
                 if (n8 == 0) {
-                    int n59 = 0;
-                    do {
-                        this.loadedModels[n59] = new Geometry(record.starcar[n59], 0, 0, 0, 0);
-                    } while (++n59 < 5);
-                }
-                medium.draw(this.graphics);
-                int n60 = 0;
-                final int[] array28 = new int[100];
-                for (int n61 = 0; n61 < this.nob; ++n61) {
-                    if (this.loadedModels[n61].dist != 0) {
-                        array28[n60] = n61;
-                        ++n60;
-                    } else {
-                        this.loadedModels[n61].draw(this.graphics);
+                    for(int i = 0; i < 5; i++) {
+                        this.loadedModels[i] = new Geometry(record.starcar[i], 0, 0, 0, 0);
                     }
                 }
-                final int[] array29 = new int[n60];
-                for (int n62 = 0; n62 < n60; ++n62) {
-                    array29[n62] = 0;
+                medium.draw(this.graphics);
+                int numberOfModelsInRange = 0;
+                final int[] array28 = new int[100];
+                for (int i = 0; i < this.nob; ++i) {
+                    if (this.loadedModels[i].distance != 0) {
+                        array28[numberOfModelsInRange] = i;
+                        ++numberOfModelsInRange;
+                    } else {
+                        this.loadedModels[i].draw(this.graphics);
+                    }
                 }
-                for (int n63 = 0; n63 < n60; ++n63) {
-                    for (int n64 = n63 + 1; n64 < n60; ++n64) {
-                        if (this.loadedModels[array28[n63]].dist != this.loadedModels[array28[n64]].dist) {
-                            if (this.loadedModels[array28[n63]].dist < this.loadedModels[array28[n64]].dist) {
-                                ++array29[n63];
+                final int[] array29 = new int[numberOfModelsInRange];
+                for (int i = 0; i < numberOfModelsInRange; ++i) {
+                    array29[i] = 0;
+                }
+                for (int i = 0; i < numberOfModelsInRange; ++i) {
+                    for (int j = i + 1; j < numberOfModelsInRange; ++j) {
+                        if (this.loadedModels[array28[i]].distance != this.loadedModels[array28[j]].distance) {
+                            if (this.loadedModels[array28[i]].distance < this.loadedModels[array28[j]].distance) {
+                                ++array29[i];
                             } else {
-                                ++array29[n64];
+                                ++array29[j];
                             }
-                        } else if (n64 > n63) {
-                            ++array29[n63];
+                        } else if (j > i) {
+                            ++array29[i];
                         } else {
-                            ++array29[n64];
+                            ++array29[j];
                         }
                     }
                 }
-                for (int n69 = 0; n69 < n60; ++n69) {
-                    for (int n70 = 0; n70 < n60; ++n70) {
-                        if (array29[n70] == n69) {
-                            this.loadedModels[array28[n70]].draw(this.graphics);
+                for (int i = 0; i < numberOfModelsInRange; ++i) {
+                    for (int j = 0; j < numberOfModelsInRange; ++j) {
+                        if (array29[j] == i) {
+                            this.loadedModels[array28[j]].draw(this.graphics);
                         }
                     }
                 }
                 int n71 = 0;
                 do {
                     if (record.hfix[n71] == n8) {
-                        if (this.loadedModels[n71].dist == 0) {
+                        if (this.loadedModels[n71].distance == 0) {
                             this.loadedModels[n71].fcnt = 8;
                         } else {
                             this.loadedModels[n71].fix = true;
@@ -669,12 +621,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     n8 = 0;
                 }
                 graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
-                if (this.mouseClick == 2) {
-                    this.mouseClick = 0;
-                }
-                if (this.mouseClick == 1) {
-                    this.mouseClick = 2;
-                }
+                processMouseClick();
             }
             else if (graphicsPanel.state == GameState.REPLAY_NOT_AVAILABLE) {
                 graphicsPanel.cantreply(this.graphics);
@@ -757,6 +704,15 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 System.out.println("Current State : " + graphicsPanel.state);
             }
             this.graphics.setColor(Color.WHITE);
+        }
+    }
+
+    public void processMouseClick() {
+        if (this.mouseClick == 2) {
+            this.mouseClick = 0;
+        }
+        if (this.mouseClick == 1) {
+            this.mouseClick = 2;
         }
     }
 

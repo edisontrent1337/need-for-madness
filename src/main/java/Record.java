@@ -8,7 +8,7 @@ public class Record
 {
     Medium m;
     int caught;
-    boolean hcaught;
+    boolean highlightExists;
     boolean prepit;
     Geometry[] ocar;
     int cntf;
@@ -206,7 +206,7 @@ public class Record
 
     public void reset(final Geometry[] array) {
         this.caught = 0;
-        this.hcaught = false;
+        this.highlightExists = false;
         this.wasted = 0;
         this.whenwasted = 0;
         this.powered = 0;
@@ -252,7 +252,7 @@ public class Record
 
     public Record(final Medium m) {
         this.caught = 0;
-        this.hcaught = false;
+        this.highlightExists = false;
         this.prepit = true;
         this.ocar = new Geometry[5];
         this.cntf = 50;
@@ -725,7 +725,7 @@ public class Record
                     this.hmtouch[n10][n11] = this.mtouch[n10][n11];
                 } while (++n11 < 7);
             } while (++n10 < 5);
-            this.hcaught = true;
+            this.highlightExists = true;
         }
     }
 

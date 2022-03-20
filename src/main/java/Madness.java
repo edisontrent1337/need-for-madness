@@ -1835,7 +1835,7 @@ public class Madness
                 this.rpd.dest[this.im] = 300;
             }
         }
-        if (geometry.dist == 0) {
+        if (geometry.distance == 0) {
             for (int n97 = 0; n97 < geometry.numberOfPlanes; ++n97) {
                 if (geometry.planes[n97].chip != 0) {
                     geometry.planes[n97].chip = 0;
@@ -1949,7 +1949,7 @@ public class Madness
         for (int n103 = 0; n103 < checkPoints.fn; ++n103) {
             if (!checkPoints.rotated[n103]) {
                 if (Math.abs(geometry.z - checkPoints.fz[n103]) < 200 && this.py(geometry.x / 100, checkPoints.fx[n103] / 100, geometry.y / 100, checkPoints.fy[n103] / 100) < 30) {
-                    if (geometry.dist == 0) {
+                    if (geometry.distance == 0) {
                         geometry.fcnt = 8;
                     }
                     else {
@@ -1962,7 +1962,7 @@ public class Madness
                 }
             }
             else if (Math.abs(geometry.x - checkPoints.fx[n103]) < 200 && this.py(geometry.z / 100, checkPoints.fz[n103] / 100, geometry.y / 100, checkPoints.fy[n103] / 100) < 30) {
-                if (geometry.dist == 0) {
+                if (geometry.distance == 0) {
                     geometry.fcnt = 8;
                 }
                 else {
@@ -2045,7 +2045,7 @@ public class Madness
                         this.power += this.powerup;
                         if (this.im == 0 && (int)this.powerup > this.rpd.powered && this.rpd.wasted == 0 && this.powerup > 60.0f) {
                             this.rpd.cotchinow(0);
-                            if (this.rpd.hcaught) {
+                            if (this.rpd.highlightExists) {
                                 this.rpd.whenwasted = 225;
                                 this.rpd.powered = (int)this.powerup;
                             }
