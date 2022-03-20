@@ -100,7 +100,7 @@ public class ResourceLoader {
 	public Geometry[] loadModels(Medium medium, Trackers trackers) {
 		Geometry[] availableGeometry = new Geometry[modelNames.length];
 		try {
-			URL resource = this.getClass().getResource("../../resources/graphics/models.zip");
+			URL resource = this.getClass().getResource("../../../resources/graphics/models.zip");
 			File file = new File(resource.toURI());
 			final FileInputStream inputStream = new FileInputStream(file);
 			final ZipInputStream zipStream = new ZipInputStream(inputStream);
@@ -304,7 +304,7 @@ public class ResourceLoader {
 		sparker.view = 0;
 		String string = "";
 		try {
-			URL resource = this.getClass().getResource("../../resources/stages/" + checkPoints.stage + ".txt");
+			URL resource = this.getClass().getResource("../../../resources/stages/" + checkPoints.stage + ".txt");
 			File file = new File(resource.toURI());
 			final DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
 			String line;
