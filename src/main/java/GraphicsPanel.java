@@ -1,6 +1,7 @@
 package main.java;
 
-import javax.swing.*;
+import main.java.resources.ResourceLoader;
+
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.*;
@@ -20,163 +21,161 @@ import static main.java.Util.getPixelArray;
 import static main.java.Util.snapRGBs;
 
 
-
 public class GraphicsPanel extends Panel {
 	Medium medium;
 	FontMetrics fontMetrics;
 	ImageObserver imageObserver;
 	Applet app;
-	GameState state;
+	public GameState state;
 	GameState lastState;
-	int starcnt;
-	int unlocked;
-	int lockcnt;
-	int opselect;
-	boolean shaded;
-	int flipo;
-	boolean nextc;
-	int gatey;
-	int looped;
-	int[] selectedCar;
-	int[] xstart;
-	int[] zstart;
-	float[] proba;
-	float[] dishandle;
-	int holdcnt;
-	boolean winner;
-	int[] flexpix;
-	Image fleximg;
-	Image odmg;
-	Image opwr;
-	Image opos;
-	Image owas;
-	Image olap;
-	Image oyourwasted;
-	Image oyoulost;
-	Image oyouwon;
-	Image oyouwastedem;
-	Image ogameh;
-	Image oloadingmusic;
-	Image omdness;
-	Image damageMeter;
-	Image powerMeter;
-	Image pos;
-	Image was;
-	Image lap;
-	Image trackbg;
-	Image barLeft;
-	Image barTop;
-	Image barRight;
-	Image barBottom;
-	Image selectStage;
-	Image loadingmusic;
-	Image yourwasted;
-	Image youlost;
-	Image youwon;
-	Image youwastedem;
-	Image gameh;
-	Image congrd;
-	Image gameov;
-	Image carsbg;
-	Image pgate;
-	Image selectcar;
-	Image statb;
-	Image mdness;
-	Image paused;
-	Image radicalplay;
-	Image maini;
-	Image opti;
-	Image bgmain;
-	Image inst1;
-	Image inst2;
-	Image inst3;
-	Image rpro;
-	Image nfmcom;
-	Image[] next;
-	Image[] back;
-	Image[] contin1;
-	Image[] contin2;
-	Image[] ostar;
-	Image[] star;
+	public int starcnt;
+	public int unlocked;
+	public int lockcnt;
+	public int opselect;
+	public boolean shaded;
+	public int flipo;
+	public boolean nextc;
+	public int gatey;
+	public int looped;
+	public int[] selectedCar;
+	public int[] xstart;
+	public int[] zstart;
+	public float[] proba;
+	public float[] dishandle;
+	public int holdcnt;
+	public boolean winner;
+	public int[] flexpix;
+	public Image fleximg;
+	public Image odmg;
+	public Image opwr;
+	public Image opos;
+	public Image owas;
+	public Image olap;
+	public Image oyourwasted;
+	public Image oyoulost;
+	public Image oyouwon;
+	public Image oyouwastedem;
+	public Image ogameh;
+	public Image oloadingmusic;
+	public Image omdness;
+	public Image damageMeter;
+	public Image powerMeter;
+	public Image pos;
+	public Image was;
+	public Image lap;
+	public Image trackbg;
+	public Image barLeft;
+	public Image barTop;
+	public Image barRight;
+	public Image barBottom;
+	public Image selectStage;
+	public Image loadingmusic;
+	public Image yourwasted;
+	public Image youlost;
+	public Image youwon;
+	public Image youwastedem;
+	public Image gameh;
+	public Image congrd;
+	public Image gameov;
+	public Image carsbg;
+	public Image pgate;
+	public Image selectcar;
+	public Image statb;
+	public Image mdness;
+	public Image paused;
+	public Image radicalplay;
+	public Image maini;
+	public Image opti;
+	public Image bgmain;
+	public Image inst1;
+	public Image inst2;
+	public Image inst3;
+	public Image rpro;
+	public Image nfmcom;
+	public Image[] next;
+	public Image[] back;
+	public Image[] contin1;
+	public Image[] contin2;
+	public Image[] ostar;
+	public Image[] star;
 	int pcontin;
 	int pnext;
 	int pback;
 	int pstar;
-	Image[] orank;
-	Image[] rank;
-	Image[] countDownImages;
-	Image[] cntdn;
-	int gocnt;
-	AudioClip[][] engineSounds;
-	boolean[] playingEngineSound;
-	int[][] enginsignature;
-	AudioClip[] airSoundEffects;
-	boolean aird;
-	boolean grrd;
-	AudioClip[] crashSoundEffects;
-	AudioClip[] lowCrashSoundEffects;
-	AudioClip tires;
-	AudioClip checkpoint;
-	AudioClip carfixed;
-	AudioClip powerup;
-	AudioClip three;
-	AudioClip two;
-	AudioClip one;
-	AudioClip go;
-	AudioClip wastd;
-	AudioClip firewasted;
-	boolean pwastd;
-	AudioClip[] skidSoundEffects;
-	AudioClip[] dustSkidSoundEffects;
-	boolean isSoundMuted;
-	RadicalMod stages;
-	RadicalMod cars;
-	RadicalMod[] soundTracks;
-	boolean[] loadedSoundTracks;
-	boolean isMusicMuted;
-	boolean arrace;
-	int ana;
-	int cntan;
-	int cntovn;
-	boolean flk;
-	int tcnt;
-	boolean tflk;
-	String say;
-	boolean wasay;
-	int clear;
-	int posit;
-	int wasted;
-	int laps;
-	int[] dested;
-	String[] carNames;
-	int dmcnt;
-	boolean dmflk;
-	int pwcnt;
-	boolean pwflk;
-	String[][] adj;
-	String[] exlm;
-	String loop;
-	String spin;
-	String asay;
-	int auscnt;
-	boolean aflk;
-	int[] hipno;
-	int[] sndsize;
-	Image hello;
-	Image sign;
-	Image loadbar;
-	int kbload;
-	int dnload;
-	int pin;
-	int pwait;
-	int stopcnt;
-	int cntwis;
-	int crshturn;
-	int bfcrash;
-	int bfskid;
-	boolean crashup;
-	int skflg;
-	int dskflg;
+	public Image[] orank;
+	public Image[] rank;
+	public Image[] countDownImages;
+	public Image[] cntdn;
+	public int gocnt;
+	public AudioClip[][] engineSounds;
+	public boolean[] playingEngineSound;
+	public int[][] enginsignature;
+	public AudioClip[] airSoundEffects;
+	public boolean aird;
+	public boolean grrd;
+	public AudioClip[] crashSoundEffects;
+	public AudioClip[] lowCrashSoundEffects;
+	public AudioClip tires;
+	public AudioClip checkpoint;
+	public AudioClip carfixed;
+	public AudioClip powerup;
+	public AudioClip three;
+	public AudioClip two;
+	public AudioClip one;
+	public AudioClip go;
+	public AudioClip wastd;
+	public AudioClip firewasted;
+	public boolean pwastd;
+	public AudioClip[] skidSoundEffects;
+	public AudioClip[] dustSkidSoundEffects;
+	public boolean isSoundMuted;
+	public RadicalMod stages;
+	public RadicalMod cars;
+	public RadicalMod[] soundTracks;
+	public boolean[] loadedSoundTracks;
+	public boolean isMusicMuted;
+	public boolean arrace;
+	public int ana;
+	public int cntan;
+	public int cntovn;
+	public boolean flk;
+	public int tcnt;
+	public boolean tflk;
+	public String say;
+	public boolean wasay;
+	public int clear;
+	public int posit;
+	public int wasted;
+	public int laps;
+	public int[] dested;
+	public String[] carNames;
+	public int dmcnt;
+	public boolean dmflk;
+	public int pwcnt;
+	public boolean pwflk;
+	public String[][] adj;
+	public String[] exlm;
+	public String loop;
+	public String spin;
+	public String asay;
+	public int auscnt;
+	public boolean aflk;
+	public int[] hipno;
+	public int[] sndsize;
+	public Image hello;
+	public Image sign;
+	public Image loadbar;
+	public int kbload;
+	public int pin;
+	public int pwait;
+	public int stopcnt;
+	public int cntwis;
+	public int crshturn;
+	public int bfcrash;
+	public int bfskid;
+	public boolean crashup;
+	public int skflg;
+	public int dskflg;
 
 	public ResourceLoader getResourceLoader() {
 		return resourceLoader;
@@ -288,7 +287,6 @@ public class GraphicsPanel extends Panel {
 		this.hipno = new int[]{0, 2, 2, 2, 2, 0, 2, 50, 2, 2, 6};
 		this.sndsize = new int[]{39, 128, 23, 58, 106, 140, 81, 135, 38, 141, 80};
 		this.kbload = 0;
-		this.dnload = 0;
 		this.pin = 60;
 		this.pwait = 7;
 		this.stopcnt = 0;
@@ -308,10 +306,8 @@ public class GraphicsPanel extends Panel {
 		images = resourceLoader.loadImages();
 		resourceLoader.loadTextures();
 
-		this.dnload += 47;
 		this.loading(graphics, this.app);
 
-		this.dnload += 44;
 		this.loading(graphics, this.app);
 		this.next[1] = this.pressed(this.next[0]);
 		this.back[1] = this.pressed(this.back[0]);
@@ -1337,7 +1333,7 @@ public class GraphicsPanel extends Panel {
 	public void stat(final Madness madness, final CheckPoints checkPoints, final Control control, final boolean b, final Graphics graphics) {
 		this.medium.flex = 1;
 		int n = 0;
-		if (this.wasted == 4) {
+		if (allCarsAreWasted()) {
 			graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
 			graphics.fillRect(Config.SCREEN_WIDTH / 2 - this.youwastedem.getWidth(null), 70, this.youwastedem.getWidth(this.imageObserver), this.youwastedem.getHeight(this.imageObserver));
 			graphics.setColor(new Color(this.medium.fadeColor[0], this.medium.fadeColor[1], this.medium.fadeColor[2]));
@@ -1356,12 +1352,10 @@ public class GraphicsPanel extends Panel {
 			this.winner = true;
 		}
 		if (n == 0 && madness.dest && this.cntwis == 8) {
-			if (this.medium.flex != 2) {
-				graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
-				graphics.fillRect(Config.SCREEN_WIDTH / 2 - this.yourwasted.getWidth(null) / 2, 70, this.yourwasted.getWidth(this.imageObserver), this.yourwasted.getHeight(this.imageObserver));
-				graphics.setColor(new Color(this.medium.fadeColor[0], this.medium.fadeColor[1], this.medium.fadeColor[2]));
-				graphics.drawRect(Config.SCREEN_WIDTH / 2 - this.yourwasted.getWidth(null) / 2, 70, this.yourwasted.getWidth(this.imageObserver), this.yourwasted.getHeight(this.imageObserver));
-			}
+			graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
+			graphics.fillRect(Config.SCREEN_WIDTH / 2 - this.yourwasted.getWidth(null) / 2, 70, this.yourwasted.getWidth(this.imageObserver), this.yourwasted.getHeight(this.imageObserver));
+			graphics.setColor(new Color(this.medium.fadeColor[0], this.medium.fadeColor[1], this.medium.fadeColor[2]));
+			graphics.drawRect(Config.SCREEN_WIDTH / 2 - this.yourwasted.getWidth(null) / 2, 70, this.yourwasted.getWidth(this.imageObserver), this.yourwasted.getHeight(this.imageObserver));
 			graphics.drawImage(this.yourwasted, (Config.SCREEN_WIDTH / 2) - (this.yourwasted.getWidth(null) / 2), 70, null);
 			this.drawCharacters(graphics, Config.SCREEN_HEIGHT - 20, "Press  [ Enter ]  to continue", 0, 0, 0, 0);
 			n = 1;
@@ -1495,15 +1489,11 @@ public class GraphicsPanel extends Panel {
 					this.posit = checkPoints.pos[madness.im];
 				}
 				if (this.wasted != checkPoints.wasted) {
-					graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
-					graphics.fillRect(150, 8, 30, 10);
 					graphics.setColor(new Color(0, 0, 100));
 					graphics.drawString("" + checkPoints.wasted + " / 4", 150, 18);
 					this.wasted = checkPoints.wasted;
 				}
 				if (this.laps != madness.nlaps) {
-					graphics.setColor(new Color(this.medium.skyColor[0], this.medium.skyColor[1], this.medium.skyColor[2]));
-					graphics.fillRect(51, 8, 40, 10);
 					graphics.setColor(new Color(0, 0, 100));
 					graphics.drawString("" + (madness.nlaps + 1) + " / " + checkPoints.nlaps + "", 51, 18);
 					this.laps = madness.nlaps;
@@ -1819,6 +1809,10 @@ public class GraphicsPanel extends Panel {
 				}
 			} while (++n7 < 5);
 		}
+	}
+
+	private boolean allCarsAreWasted() {
+		return this.wasted == 4;
 	}
 
 	public void finish(final CheckPoints checkPoints, final Geometry[] array, final Control control, final Graphics graphics) {
@@ -2150,7 +2144,7 @@ public class GraphicsPanel extends Panel {
 		graphics.drawImage(this.barLeft, 0, 0, this.barLeft.getWidth(null), Config.SCREEN_HEIGHT, null);
 		graphics.drawImage(this.barTop, 0, 0, Config.SCREEN_WIDTH, this.barTop.getHeight(null), null);
 		graphics.drawImage(this.barRight, Config.SCREEN_WIDTH - this.barRight.getWidth(null), 0, this.barRight.getWidth(null), Config.SCREEN_HEIGHT, null);
-		graphics.drawImage(this.barBottom, 0, Config.SCREEN_HEIGHT - this.barTop.getHeight(null), Config.SCREEN_WIDTH, this.barTop.getHeight(null),null);
+		graphics.drawImage(this.barBottom, 0, Config.SCREEN_HEIGHT - this.barTop.getHeight(null), Config.SCREEN_WIDTH, this.barTop.getHeight(null), null);
 		graphics.drawImage(this.selectStage, (Config.SCREEN_WIDTH / 2) - this.selectStage.getWidth(null), 45, null);
 	}
 
@@ -2329,7 +2323,7 @@ public class GraphicsPanel extends Panel {
 		yCoordinates[1] = 40;
 		xCoordinates[2] = (int) (Config.SCREEN_WIDTH - 128 + power);
 		yCoordinates[2] = 40;
-		xCoordinates[3] = (int) (Config.SCREEN_WIDTH - 128+ power);
+		xCoordinates[3] = (int) (Config.SCREEN_WIDTH - 128 + power);
 		yCoordinates[3] = 31;
 		int n8 = 128;
 		if (power == 98.0f) {
@@ -2391,9 +2385,7 @@ public class GraphicsPanel extends Panel {
 		this.drawCharacters(graphics, 333, "Loading game, please wait.", 0, 0, 0, 3);
 		graphics.setColor(new Color(255, 255, 255));
 		graphics.fillRect(170, 373, 210, 17);
-		this.drawCharacters(graphics, 385, "" + (int) ((26.0f + this.dnload / (float) this.kbload * 200.0f) / 226.0f * 100.0f) + " % loaded    |    " + (this.kbload - this.dnload) + " KB remaining", 32, 64, 128, 3);
 		graphics.setColor(new Color(32, 64, 128));
-		graphics.fillRect(162, 346, 26 + (int) (this.dnload / (float) this.kbload * 200.0f), 10);
 		applet.repaint();
 	}
 
@@ -2640,7 +2632,7 @@ public class GraphicsPanel extends Panel {
 		this.medium.positionZ = -50;
 		this.medium.xz = 0;
 		this.medium.zy = 10;
-			this.medium.ground = 720;
+		this.medium.ground = 720;
 		Geometry geometry = geometries[this.selectedCar[0]];
 		geometry.draw(graphics);
 		if (this.flipo == 0) {
@@ -2947,7 +2939,7 @@ public class GraphicsPanel extends Panel {
 		for (int i = 0; i < pixels.length; ++i) {
 			if (pixels[i] != pixels[76]) {
 				final Color color = new Color(pixels[i]);
-				int r, g ,b;
+				int r, g, b;
 				if (this.hipno[n - 1] != 0) {
 					r = (int) (color.getRed() - color.getRed() * (this.medium.snapColor[0] / (float) (50 * this.hipno[n - 1])));
 					g = (int) (color.getGreen() - color.getGreen() * (this.medium.snapColor[1] / (float) (50 * this.hipno[n - 1])));

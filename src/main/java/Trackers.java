@@ -2,18 +2,18 @@ package main.java;
 
 public class Trackers
 {
-    int[] x;
-    int[] y;
-    int[] z;
-    int[] xy;
-    int[] zy;
-    int[] skd;
-    int[] dam;
-    int[][] objectColor;
-    int[] radx;
-    int[] radz;
-    int[] rady;
-    int nt;
+    public int[] x;
+    public int[] y;
+    public int[] z;
+    public int[] xy;
+    public int[] zy;
+    public int[] skd;
+    public int[] dam;
+    public int[][] objectColor;
+    public int[] radx;
+    public int[] radz;
+    public int[] rady;
+    public int nt;
 
     public Trackers() {
         this.x = new int[500];

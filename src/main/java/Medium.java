@@ -7,49 +7,49 @@ import java.util.stream.IntStream;
 
 
 public class Medium {
-    int focusPoint;
-    float ground;
-    int skyline;
-    int[] fade;
-    int[] skyColor;
-    int[] groundColor;
-    int[] fadeColor;
-    int[] snapColor;
-    int origfade;
-    int flex;
-    boolean trk;
-    boolean crs;
-    float centerX;
-    float centerY;
-    float centerZ;
-    float xz;
-    float zy;
-    int positionX;
-    int positionY;
-    int positionZ;
-    int width;
-    int height;
-    int nsp;
-    int[] spx;
-    int[] spz;
-    int[] sprad;
-    boolean td;
-    int circleAmount;
-    int adv;
-    boolean vert;
-    int trns;
-    float[] tcos;
-    float[] tsin;
-    int randomCnt;
-    boolean[] directionUp;
-    int[] randomList;
-    int turn;
-    int hit;
-    int ptr;
-    int ptcnt;
-    int nrnd;
-    long trx;
-    long trz;
+    public int focusPoint;
+    public float ground;
+    public int skyline;
+    public int[] fade;
+    public int[] skyColor;
+    public int[] groundColor;
+    public int[] fadeColor;
+    public int[] snapColor;
+    public int origfade;
+    public int flex;
+    public boolean trk;
+    public boolean crs;
+    public float centerX;
+    public float centerY;
+    public float centerZ;
+    public float xz;
+    public float zy;
+    public int positionX;
+    public int positionY;
+    public int positionZ;
+    public int width;
+    public int height;
+    public int nsp;
+    public int[] spx;
+    public int[] spz;
+    public int[] sprad;
+    public boolean td;
+    public int circleAmount;
+    public int adv;
+    public boolean vert;
+    public int trns;
+    public float[] tcos;
+    public float[] tsin;
+    public int randomCnt;
+    public boolean[] directionUp;
+    public int[] randomList;
+    public int turn;
+    public int hit;
+    public int ptr;
+    public int ptcnt;
+    public int nrnd;
+    public long trx;
+    public long trz;
 
     Medium() {
         this.focusPoint = Config.SCREEN_HEIGHT;
@@ -129,7 +129,7 @@ public class Medium {
         return (n2 - this.focusPoint) * (this.centerY - n) / n2 + n;
     }
 
-    void setFade(List<Integer> fadeValues) {
+    public void setFade(List<Integer> fadeValues) {
         IntStream.range(0, 3)
                 .forEach(i -> this.fadeColor[i] = (int) Util.clampCol(fadeValues.get(i) * (1 + 0.01f * this.snapColor[i])));
     }
@@ -271,7 +271,7 @@ public class Medium {
         }
     }
 
-    void setSnapColor(List<Integer> snapValues) {
+    public void setSnapColor(List<Integer> snapValues) {
         IntStream.range(0, 3).forEach(i -> this.snapColor[i] = snapValues.get(i));
     }
 
@@ -333,7 +333,7 @@ public class Medium {
 
     }
 
-    void setGround(List<Integer> groundValues) {
+    public void setGround(List<Integer> groundValues) {
         IntStream.range(0, 3)
                 .forEach(i -> this.groundColor[i] = (int) Util.clampCol(groundValues.get(i) * (1 + 0.01f * this.snapColor[i])));
     }
@@ -420,7 +420,7 @@ public class Medium {
         skyColor[2] = Util.clamp(skyColor[2], 0, 255);
     }
 
-    void setSky(List<Integer> skyValues) {
+    public void setSky(List<Integer> skyValues) {
         IntStream.range(0, 3)
                 .forEach(i -> this.skyColor[i] = (int) Util.clampCol(skyValues.get(i) * (1 + 0.01f * this.snapColor[i])));
     }
@@ -432,7 +432,7 @@ public class Medium {
         } while (++n2 < 8);
     }
 
-    void fadeFrom(List<Integer> fadeIntervall) {
+    public void fadeFrom(List<Integer> fadeIntervall) {
         IntStream.range(0, 8).forEach(i->this.fade[i] = fadeIntervall.get(0) * (i + 1));
     }
 

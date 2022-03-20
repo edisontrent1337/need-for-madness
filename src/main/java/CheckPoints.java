@@ -1,30 +1,30 @@
 package main.java;
 
 public class CheckPoints {
-    int[] x;
-    int[] z;
-    int[] y;
-    int[] typ;
-    int pcs;
-    int nsp;
-    int n;
-    int[] fx;
-    int[] fz;
-    int[] fy;
-    boolean[] rotated;
-    boolean[] special;
-    int fn;
-    int stage;
-    int nlaps;
-    String name;
-    int[] pos;
-    int[] clear;
-    int[] dested;
-    int wasted;
-    boolean haltall;
-    int[] opx;
-    int[] opz;
-    int[] onscreen;
+    public int[] x;
+    public int[] z;
+    public int[] y;
+    public int[] typ;
+    public int pcs;
+    public int nsp;
+    public int n;
+    public int[] fx;
+    public int[] fz;
+    public int[] fy;
+    public boolean[] rotated;
+    public boolean[] special;
+    public int fn;
+    public int stage;
+    public int nlaps;
+    public String name;
+    public int[] pos;
+    public int[] clear;
+    public int[] dested;
+    public int wasted;
+    public boolean haltall;
+    public int[] opx;
+    public int[] opz;
+    public int[] onscreen;
 
     public CheckPoints() {
         this.x = new int[140];
