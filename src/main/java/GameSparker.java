@@ -1,6 +1,7 @@
 package main.java;
 
-import javax.swing.*;
+import main.java.resources.ResourceLoader;
+
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -13,16 +14,16 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
     Graphics graphics;
     Image offscreenImage;
     Thread gameThread;
-    Control[] controls;
+    public Control[] controls;
     ResourceLoader resourceLoader;
-    int mouseClick;
-    int mouseX;
-    int mouseY;
-    boolean isWindowFocusLost;
-    boolean exwist;
-    int nob;
-    int notb;
-    int view;
+    public int mouseClick;
+    public int mouseX;
+    public int mouseY;
+    public boolean isWindowFocusLost;
+    public boolean exwist;
+    public int nob;
+    public int notb;
+    public int view;
 
     GameState lastState;
 
@@ -707,8 +708,10 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
             }
             this.repaint();
             graphicsPanel.setFont(new Font("SansSerif", Font.BOLD, 12));
-            String print = "hit:" + medium.hit + ", circleAmount:" + medium.circleAmount + ", zy:" + medium.zy + ", xz:" + medium.xz;
-            graphicsPanel.drawCharacters(graphics, 50, print, 0, 0, 0, 3);
+            String print = "hit:" + medium.hit + ", circleAmount:" + medium.circleAmount + ", zy:" + medium.zy + ", xz:" + medium.xz
+
+                    + "Flex: " + medium.flex;
+            graphicsPanel.drawCharacters(graphics, 50, print, 255, 0, 255, 3);
 
             graphicsPanel.playsounds(cars[0], this.controls[0], checkPoints.stage);
             if (graphicsPanel.state == GameState.GAMEPLAY || graphicsPanel.state == GameState.PLAY_REPLAY || graphicsPanel.state == GameState.GAME_HIGHLIGHT_2) {
@@ -770,6 +773,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
         trackers = new Trackers();
         checkPoints = new CheckPoints();
         graphicsPanel = new GraphicsPanel(medium, this.graphics, this);
+        this.resourceLoader = new ResourceLoader(graphicsPanel);
         cars = new Madness[5];
         record = new Record(medium);
         loadedModels = new Geometry[210];
@@ -805,7 +809,6 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
     public void resize(int width, int height) {
         super.resize(width, height);
         Config.updateScreenSize(width, height);
-
     }
 
     @Override
