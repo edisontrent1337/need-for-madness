@@ -1,25 +1,21 @@
 package main.java;
 
+import javax.swing.*;
 import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.URL;
-import java.util.Date;
-import java.util.List;
 
 public class GameSparker extends Applet implements Runnable, MouseListener, KeyListener {
 
     Graphics graphics;
     Image offscreenImage;
-    Thread gamer;
+    Thread gameThread;
     Control[] controls;
-    int mouses;
+    ResourceLoader resourceLoader;
+    int mouseClick;
     int mouseX;
     int mouseY;
     boolean isWindowFocusLost;
@@ -41,7 +37,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
 
     public GameSparker() {
         this.controls = new Control[5];
-        this.mouses = 0;
+        this.mouseClick = 0;
         this.mouseX = 0;
         this.mouseY = 0;
         this.isWindowFocusLost = false;
@@ -54,9 +50,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
     }
 
     public void stop() {
-        if (this.exwist && this.gamer != null) {
-            this.gamer.stop();
-            this.gamer = null;
+        if (this.exwist && this.gameThread != null) {
+            this.gameThread.stop();
+            this.gameThread = null;
         }
         this.exwist = true;
     }
@@ -64,7 +60,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
     public boolean lostFocus(final Event event, final Object o) {
         if (!this.exwist) {
             this.isWindowFocusLost = true;
-            this.mouses = 0;
+            this.mouseClick = 0;
             this.controls[0].resetControls();
         }
         return false;
@@ -78,287 +74,70 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
         this.paint(graphics);
     }
 
+
     public void start() {
-        if (this.gamer == null) {
-            this.gamer = new Thread(this);
+        if (this.gameThread == null) {
+            this.gameThread = new Thread(this);
         }
-        this.gamer.start();
-    }
-
-    public void loadStage(final Geometry[] stageGeometry, final Geometry[] availableGeometry, final Medium medium, final Trackers trackers, final CheckPoints checkPoints, final GraphicsPanel GraphicsPanel, final Madness[] array3, final Record record) {
-        trackers.nt = 0;
-        this.nob = 5;
-        this.notb = 0;
-        checkPoints.n = 0;
-        checkPoints.nsp = 0;
-        checkPoints.fn = 0;
-        checkPoints.haltall = false;
-        checkPoints.wasted = 0;
-        medium.ground = 250;
-        this.view = 0;
-        String string = "";
-        try {
-            URL resource = this.getClass().getResource("../../resources/stages/" + checkPoints.stage + ".txt");
-            File file = new File(resource.toURI());
-            final DataInputStream dataInputStream = new DataInputStream(new FileInputStream(file));
-            String line;
-            while ((line = dataInputStream.readLine()) != null) {
-                string = line.trim();
-                final List<Integer> integerList = Util.getInts(string);
-                if (string.startsWith("snap")) {
-                    medium.setSnapColor(integerList);
-                }
-                if (string.startsWith("sky")) {
-                    medium.setSky(integerList);
-                    GraphicsPanel.snap(checkPoints.stage);
-                }
-                if (string.startsWith("ground")) {
-                    medium.setGround(integerList);
-                }
-                if (string.startsWith("fog")) {
-                    medium.setFade(integerList);
-                }
-                if (string.startsWith("fadefrom")) {
-                    medium.fadeFrom(integerList);
-                    medium.origfade = medium.fade[0];
-                }
-                if (string.startsWith("set")) {
-                    final int geometryIndex = integerList.get(0);
-                    stageGeometry[this.nob] = new Geometry(availableGeometry[geometryIndex], integerList.get(1), (int) medium.ground - availableGeometry[geometryIndex].grat, integerList.get(2), integerList.get(3));
-                    if (string.contains(")p")) {
-                        checkPoints.x[checkPoints.n] = integerList.get(1);
-                        checkPoints.z[checkPoints.n] = integerList.get(2);
-                        checkPoints.y[checkPoints.n] = 0;
-                        checkPoints.typ[checkPoints.n] = 0;
-
-                        //TODO: Checkpoint Types for Bots? Maybe smth better mayking anna
-                        if (string.contains(")pt")) {
-                            checkPoints.typ[checkPoints.n] = -1;
-                        }
-                        if (string.contains(")pr")) {
-                            checkPoints.typ[checkPoints.n] = -2;
-                        }
-                        if (string.contains(")po")) {
-                            checkPoints.typ[checkPoints.n] = -3;
-                        }
-                        if (string.contains(")ph")) {
-                            checkPoints.typ[checkPoints.n] = -4;
-                        }
-                        ++checkPoints.n;
-                        this.notb = this.nob + 1;
-                    }
-                    ++this.nob;
-                }
-                if (string.startsWith("chk")) {
-                    final int checkpointIndex = integerList.get(0);
-                    stageGeometry[this.nob] = new Geometry(availableGeometry[checkpointIndex], integerList.get(1), (int) medium.ground - availableGeometry[checkpointIndex].grat, integerList.get(2), integerList.get(3));
-                    checkPoints.x[checkPoints.n] = integerList.get(1);
-                    checkPoints.z[checkPoints.n] = integerList.get(2);
-                    checkPoints.y[checkPoints.n] = (int) medium.ground - availableGeometry[checkpointIndex].grat;
-
-                    checkPoints.typ[checkPoints.n] = integerList.get(3) == 0 ? 1 : 2;
-                    checkPoints.pcs = checkPoints.n;
-
-                    checkPoints.n++;
-                    checkPoints.nsp++;
-                    this.nob++;
-                    this.notb = this.nob;
-                }
-                if (string.startsWith("fix")) {
-					stageGeometry[this.nob] = new Geometry(availableGeometry[integerList.get(0)], integerList.get(1), integerList.get(3), integerList.get(2), integerList.get(4));
-                    checkPoints.fx[checkPoints.fn] = integerList.get(1);
-                    checkPoints.fz[checkPoints.fn] = integerList.get(2);
-                    checkPoints.fy[checkPoints.fn] = integerList.get(3);
-
-                    stageGeometry[this.nob].elec = true;
-					checkPoints.rotated[checkPoints.fn] = integerList.get(4) != 0;
-					stageGeometry[this.nob].roted = checkPoints.rotated[checkPoints.fn];
-
-                    checkPoints.special[checkPoints.fn] = string.contains(")drawShadow");
-                    ++checkPoints.fn;
-                    ++this.nob;
-                    this.notb = this.nob;
-                }
-                if (string.startsWith("nlaps")) {
-                    checkPoints.nlaps = integerList.get(0);
-                }
-                if (string.startsWith("name")) {
-                    checkPoints.name = Util.getName(string).replace('|', ',');
-                }
-                if(string.startsWith("max")) {
-					final int angle, sign, xy, zy;
-					angle = (string.startsWith("maxr") || string.startsWith("maxl")) ? 0 : 90;
-					sign = (string.startsWith("maxr") || string.startsWith("maxt")) ? 1 : -1;
-
-					for (int i = 0; i < integerList.get(0); ++i) {
-                        int xPos = (string.startsWith("maxr") || string.startsWith("maxl")) ? integerList.get(1) : integerList.get(2) + i * 4800;
-                        int zPos = (string.startsWith("maxr") || string.startsWith("maxl")) ? integerList.get(2) + i * 4800 : integerList.get(1);
-                        stageGeometry[this.nob] = new Geometry(availableGeometry[39],  xPos, (int) medium.ground - availableGeometry[39].grat, zPos, angle);
-						++this.nob;
-					}
-
-                    trackers.y[trackers.nt] = -5000;
-                    trackers.rady[trackers.nt] = 7100;
-                    trackers.dam[trackers.nt] = 1;
-
-                    if (string.startsWith("maxr") || string.contains("maxl")) {
-                        trackers.x[trackers.nt] = integerList.get(1) + (sign *  500);
-                        trackers.z[trackers.nt] = integerList.get(0) * 4800 / 2 + integerList.get(2) - 2400;
-                        trackers.radx[trackers.nt] = 600;
-                        trackers.radz[trackers.nt] = integerList.get(0) * 4800 / 2;
-                        trackers.xy[trackers.nt] = sign * 90;
-                        trackers.zy[trackers.nt] = 0;
-                    } else {
-                        trackers.x[trackers.nt] = integerList.get(0) * 4800 / 2 + integerList.get(2) - 2400;
-                        trackers.z[trackers.nt] = integerList.get(1) + (sign * 500);
-                        trackers.radx[trackers.nt] = integerList.get(0) * 4800 / 2;
-                        trackers.radz[trackers.nt] = 600;
-                        trackers.xy[trackers.nt] = 0;
-                        trackers.zy[trackers.nt] = sign * 90;
-                    }
-
-                    trackers.y[trackers.nt] = -5000;
-                    trackers.rady[trackers.nt] = 7100;
-                    trackers.dam[trackers.nt] = 1;
-                    ++trackers.nt;
-                }
-            }
-            dataInputStream.close();
-        } catch (Exception e) {
-            GraphicsPanel.state = GameState.UNKNOWN_STATE_2;
-            System.out.println("Error in stage " + checkPoints.stage);
-            System.out.println("" + e);
-            e.printStackTrace();
-            System.out.println("At line: " + string);
-        }
-        if (GraphicsPanel.state == GameState.LOADING_STAGE_PREVIEW) {
-            medium.trx = 0L;
-            medium.trz = 0L;
-            if (trackers.nt >= 4) {
-                int n = 4;
-                do {
-                    medium.trx += trackers.x[trackers.nt - n];
-                    medium.trz += trackers.z[trackers.nt - n];
-                } while (--n > 0);
-            }
-            medium.trx /= 4L;
-            medium.trz /= 4L;
-            medium.ptr = 0;
-            medium.ptcnt = -10;
-            medium.hit = 60000;
-            medium.nrnd = 0;
-            medium.trk = true;
-            GraphicsPanel.state = GameState.STAGE_PREVIEW;
-            this.mouses = 0;
-        }
-        int n2 = 0;
-        do {
-            this.controls[n2].reset(checkPoints);
-        } while (++n2 < 5);
-        GraphicsPanel.resetstat(checkPoints.stage);
-        int n3 = 0;
-        do {
-            stageGeometry[n3] = new Geometry(availableGeometry[GraphicsPanel.sc[n3]], GraphicsPanel.xstart[n3], 250 - availableGeometry[GraphicsPanel.sc[n3]].grat, GraphicsPanel.zstart[n3], 0);
-            array3[n3].reseto(GraphicsPanel.sc[n3], stageGeometry[n3], checkPoints);
-        } while (++n3 < 5);
-        record.reset(stageGeometry);
+        this.gameThread.start();
     }
 
     public void run() {
-        this.graphics.setColor(new Color(0, 0, 0));
-        this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+        fillScreen(Color.BLACK);
         this.repaint();
 
-        //Geometry[] this.models = new Geometry[43];
-        //this.loadModels(this.models, medium, trackers);
-        graphicsPanel.dnload += 29;
-        graphicsPanel.loading(this.graphics, this);
-        int n2 = 0;
-        do {
-            cars[n2] = new Madness(medium, record, graphicsPanel, n2);
-            this.controls[n2] = new Control(medium);
-        } while (++n2 < 5);
-
-        float n3 = 35.0f;
         int n4 = 80;
 
-        graphicsPanel.unlocked = 11;
+        graphicsPanel.unlocked = 0;
 
         int n5 = 0;
-        long time = new Date().getTime();
-        float a = 30.0f;
         int n6 = 0;
         int n7 = 0;
         int n8 = 0;
         int n9 = 0;
         int n10 = 0;
+        int frames = 0;
         this.exwist = false;
+
         while (true) {
-            final long time2 = new Date().getTime();
-            if (graphicsPanel.state == GameState.UNKNOWN_STATE_3) {
-                if (this.mouses == 1) {
-                    n9 = 800;
-                }
-                if (n9 < 800) {
-                    graphicsPanel.clicknow(this.graphics);
-                    ++n9;
+            if (graphicsPanel.state == GameState.TRANSITION_MAIN_MENU_CAR_SELECT) {
+                if(frames < 5) {
+                    fillScreen(Color.WHITE);
+                    frames++;
                 } else {
-                    n9 = 0;
-                    graphicsPanel.state = GameState.UNKNOWN_STATE_4;
-                    this.mouses = 0;
-                    this.isWindowFocusLost = false;
-                }
-            }
-            else if (graphicsPanel.state == GameState.UNKNOWN_STATE_4) {
-                if (n9 < 150) {
-                    graphicsPanel.rad(this.graphics, n9);
-                    ++n9;
-                } else {
-                    n9 = 0;
-                    graphicsPanel.state = GameState.MAIN_MENU;
-                    this.mouses = 0;
-                    this.controls[0].resetControls();
-                }
-            }
-            else if (graphicsPanel.state == GameState.UNKNOWN_STATE_1) {
-                if (n9 < 5) {
-                    this.graphics.setColor(new Color(255, 255, 255));
-                    this.graphics.fillRect(0, 0, 550, 400);
-                    ++n9;
-                } else {
-                    n9 = 0;
                     graphicsPanel.state = GameState.CAR_SELECT;
-                    this.mouses = 0;
+                    this.mouseClick = 0;
+                    frames = 0;
                 }
             }
             else if (graphicsPanel.state == GameState.CREDITS) {
                 graphicsPanel.credits(this.graphics, this.controls[0]);
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
                 }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
                 }
             }
             else if (graphicsPanel.state == GameState.MAIN_MENU) {
                 graphicsPanel.maini(this.graphics, this.controls[0]);
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
                 }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
                 }
             }
             else if (graphicsPanel.state == GameState.GAME_INSTRUCTIONS) {
                 graphicsPanel.inst(this.graphics, this.controls[0]);
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
                 }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
                 }
             }
             else if (graphicsPanel.state == GameState.END_RACE_CONGRATS) {
@@ -367,72 +146,71 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     if (checkPoints.stage == graphicsPanel.unlocked && graphicsPanel.winner && graphicsPanel.unlocked != 11) {
                         this.saveCookie("unlocked", "" + (graphicsPanel.unlocked + 1));
                     }
-                    this.saveCookie("gameprfact", "" + (int) n3);
-                    this.saveCookie("usercar", "" + graphicsPanel.sc[0]);
+                    this.saveCookie("usercar", "" + graphicsPanel.selectedCar[0]);
                     n5 = 0;
                 }
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
                 }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
                 }
             }
             else if (graphicsPanel.state == GameState.CAR_SELECT) {
                 graphicsPanel.carselect(this.controls[0], this.models, cars[0], this.graphics);
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
                 }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
-                }
-            }
-            else if (graphicsPanel.state == GameState.LOADING_STAGE_COMPLETE) {
-                graphicsPanel.musicomp(checkPoints.stage, this.graphics, this.controls[0]);
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
-                }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
                 }
             }
-            else if (graphicsPanel.state == GameState.LOADING_STAGE_1) {
-                graphicsPanel.loadmusic(checkPoints.stage, n4, this.graphics);
+            else if (graphicsPanel.state == GameState.LOADING_SOUNDTRACK_COMPLETE) {
+                graphicsPanel.loadingMusicComplete(checkPoints.stage, this.graphics, this.controls[0]);
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
+                }
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
+                }
+            }
+            else if (graphicsPanel.state == GameState.LOADING_SOUNDTRACK_1) {
+                graphicsPanel.loadingMusicScreen(checkPoints.stage, n4, this.graphics);
                 if (n5 == 0) {
-                    this.saveCookie("usercar", "" + graphicsPanel.sc[0]);
+                    this.saveCookie("usercar", "" + graphicsPanel.selectedCar[0]);
                     n5 = 1;
                 }
             }
             else if (graphicsPanel.state == GameState.STAGE_LOCKED_UNSAFE) {
                 graphicsPanel.cantgo(this.graphics, this.controls[0]);
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
                 }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
                 }
             }
-            else if (graphicsPanel.state == GameState.UNKNOWN_STATE_2) {
+            else if (graphicsPanel.state == GameState.LOADING_STAGE_FAILED) {
                 graphicsPanel.loadingFailed(checkPoints.stage, this.controls[0], this.graphics);
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
                 }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
                 }
             }
-            else if (graphicsPanel.state == GameState.LOADING_STAGE_PREVIEW) {
+            else if (graphicsPanel.state == GameState.LOADING_STAGE) {
                 graphicsPanel.loadingStage(checkPoints.stage, this.graphics);
-                loadStage(loadedModels, models, medium, trackers, checkPoints, graphicsPanel, cars, record);
+                graphicsPanel.getResourceLoader().loadStage(this, loadedModels, models, medium, trackers, checkPoints, graphicsPanel, cars, record);
                 controls[0].resetControls();
             }
             else if (graphicsPanel.state == GameState.STAGE_PREVIEW) {
-                graphicsPanel.trackbg(this.graphics);
+                graphicsPanel.stageSelectBg(this.graphics);
                 medium.circleAroundStage(checkPoints);
                 int n11 = 0;
                 final int[] array4 = new int[200];
@@ -470,49 +248,49 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         }
                     }
                 }
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
                 }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
                 }
-                graphicsPanel.stageselect(this.graphics, checkPoints, this.controls[0]);
+                graphicsPanel.stageSelect(this.graphics, checkPoints, this.controls[0]);
             }
-            else if (graphicsPanel.state == GameState.LOADING_STAGE_2) {
+            else if (graphicsPanel.state == GameState.LOADING_SOUNDTRACK_2) {
                 medium.draw(this.graphics);
-                int n18 = 0;
+                int count = 0;
                 final int[] array10 = new int[100];
-                for (int n19 = 0; n19 < this.nob; ++n19) {
-                    if (this.loadedModels[n19].dist != 0) {
-                        array10[n18] = n19;
-                        ++n18;
+                for (int i = 0; i < this.nob; ++i) {
+                    if (this.loadedModels[i].dist != 0) {
+                        array10[count] = i;
+                        ++count;
                     } else {
-                        this.loadedModels[n19].draw(this.graphics);
+                        this.loadedModels[i].draw(this.graphics);
                     }
                 }
-                final int[] array11 = new int[n18];
-                for (int n20 = 0; n20 < n18; ++n20) {
-                    array11[n20] = 0;
+                final int[] array11 = new int[count];
+                for (int i = 0; i < count; ++i) {
+                    array11[i] = 0;
                 }
-                for (int n21 = 0; n21 < n18; ++n21) {
-                    for (int n22 = n21 + 1; n22 < n18; ++n22) {
-                        if (this.loadedModels[array10[n21]].dist != this.loadedModels[array10[n22]].dist) {
-                            if (this.loadedModels[array10[n21]].dist < this.loadedModels[array10[n22]].dist) {
-                                ++array11[n21];
+                for (int i = 0; i < count; ++i) {
+                    for (int j = i + 1; j < count; ++j) {
+                        if (this.loadedModels[array10[i]].dist != this.loadedModels[array10[j]].dist) {
+                            if (this.loadedModels[array10[i]].dist < this.loadedModels[array10[j]].dist) {
+                                ++array11[i];
                             } else {
-                                ++array11[n22];
+                                ++array11[j];
                             }
-                        } else if (n22 > n21) {
-                            ++array11[n21];
+                        } else if (j > i) {
+                            ++array11[i];
                         } else {
-                            ++array11[n22];
+                            ++array11[j];
                         }
                     }
                 }
-                for (int n27 = 0; n27 < n18; ++n27) {
-                    for (int n28 = 0; n28 < n18; ++n28) {
-                        if (array11[n28] == n27) {
+                for (int i = 0; i < count; ++i) {
+                    for (int n28 = 0; n28 < count; ++n28) {
+                        if (array11[n28] == i) {
                             this.loadedModels[array10[n28]].draw(this.graphics);
                         }
                     }
@@ -528,7 +306,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         graphicsPanel.soundTracks[checkPoints.stage - 1].play();
                     }
                     this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-                    graphicsPanel.state = GameState.LOADING_STAGE_COMPLETE;
+                    graphicsPanel.state = GameState.LOADING_SOUNDTRACK_COMPLETE;
                 }
             }
             else if (graphicsPanel.state == GameState.GAMEPLAY) {
@@ -608,7 +386,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         medium.zy = 40;
                         medium.circleAmount = 70;
                         this.graphics.setColor(new Color(255, 255, 255));
-                        this.graphics.fillRect(0, 0, 550, 400);
+                        this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
                     }
                     if (graphicsPanel.starcnt != 0) {
                         --graphicsPanel.starcnt;
@@ -627,9 +405,9 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         medium.watchFromStationaryPoint(this.loadedModels[0], cars[0].mxz);
                         graphicsPanel.stat(cars[0], checkPoints, this.controls[0], false, this.graphics);
                     }
-                    if (this.mouses == 1) {
+                    if (this.mouseClick == 1) {
                         this.controls[0].enter = true;
-                        this.mouses = 0;
+                        this.mouseClick = 0;
                     }
                 } else {
                     medium.circleAroundCar(this.loadedModels[3], true);
@@ -639,7 +417,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         this.controls[0].handb = false;
                     }
                     if (graphicsPanel.starcnt == 35) {
-                        this.mouses = 0;
+                        this.mouseClick = 0;
                         medium.vert = false;
                         medium.adv = 900;
                         medium.circleAmount = 180;
@@ -647,7 +425,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         medium.follow(this.loadedModels[0], cars[0].cxz);
                         graphicsPanel.stat(cars[0], checkPoints, this.controls[0], true, this.graphics);
                         this.graphics.setColor(new Color(255, 255, 255));
-                        this.graphics.fillRect(0, 0, 550, 400);
+                        this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
                     }
                 }
             }
@@ -696,11 +474,11 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                         }
                     }
                 }
-                if (this.controls[0].enter || this.controls[0].handb || this.mouses == 1) {
+                if (this.controls[0].enter || this.controls[0].handb || this.mouseClick == 1) {
                     n8 = 299;
                     this.controls[0].enter = false;
                     this.controls[0].handb = false;
-                    this.mouses = 0;
+                    this.mouseClick = 0;
                 }
                 int n58 = 0;
                 do {
@@ -814,15 +592,15 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     this.controls[0].handb = false;
                     n8 = -7;
                 } else {
-                    graphicsPanel.levelhigh(this.graphics, record.wasted, record.whenwasted);
+                    graphicsPanel.showGameHighlight(this.graphics, record.wasted, record.whenwasted);
                     if (n8 == 0 || n8 == 1 || n8 == 2) {
                         this.graphics.setColor(new Color(0, 0, 0));
-                        this.graphics.fillRect(0, 0, 550, 400);
+                        this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
                     }
                     if (record.wasted != 0) {
                         if (n9 == 10) {
                             this.graphics.setColor(new Color(255, 255, 255));
-                            this.graphics.fillRect(0, 0, 550, 400);
+                            this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
                         }
                         if (n9 >= 10) {
                             medium.circleAroundCar(this.loadedModels[record.wasted], false);
@@ -840,7 +618,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                     } else {
                         if (n9 == 3 || n9 == 31 || n9 == 66) {
                             this.graphics.setColor(new Color(255, 255, 255));
-                            this.graphics.fillRect(0, 0, 550, 400);
+                            this.graphics.fillRect(0, 0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
                         }
                         if (n8 > record.whenwasted && n9 != 67) {
                             ++n9;
@@ -881,30 +659,30 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
             }
             else if (graphicsPanel.state == GameState.GAME_PAUSED) {
-                graphicsPanel.pauseimage(this.offscreenImage, this.graphics);
+                graphicsPanel.pauseImage(this.offscreenImage, this.graphics);
                 graphicsPanel.state = GameState.GAME_PAUSED_2_BLURRED;
-                this.mouses = 0;
+                this.mouseClick = 0;
             }
             else if (graphicsPanel.state == GameState.GAME_PAUSED_2_BLURRED) {
                 graphicsPanel.pausedgame(this.graphics, checkPoints.stage, this.controls[0], record);
                 if (n8 != 0) {
                     n8 = 0;
                 }
-                graphicsPanel.ctachm(this.mouseX, this.mouseY, this.mouses, this.controls[0]);
-                if (this.mouses == 2) {
-                    this.mouses = 0;
+                graphicsPanel.checkMouseClick(this.mouseX, this.mouseY, this.mouseClick, this.controls[0]);
+                if (this.mouseClick == 2) {
+                    this.mouseClick = 0;
                 }
-                if (this.mouses == 1) {
-                    this.mouses = 2;
+                if (this.mouseClick == 1) {
+                    this.mouseClick = 2;
                 }
             }
             else if (graphicsPanel.state == GameState.REPLAY_NOT_AVAILABLE) {
                 graphicsPanel.cantreply(this.graphics);
-                if (++n8 == 150 || this.controls[0].enter || this.controls[0].handb || this.mouses == 1) {
+                if (++n8 == 150 || this.controls[0].enter || this.controls[0].handb || this.mouseClick == 1) {
                     this.graphics.drawImage(graphicsPanel.fleximg, 0, 0, null);
                     this.graphics.drawImage(graphicsPanel.paused, 156, 106, null);
                     graphicsPanel.state = GameState.GAME_PAUSED_2_BLURRED;
-                    this.mouses = 0;
+                    this.mouseClick = 0;
                     this.controls[0].enter = false;
                     this.controls[0].handb = false;
                 }
@@ -914,7 +692,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 if (graphicsPanel.state == GameState.GAMEPLAY) {
                     this.controls[0].enter = true;
                 }
-                if (this.mouses == 1 || this.mouses == 2) {
+                if (this.mouseClick == 1 || this.mouseClick == 2) {
                     this.isWindowFocusLost = false;
                     if (graphicsPanel.state == GameState.MAIN_MENU) {
                         graphicsPanel.flipo = 0;
@@ -928,85 +706,48 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 }
             }
             this.repaint();
+            graphicsPanel.setFont(new Font("SansSerif", Font.BOLD, 11));
+            graphicsPanel.drawCharacters(graphics, 25, "aflk: " + graphicsPanel.aflk, 0, 255, 0, 3);
+
             graphicsPanel.playsounds(cars[0], this.controls[0], checkPoints.stage);
-            final long time3 = new Date().getTime();
             if (graphicsPanel.state == GameState.GAMEPLAY || graphicsPanel.state == GameState.PLAY_REPLAY || graphicsPanel.state == GameState.GAME_HIGHLIGHT_2) {
                 if (n6 == 0) {
-                    a = n3;
                     n6 = 1;
                     n7 = 0;
                 }
                 if (n7 == 10) {
-                    if (time3 - time < 530L) {
-                        a += 0.5;
-                    } else {
-                        a -= 0.5;
-                        if (a < 5.0f) {
-                            a = 5.0f;
-                        }
-                    }
                     if (graphicsPanel.starcnt == 0) {
-                        medium.adjustFade(a);
+                        // TODO: find out how this fade stuff works
+                        //medium.adjustFade(a);
                     }
-                    time = time3;
                     n7 = 0;
                 } else {
                     ++n7;
                 }
             } else {
                 if (n6 != 0) {
-                    n3 = a;
                     n6 = 0;
                     n7 = 0;
                 }
-                if (n4 == 0 || graphicsPanel.state != GameState.LOADING_STAGE_2) {
-                    if (n7 == 10) {
-                        if (time3 - time < 400L) {
-                            a += 3.5;
-                        } else {
-                            a -= 3.5;
-                            if (a < 5.0f) {
-                                a = 5.0f;
-                            }
-                        }
-                        time = time3;
-                        n7 = 0;
-                    } else {
-                        ++n7;
-                    }
-                } else {
+                if (n4 != 0 && graphicsPanel.state == GameState.LOADING_SOUNDTRACK_2) {
                     if (n4 == 79) {
-                        a = n3;
-                        time = time3;
                         n7 = 0;
                     }
-                    if (n7 == 10) {
-                        if (time3 - time < 530L) {
-                            a += 5.0f;
-                        } else {
-                            a -= 5.0f;
-                            if (a < 5.0f) {
-                                a = 5.0f;
-                            }
-                        }
-                        time = time3;
-                        n7 = 0;
-                    } else {
-                        ++n7;
-                    }
-                    if (n4 == 1) {
-                        n3 = a;
-                    }
+                }
+                if (n7 == 10) {
+                    n7 = 0;
+                } else {
+                    ++n7;
                 }
             }
             if (this.exwist) {
                 this.graphics.dispose();
                 graphicsPanel.stopallnow();
-                this.gamer.stop();
-                this.gamer = null;
+                this.gameThread.stop();
+                this.gameThread = null;
             }
             try {
-                Thread.sleep(1000 / 23);
+                Thread.sleep(1000 / 24);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -1014,7 +755,7 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
                 this.lastState = graphicsPanel.state;
                 System.out.println("Current State : " + graphicsPanel.state);
             }
-            this.graphics.setColor(new Color(0, 0, 0));
+            this.graphics.setColor(Color.WHITE);
         }
     }
 
@@ -1027,28 +768,43 @@ public class GameSparker extends Applet implements Runnable, MouseListener, KeyL
         medium = new Medium();
         trackers = new Trackers();
         checkPoints = new CheckPoints();
-        graphicsPanel = new GraphicsPanel(medium, this.graphics, this, 2);
+        graphicsPanel = new GraphicsPanel(medium, this.graphics, this);
         cars = new Madness[5];
         record = new Record(medium);
         loadedModels = new Geometry[210];
 
-        ResourceLoader resourceLoader = new ResourceLoader(this.graphicsPanel);
-        resourceLoader.loadImages();
-        models = resourceLoader.loadModels(medium, trackers);
+        models = graphicsPanel.getResourceLoader().loadModels(medium, trackers);
+
+        for(int i = 0; i < Config.TOTAL_CARS;i++) {
+            cars[i] = new Madness(medium, record, graphicsPanel, i);
+            this.controls[i] = new Control(medium);
+        }
 
     }
 
+    void fillScreen(Color c) {
+        graphics.setColor(c);
+        graphics.fillRect(0,0, Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT);
+    }
+
     public void saveCookie(final String str, final String str2) {
+        //TODO: Handle savestate not with cookie?
     }
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        //System.out.println("Mouse pressed.");
-        if (!this.exwist && this.mouses == 0) {
+        if (!this.exwist && this.mouseClick == 0) {
             this.mouseX = mouseEvent.getX();
             this.mouseY = mouseEvent.getY();
-            this.mouses = 1;
+            this.mouseClick = 1;
         }
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        Config.updateScreenSize(width, height);
+
     }
 
     @Override

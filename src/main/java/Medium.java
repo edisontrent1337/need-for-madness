@@ -338,7 +338,8 @@ public class Medium {
                 .forEach(i -> this.groundColor[i] = (int) Util.clampCol(groundValues.get(i) * (1 + 0.01f * this.snapColor[i])));
     }
 
-    void adjustFade(final float n) {
+    void adjustFade(float n) {
+        n = 30.0f;
         if (n < 15.0f) {
             this.fade[0] = (int) (this.origfade - 1000.0f * (15.0f - n));
             if (this.fade[0] < 3000) {

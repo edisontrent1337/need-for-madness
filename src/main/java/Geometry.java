@@ -505,7 +505,7 @@ public class Geometry {
 		if (this.xs(n + this.maxR, n3) > 0 && this.xs(n - this.maxR, n3) < this.medium.width && n3 > -this.maxR && (n3 < this.medium.fade[this.disline] + this.maxR || this.medium.trk) && (this.xs(n + this.maxR, n3) - this.xs(n - this.maxR, n3) > this.disp || this.medium.trk)) {
 			if (this.shadow) {
 				if (!this.medium.crs) {
-					if (n3 < 2000) {
+					if (n3 < 5000) {
 						boolean b = false;
 						for (int i = this.trackers.nt - 1; i >= 0; --i) {
 							if (Math.abs(this.trackers.zy[i]) != 90 && Math.abs(this.trackers.xy[i]) != 90 && Math.abs(this.x - this.trackers.x[i]) < this.trackers.radx[i] + this.maxR && Math.abs(this.z - this.trackers.z[i]) < this.trackers.radz[i] + this.maxR) {
