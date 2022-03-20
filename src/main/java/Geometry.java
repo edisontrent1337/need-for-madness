@@ -23,7 +23,7 @@ public class Geometry {
 	public float zy;
 	public float wxz;
 	public float wzy;
-	public int dist;
+	public int distance;
 	public int maxR;
 	public int disp;
 	public int disline;
@@ -199,7 +199,7 @@ public class Geometry {
 		this.zy = 0;
 		this.wxz = 0;
 		this.wzy = 0;
-		this.dist = 0;
+		this.distance = 0;
 		this.maxR = 0;
 		this.disp = 0;
 		this.disline = 7;
@@ -405,7 +405,7 @@ public class Geometry {
 		this.zy = 0;
 		this.wxz = 0;
 		this.wzy = 0;
-		this.dist = 0;
+		this.distance = 0;
 		this.maxR = 0;
 		this.disp = 0;
 		this.disline = 7;
@@ -496,8 +496,8 @@ public class Geometry {
 	}
 
 	public void draw(final Graphics graphics) {
-		if (this.dist != 0) {
-			this.dist = 0;
+		if (this.distance != 0) {
+			this.distance = 0;
 		}
 		final float n = this.medium.centerX +  ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.cos(this.medium.xz) - (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.sin(this.medium.xz));
 		final float n2 = this.medium.centerZ + ((this.x - this.medium.positionX - this.medium.centerX) * this.medium.sin(this.medium.xz) + (this.z - this.medium.positionZ - this.medium.centerZ) * this.medium.cos(this.medium.xz));
@@ -579,10 +579,10 @@ public class Geometry {
 						}
 					}
 				}
-				this.dist = (int) (Math.sqrt((int) Math.sqrt((this.medium.positionX + this.medium.centerX - this.x) * (this.medium.positionX + this.medium.centerX - this.x) + (this.medium.positionZ - this.z) * (this.medium.positionZ - this.z) + (this.medium.positionY + this.medium.centerY - this.y) * (this.medium.positionY + this.medium.centerY - this.y))) * this.grounded);
+				this.distance = (int) (Math.sqrt((int) Math.sqrt((this.medium.positionX + this.medium.centerX - this.x) * (this.medium.positionX + this.medium.centerX - this.x) + (this.medium.positionZ - this.z) * (this.medium.positionZ - this.z) + (this.medium.positionY + this.medium.centerY - this.y) * (this.medium.positionY + this.medium.centerY - this.y))) * this.grounded);
 			}
 		}
-		if (this.dist == 0) {
+		if (this.distance == 0) {
 			int n17 = 0;
 			do {
 				if (this.stg[n17] != 0) {

@@ -57,7 +57,7 @@ public class CheckPoints {
         if (!this.haltall) {
             for (int i = 0; i < 5; i++) {
                 this.pos[i] = 0;
-                this.onscreen[i] = geometries[i].dist;
+                this.onscreen[i] = geometries[i].distance;
                 this.opx[i] = geometries[i].x;
                 this.opz[i] = geometries[i].z;
                 if (this.dested[i] == 0) {
